@@ -1,0 +1,7 @@
+[
+  "tests/test_todo.py::TestTodo::test_create_todo_succeeds", 
+  "tests/test_todo.py::TestTodo::test_delete_non_existing_todo_fails", 
+  "tests/test_todo.py::TestTodo::test_delete_todo_succeeds", 
+  "tests/test_todo.py::TestTodo::test_update_non_existing_todo_fails", 
+  "tests/test_todo.py::TestTodo::test_update_todo_succeeds"
+]
