@@ -1,5 +1,6 @@
 from .basetest import BaseTestCase
 import json
+import psycopg2
 
 
 class TestTodo(BaseTestCase):
@@ -56,3 +57,10 @@ class TestTodo(BaseTestCase):
             '/todo/1', data=data, headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json['error'], 'Not found')
+    
+    def test_creating_a_table(self):
+        from models.todo import Todo
+        with self.assertRaises(psycopg2.ProgrammingError):
+            string = Todo.create()
+            self.db.execute(string,commit=True)
+            self.assertEqual(True,True)
