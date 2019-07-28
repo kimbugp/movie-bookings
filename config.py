@@ -3,6 +3,7 @@ import os
 
 class BaseConfig():
     DEBUG = False
+    DATABASE_URL = os.environ.get('DATABASE_URL')
 
 
 class DevelopmentConfig(BaseConfig):
@@ -10,8 +11,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    DATABASE_URL = os.environ.get('DATABASE_URL')
-
+    pass
 
 class TestingConfig(BaseConfig):
     pass

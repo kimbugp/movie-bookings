@@ -4,10 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pep8 = "*"
 
 [packages]
 flask = "*"
 python-dotenv = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.6"

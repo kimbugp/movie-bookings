@@ -5,7 +5,7 @@ from flask import make_response, jsonify
 from utils import NotFound
 
 
-app = create_app(os.environ.get('FLASK_ENV'))
+app,db = create_app(os.environ.get('FLASK_ENV'))
 
 
 @app.errorhandler(NotFound)
