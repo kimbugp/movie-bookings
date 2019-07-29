@@ -12,4 +12,4 @@ def create_app(config):
 
     db = Database(app.config.get('DATABASE_URL'))
 
-    return app,db
+    return app, db
