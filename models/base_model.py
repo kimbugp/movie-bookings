@@ -42,9 +42,6 @@ class Model():
 
     @classmethod
     def create(cls):
-        # check current db status
-        # if not exist, create
-        # else alter table syntax
         string = '''CREATE TABLE {} ({})'''.format(
             cls.__name__.lower(),
             ','.join([i for i in cls.parse_fields().values()]))

@@ -13,8 +13,9 @@ class DevelopmentConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     pass
 
+
 class TestingConfig(BaseConfig):
-    pass
+    DATABASE_URL = os.environ.get('TEST_DATABASE_URL')
 
 
 configurations = {

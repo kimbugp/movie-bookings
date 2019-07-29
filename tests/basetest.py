@@ -18,6 +18,7 @@ class BaseTestCase(TestCase):
 
     def tearDown(self):
         self.app_context.pop()
+        self.db.drop_all()
 
     def create_app(self):
         self.app, self.db = create_app('testing')

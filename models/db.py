@@ -16,14 +16,20 @@ class Database():
 
     def execute(self, query, commit=False):
         try:
-            cur = self.dict_cursor
-            results = cur.execute(query)
-            cur.close()
+            cur = self.cursor
+            cur.execute(query)
             if commit:
                 self.conn.commit()
+            return cur
         except psycopg2.DatabaseError as error:
             raise error
-        return results
+
+    def drop_all(self):
+        query = '''SELECT table_schema,table_name FROM information_schema.tables\
+             WHERE table_schema = 'public' ORDER BY table_schema,table_name'''
+        cur = self.execute(query)
+        rows = cur.fetchall()
+        [self.execute("drop table " + row[1] + " cascade") for row in rows]
 
     @property
     def cursor(self):
