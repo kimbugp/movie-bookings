@@ -6,5 +6,5 @@ class Todo(db):
     description = db.fields(db.text(), db.not_null())
     slug = db.fields(db.string(100), db.unique(), db.not_null())
     name = db.fields(db.date(), db.not_null(False))
-    user_id = db.fields(db.integer(), db.not_null(
+    users_id = db.fields(db.integer(), db.not_null(
         False), db.foreignkey('users.id', on_delete_cascade=True))

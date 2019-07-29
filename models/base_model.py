@@ -25,6 +25,10 @@ class Model():
         return 'SERIAL'
 
     @classmethod
+    def numeric(self):
+        return 'numeric'
+
+    @classmethod
     def primary(self):
         return 'PRIMARY KEY'
 
@@ -34,15 +38,16 @@ class Model():
 
     @classmethod
     def foreignkey(self, ref, on_delete_cascade=True):
-        cascade = 'ON DELETE CASCADE' if on_delete_cascade else ''
+        cascade = 'ON DELETE CASCADE' if on_delete_cascade else 'ON DELETE RESTRICT'
         table, column = ref.split('.')
-        return ',FOREIGN KEY (user_id) REFERENCES {}({}) {}'.format(table,
-                                                                    column,
-                                                                    cascade)
+        return 'REFERENCES {}({}) {}'.format(
+            table,
+            column,
+            cascade)
 
     @classmethod
     def create(cls):
-        string = '''CREATE TABLE {} ({})'''.format(
+        string = '''CREATE TABLE IF NOT EXISTS {} ({})'''.format(
             cls.__name__.lower(),
             ','.join([i for i in cls.parse_fields().values()]))
 
