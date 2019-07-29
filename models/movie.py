@@ -14,5 +14,9 @@ class ShowTime(db):
     date = db.fields(db.date(), db.not_null())
     movie_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
         'movie.id', on_delete_cascade=True))
-    seat = db.fields(db.string(100), db.not_null())
     price = db.fields(db.numeric(), db.not_null())
+
+
+class Seat(db):
+    id = db.fields(db.serial(), db.primary(), db.unique())
+    number = db.fields(db.string(100), db.not_null(), db.unique())

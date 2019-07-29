@@ -8,4 +8,5 @@ class Ticket(db):
                         db.foreignkey('users.id', on_delete_cascade=True))
     showtime_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
         'showtime.id', on_delete_cascade=True))
-    date = db.fields(db.date(), db.not_null())
+    seat = db.fields(db.string(100), db.not_null(), db.foreignkey(
+        'seat.number', on_delete_cascade=True))
