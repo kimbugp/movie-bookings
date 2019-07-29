@@ -3,7 +3,7 @@ from unittest import TestCase
 from flask import jsonify, make_response
 
 from main import create_app
-from utils import NotFound
+from utils import NotFound, create_tables
 
 
 def raise_not_found(error):
@@ -25,3 +25,6 @@ class BaseTestCase(TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.app.register_error_handler(NotFound, raise_not_found)
+
+    def create_tables(self):
+        create_tables(self.db)

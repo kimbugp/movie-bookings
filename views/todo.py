@@ -7,7 +7,7 @@ todo = Blueprint('todo', __name__, url_prefix='/todo')
 
 @todo.route('', methods=['POST'])
 def create():
-    todo = request.json
+    todo = request.get_json()
     controller = TodoController(todo)
     new_todo = controller.save()
     return jsonify(**todo), 201
@@ -29,7 +29,7 @@ def delete(id):
 
 @todo.route('/<string:id>', methods=['PUT'])
 def update(id):
-    todo = request.json
+    todo = request.get_json()
     controller = TodoController()
     todo = controller.update(id, todo)
     return jsonify(**todo), 200

@@ -1,5 +1,9 @@
 class Model:
 
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
     @classmethod
     def string(self, length):
         return 'VARCHAR ({})'.format(length)
@@ -67,7 +71,7 @@ class Model:
         record = {
             'table_name': self.__class__.__name__.lower(),
             'columns': ','.join(record.keys()),
-            'values': ','.join(record.values())
+            'values': "\'" + "','".join(record.values())+"\'"
         }
         return '''INSERT INTO {table_name}({columns}) VALUES ({values})'''.format(**record)
 
