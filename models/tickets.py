@@ -10,3 +10,6 @@ class Ticket(db):
         'showtime.id', on_delete_cascade=True))
     seat = db.fields(db.string(100), db.not_null(), db.foreignkey(
         'seat.number', on_delete_cascade=True))
+
+    class _Meta_:
+        unique_together = ('showtime_id', 'seat')

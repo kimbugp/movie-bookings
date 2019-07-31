@@ -51,11 +51,17 @@ class Model:
 
     @classmethod
     def create(cls):
-        string = '''CREATE TABLE IF NOT EXISTS {} ({})'''.format(
+        string = '''CREATE TABLE IF NOT EXISTS {} ({}{})'''.format(
             cls.__name__.lower(),
-            ','.join([i for i in cls.parse_fields().values()]))
-
+            ','.join([i for i in cls.parse_fields().values()]),
+            cls.format_meta())
         return string
+
+    @classmethod
+    def format_meta(cls):
+        if getattr(cls, '_Meta_', None):
+            return ', UNIQUE({})'.format(','.join(cls._Meta_.unique_together))
+        return ''
 
     @classmethod
     def parse_fields(cls):
