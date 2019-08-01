@@ -6,7 +6,7 @@ class NotFound(Exception):
 
 
 def create_tables(db):
-    tables = [Users, Todo, Movie, ShowTime, Seat, Ticket]
+    tables = [Users, Movie, ShowTime, Seat, Ticket]
     for table in tables:
         string = table.create()
         with db.cursor(commit=True) as cursor:
