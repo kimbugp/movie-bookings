@@ -8,8 +8,8 @@ class UserController(SQLBaseController):
 
     def insert(self, **kwargs):
         query = '''
-        INSERT into users (email, password, name) VALUES ('{email}','{password}','{name}')
+        INSERT into users (email, password, name) VALUES \
+            ('{email}','{password}','{name}') RETURNING *
         '''.format(**kwargs)
-        cur = self.db.dict_cursor.execute(query)
-        import pdb; pdb.set_trace()
-        return cur.fetchone()
+        results = self.db.execute(query, True)
+        return {results}

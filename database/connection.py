@@ -1,11 +1,14 @@
-from psycopg2.pool import ThreadedConnectionPool
-from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
+
+from psycopg2 import connect
+from psycopg2.extras import RealDictCursor
+from psycopg2.pool import ThreadedConnectionPool
 
 
 class DBConnection():
     def __init__(self, db, *args, **kwargs):
         self.pool = ThreadedConnectionPool(1, 20, db)
+        self.obj = None
 
     @contextmanager
     def connect(self):
@@ -22,9 +25,10 @@ class DBConnection():
                 cursor_factory=RealDictCursor)
             try:
                 yield cursor
+
+            finally:
                 if commit:
                     connection.commit()
-            finally:
                 cursor.close()
 
     @contextmanager
@@ -33,15 +37,15 @@ class DBConnection():
             cursor = connection.cursor()
             try:
                 yield cursor
+            finally:
                 if commit:
                     connection.commit()
-            finally:
                 cursor.close()
 
     def execute(self, query, commit=False):
         with self.cursor(commit=commit) as cursor:
             cursor.execute(query)
-            data = cursor.fetchall()
+            data = list(cursor)
         return data
 
     def drop_all(self):

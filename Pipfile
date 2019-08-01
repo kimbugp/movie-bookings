@@ -10,6 +10,7 @@ pep8 = "*"
 flask = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
+flask-restplus = "*"
 
 [requires]
 python_version = "3.6"
