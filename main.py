@@ -6,7 +6,7 @@ from database import Connection
 from flask_restplus import Api
 from views.todo import todo
 authorizations = {
-    'apikey': {
+    'Bearer Token': {
         'type': 'apiKey',
         'in': 'header',
         'name': 'Authorization'

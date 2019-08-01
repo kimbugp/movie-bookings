@@ -6,10 +6,10 @@ from apps.cinema.schema.user_schema import *
 from apps.middlewares.validation import ValidationError
 from controllers.user_controller import UserController
 from flask_restplus import Resource
-from apps.middlewares.auth import generate_token
+from apps.middlewares.auth import generate_token, token_header
 
 
-@api.route('/register', endpoint='users')
+@api.route('/auth', endpoint='users')
 class UserRegistration(Resource):
     @api.marshal_with(user_schema_fields, envelope='user')
     @api.expect(user_request_fields)
@@ -24,6 +24,12 @@ class UserRegistration(Resource):
             return user, 201
         raise ValidationError(message='error', status_code=400, payload={
                               'message': 'User with email already exists'})
+
+    @api.marshal_with(user_schema_fields, envelope='user')
+    @api.doc(security='Authorisation')
+    @token_header
+    def get(self):
+        return request.user, 200
 
 
 @api.route('/login', endpoint='login')

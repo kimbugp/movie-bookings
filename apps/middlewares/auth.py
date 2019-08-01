@@ -4,21 +4,28 @@ from functools import wraps
 import jwt
 from flask import current_app, jsonify, make_response, request
 
+from apps.middlewares.validation import ValidationError
+from controllers.user_controller import UserController
+
 
 def token_header(f):
     ''' Function to get the token using the header'''
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get('Authorisation', None)
+        token = request.headers.get('Authorization', None)
         if not token:
-            return make_response(jsonify({'message': 'No auth token'}), 401)
+            raise ValidationError(message='error', status_code=401, payload={
+                'message': 'No auth token'})
         try:
             data = jwt.decode(
                 token, current_app.config['SECRET_KEY'], algorithm=['HS256'])
-            user_id = 1
-        except:
-            return make_response(jsonify({'message': 'Invalid token'}), 401)
-        return f(user_id, *args, **kwargs)
+            controller = UserController()
+            user = controller.find_one(email=data.get('email'))
+            request.user = user
+        except Exception as error:
+            raise ValidationError(message='error', status_code=401, payload={
+                'message': 'Invalid token'})
+        return f(*args, **kwargs)
     return decorated
 
 
