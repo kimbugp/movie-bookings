@@ -1,4 +1,4 @@
-from .base_model import Model as db
+from database import Model as db
 
 
 class Users(db):

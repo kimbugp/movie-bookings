@@ -25,7 +25,8 @@ class TestTodo(BaseTestCase):
         self.test_client.post('/todo', data=data,
                               headers={'Content-Type': 'application/json'})
         response = self.test_client.put(
-            '/todo/1', data=new_data, headers={'Content-Type': 'application/json'})
+            '/todo/1', data=new_data,
+            headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['name'], 'not going')
 

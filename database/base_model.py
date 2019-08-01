@@ -42,7 +42,8 @@ class Model:
 
     @classmethod
     def foreignkey(self, ref, on_delete_cascade=True):
-        cascade = 'ON DELETE CASCADE' if on_delete_cascade else 'ON DELETE RESTRICT'
+        cascade = 'ON DELETE CASCADE' if on_delete_cascade \
+            else 'ON DELETE RESTRICT'
         table, column = ref.split('.')
         return 'REFERENCES {}({}) {}'.format(
             table,
@@ -79,7 +80,8 @@ class Model:
             'columns': ','.join(record.keys()),
             'values': "\'" + "','".join(record.values())+"\'"
         }
-        return '''INSERT INTO {table_name}({columns}) VALUES ({values})'''.format(**record)
+        return '''INSERT INTO {table_name}({columns}) \
+            VALUES ({values})'''.format(**record)
 
     @classmethod
     def find(cls, operator, **kwargs):
@@ -89,7 +91,8 @@ class Model:
             'number': 1000,
             'params': cls.get_kwargs(operator, **kwargs) if kwargs else ''
         }
-        return'''SELECT {columns} from {table_name} LIMIT {number} {params}'''.format(**record)
+        return'''SELECT {columns} from {table_name}\
+             LIMIT {number} {params}'''.format(**record)
 
     @classmethod
     def get_kwargs(cls, operator, **kwargs):
@@ -98,9 +101,3 @@ class Model:
         for key, value in kwargs.items():
             ls.append(key+'='+str(value))
         return " WHERE "+operator.join(ls)
-
-    # update method
-    # get by id
-    # get by kwargs
-    # delete
-    # join method

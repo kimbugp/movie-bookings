@@ -1,7 +1,7 @@
 from flask import Flask
 
 from config import configurations
-from models.db import Database
+from database import Connection
 from views.todo import todo
 from views.users import auth
 
@@ -12,7 +12,7 @@ def create_app(config):
     app.register_blueprint(todo)
     app.register_blueprint(auth)
 
-    db = Database(app.config.get('DATABASE_URL'))
+    db = Connection(app.config.get('DATABASE_URL'))
     app.db = db
-    
+
     return app, db
