@@ -17,7 +17,7 @@ class Model:
         return 'TEXT'
 
     @classmethod
-    def date(self):
+    def datetime(self):
         return 'TIMESTAMP'
 
     @classmethod
