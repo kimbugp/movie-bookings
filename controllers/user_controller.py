@@ -19,3 +19,6 @@ class UserController(SQLBaseController):
     def find(self, **kwargs):
         query = Users.find('OR', **kwargs)
         return self.db.execute(query, True)
+
+    def find_one(self, **kwargs):
+        return self.find(**kwargs)[0]
