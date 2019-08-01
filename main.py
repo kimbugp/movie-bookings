@@ -5,13 +5,20 @@ from config import configurations
 from database import Connection
 from flask_restplus import Api
 from views.todo import todo
-
-api = Api(cinema_app)
+authorizations = {
+    'apikey': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
+api = Api(cinema_app, authorizations=authorizations)
 
 
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(configurations.get(config, 'development'))
+
     app.register_blueprint(todo)
     app.register_blueprint(cinema_app)
 

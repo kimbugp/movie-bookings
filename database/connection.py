@@ -1,8 +1,10 @@
 from contextlib import contextmanager
 
-from psycopg2 import connect
+import psycopg2
 from psycopg2.extras import RealDictCursor
 from psycopg2.pool import ThreadedConnectionPool
+
+from apps.middlewares.validation import ValidationError
 
 
 class DBConnection():
@@ -42,16 +44,21 @@ class DBConnection():
                     connection.commit()
                 cursor.close()
 
-    def execute(self, query, commit=False):
-        with self.cursor(commit=commit) as cursor:
-            cursor.execute(query)
-            data = list(cursor)
+    def execute(self, query, named=True, commit=False):
+        cur = self.dict_cursor if named else self.cursor
+        with cur(commit) as cursor:
+            try:
+                cursor.execute(query)
+                data = list(cursor)
+            except(psycopg2.OperationalError, psycopg2.errors.UniqueViolation) as error:
+                raise ValidationError(error.args[0].split(
+                    'DETAIL:')[1], status_code=400)
         return data
 
     def drop_all(self):
         query = '''SELECT table_schema,table_name FROM information_schema.tables\
              WHERE table_schema = 'public' ORDER BY table_schema,table_name'''
-        rows = self.execute(query)
+        rows = self.execute(query, named=False)
         with self.cursor(commit=True) as cursor:
             [cursor.execute("drop table " + row[1] + " cascade")
              for row in rows]

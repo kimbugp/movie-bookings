@@ -91,13 +91,15 @@ class Model:
             'number': 1000,
             'params': cls.get_kwargs(operator, **kwargs) if kwargs else ''
         }
-        return'''SELECT {columns} from {table_name}\
-             LIMIT {number} {params}'''.format(**record)
+        return'''SELECT {columns} from {table_name} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def get_kwargs(cls, operator, **kwargs):
         operator = " " + operator + " "
-        ls = []
+        query = []
         for key, value in kwargs.items():
-            ls.append(key+'='+str(value))
-        return " WHERE "+operator.join(ls)
+            if type(value) is int:
+                query.append(f"{key}={value}")
+            else:
+                query.append(f"{key}='{value}'")
+        return " WHERE "+operator.join(query)
