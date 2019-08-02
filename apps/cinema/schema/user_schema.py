@@ -1,6 +1,6 @@
 import re
 
-from jsonschema import validate
+from .schema_utils import validate_json
 
 from apps.cinema import api
 from apps.middlewares.validation import ValidationError
@@ -62,7 +62,7 @@ def process_user_json(var, partial=False):
     schema = user_schema.copy()
     if partial:
         schema.pop('required')
-    validate(var, schema)
+    validate_json(var, schema)
     if re.match(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', var['email'], re.I):
         return var
     raise ValidationError(
@@ -71,4 +71,4 @@ def process_user_json(var, partial=False):
 
 def process_signin_json(var):
     schema = user_login_schema.copy()
-    validate(var, schema)
+    validate_json(var, schema)

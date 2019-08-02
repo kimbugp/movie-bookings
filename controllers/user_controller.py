@@ -21,4 +21,5 @@ class UserController(SQLBaseController):
         return self.db.execute(query, True)
 
     def find_one(self, **kwargs):
-        return self.find(**kwargs)[0]
+        item = self.find(**kwargs)
+        return item[0] if len(item) > 0 else []
