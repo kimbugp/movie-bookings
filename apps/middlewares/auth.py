@@ -33,6 +33,6 @@ def generate_token(user):
     user.pop('password')
     token = jwt.encode({
         'exp': datetime.datetime.utcnow() +
-        datetime.timedelta(minutes=60), **user},
-        current_app.config['SECRET_KEY'], algorithm='HS256')
+        datetime.timedelta(days=60), **user},
+        current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     return token

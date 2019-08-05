@@ -8,8 +8,8 @@ from flask import request
 
 @api.route('/showtime', endpoint='showtime')
 class ShowTimeEndpoint(Resource):
-    @api.marshal_with(showtimes_schema, envelope='showtime')
+    # @api.marshal_with(showtimes_schema, envelope='showtime')
     @token_header
     def get(self):
         showtimes = ShowTimeController()
-        return showtimes.findall(), 200
+        return {'showtimes': showtimes.findall()}, 200

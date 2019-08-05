@@ -1,6 +1,6 @@
 
+from apps.cinema import api
 from flask_restplus import fields
-
 
 ticket_schema = api.model('ShowTime', {
     'payment_method': fields.String(required=True),
@@ -23,5 +23,4 @@ showtime = api.model('ShowTime', {
 
 showtimes_schema = api.model('ShowTimes', {
     'showtimes': fields.List(fields.Nested(showtime)),
-    'count': fields.Integer(required=True)
 })
