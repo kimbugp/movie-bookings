@@ -3,10 +3,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from apps.cinema import api
 from apps.cinema.schema.user_schema import *
+from apps.middlewares.auth import generate_token, token_header
 from apps.middlewares.validation import ValidationError
 from controllers.user_controller import UserController
 from flask_restplus import Resource
-from apps.middlewares.auth import generate_token, token_header
 
 
 @api.route('/auth', endpoint='users')

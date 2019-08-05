@@ -74,14 +74,13 @@ class Model:
     def fields(cls, *args, **kwargs):
         return args
 
-    def insert(self, record):
+    def insert_query(self, **kwargs):
         record = {
             'table_name': self.__class__.__name__.lower(),
-            'columns': ','.join(record.keys()),
-            'values': "\'" + "','".join(record.values())+"\'"
+            'columns': ','.join(kwargs.keys()),
+            'values': tuple(kwargs.values())
         }
-        return '''INSERT INTO {table_name}({columns}) \
-            VALUES ({values})'''.format(**record)
+        return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 
     @classmethod
     def find(cls, operator, **kwargs):

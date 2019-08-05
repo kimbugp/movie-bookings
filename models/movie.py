@@ -21,7 +21,7 @@ class ShowTime(db):
 
 class Seat(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
-    number = db.fields(db.string(100), db.not_null(), db.unique())
+    seat_number = db.fields(db.string(100), db.not_null(), db.unique())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
 
