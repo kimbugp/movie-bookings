@@ -1,13 +1,17 @@
-from models import *
 from apps.middlewares.validation import ValidationError
+from .fixtures import cinemahall, movie, seat, showtime
+from models import *
+from collections import OrderedDict
 
 
 class NotFound(Exception):
     pass
 
 
+tables = [Users, CinemaHall, Movie, ShowTime, Seat, Ticket]
+
+
 def create_tables(db):
-    tables = [Users, CinemaHall, Movie, ShowTime, Seat, Ticket]
     for table in tables:
         string = table.create()
         with db.cursor(commit=True) as cursor:
@@ -24,3 +28,19 @@ def find_or_404(db, model, **kwargs):
         raise ValidationError('error', status_code=400, payload={
                               'message': "{} not found".format(', '.join(result))})
     return results
+
+
+def seed_data(db):
+    db.drop_all()
+    create_tables(db)
+    fixtures = OrderedDict({
+        'cinemahall': CinemaHall,
+        'movie': Movie,
+        'showtime': ShowTime,
+        'seat': Seat,
+
+    })
+    for fixture, model in fixtures.items():
+        for item in eval(fixture):
+            query = model().insert_query(**item)
+            db.execute(query, named=True, commit=True)

@@ -12,4 +12,4 @@ class Ticket(db):
         'seat.seat_number', on_delete_cascade=True))
 
     class _Meta_:
-        unique_together = ('showtime_id', 'seat')
+        unique_together = ('showtime_id', 'seat_number')

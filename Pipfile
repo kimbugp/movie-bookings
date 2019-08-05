@@ -13,6 +13,7 @@ psycopg2-binary = "*"
 flask-restplus = "*"
 jsonschema = "*"
 pyjwt = "*"
+click = "*"
 
 [requires]
 python_version = "3.6"

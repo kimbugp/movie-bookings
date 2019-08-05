@@ -4,5 +4,5 @@ from .movie import Movie, ShowTime, Seat, CinemaHall
 
 
 __all__ = (
-    'Users', 'Ticket', 'Movie', 'ShowTime', 'Seat','CinemaHall'
+    'Users', 'Ticket', 'Movie', 'ShowTime', 'Seat', 'CinemaHall'
 )
