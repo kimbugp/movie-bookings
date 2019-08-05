@@ -19,8 +19,3 @@ class TicketBookings(Resource):
         controller = TicketController()        
         ticket = controller.insert(**body)
         return ticket
-
-    # @api.marshal_with(user_schema_fields, envelope='user')
-    # @api.doc(security='Authorisation')
-    # def get(self):
-    #     return request.user, 200
