@@ -17,7 +17,7 @@ class Model:
         return 'TEXT'
 
     @classmethod
-    def date(self):
+    def datetime(self):
         return 'TIMESTAMP'
 
     @classmethod
@@ -42,7 +42,8 @@ class Model:
 
     @classmethod
     def foreignkey(self, ref, on_delete_cascade=True):
-        cascade = 'ON DELETE CASCADE' if on_delete_cascade else 'ON DELETE RESTRICT'
+        cascade = 'ON DELETE CASCADE' if on_delete_cascade \
+            else 'ON DELETE RESTRICT'
         table, column = ref.split('.')
         return 'REFERENCES {}({}) {}'.format(
             table,
@@ -73,13 +74,25 @@ class Model:
     def fields(cls, *args, **kwargs):
         return args
 
-    def insert(self, record):
+    def process_records(self, records):
+        if type(records) is list:
+            values = [str(tuple(record.values())) for record in records]
+            values = ', '.join(values)
+
+            columns = records[0].keys()
+        else:
+            values = tuple(records.values())
+            columns = records.keys()
+        return columns, values
+
+    def insert_query(self, records):
+        columns, values = self.process_records(records)
         record = {
             'table_name': self.__class__.__name__.lower(),
-            'columns': ','.join(record.keys()),
-            'values': "\'" + "','".join(record.values())+"\'"
+            'columns': ','.join(columns),
+            'values': values
         }
-        return '''INSERT INTO {table_name}({columns}) VALUES ({values})'''.format(**record)
+        return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 
     @classmethod
     def find(cls, operator, **kwargs):
@@ -89,18 +102,15 @@ class Model:
             'number': 1000,
             'params': cls.get_kwargs(operator, **kwargs) if kwargs else ''
         }
-        return'''SELECT {columns} from {table_name} LIMIT {number} {params}'''.format(**record)
+        return'''SELECT {columns} from {table_name} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def get_kwargs(cls, operator, **kwargs):
         operator = " " + operator + " "
-        ls = []
+        query = []
         for key, value in kwargs.items():
-            ls.append(key+'='+str(value))
-        return " WHERE "+operator.join(ls)
-
-    # update method
-    # get by id
-    # get by kwargs
-    # delete
-    # join method
+            if type(value) is int:
+                query.append(f"{key}={value}")
+            else:
+                query.append(f"{key}='{value}'")
+        return " WHERE "+operator.join(query)

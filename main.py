@@ -1,18 +1,31 @@
 from flask import Flask
 
+from apps import cinema_app
 from config import configurations
-from models.db import Database
+from database import Connection
+from flask_restplus import Api
 from views.todo import todo
-from views.users import auth
+authorizations = {
+    'Bearer Token': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
+api = Api(cinema_app, authorizations=authorizations)
 
 
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(configurations.get(config, 'development'))
-    app.register_blueprint(todo)
-    app.register_blueprint(auth)
 
-    db = Database(app.config.get('DATABASE_URL'))
+    app.register_blueprint(todo)
+    app.register_blueprint(cinema_app)
+
+    db = Connection(app.config.get('DATABASE_URL'))
     app.db = db
-    
+
+    # import views
+    import apps.cinema.views
+
     return app, db
