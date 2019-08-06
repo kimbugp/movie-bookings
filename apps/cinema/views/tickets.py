@@ -7,7 +7,7 @@ from controllers.ticket_controller import TicketController
 from flask_restplus import Resource
 
 
-@api.route('/tickets', endpoint='tickets')
+@api.route('/ticket', endpoint='tickets')
 class TicketBookings(Resource):
     @api.marshal_with(ticket_response_body, envelope='ticket')
     @api.expect(ticket_schema)
@@ -16,6 +16,6 @@ class TicketBookings(Resource):
         body = api.payload or {}
         validate_json(body, schema)
         body['user_id'] = request.user.get('id')
-        controller = TicketController()        
+        controller = TicketController()
         ticket = controller.insert(**body)
         return ticket
