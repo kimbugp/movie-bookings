@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 pep8 = "*"
+pytest-cov = "*"
+coveralls = "*"
 
 [packages]
 flask = "*"
@@ -14,6 +16,7 @@ flask-restplus = "*"
 jsonschema = "*"
 pyjwt = "*"
 click = "*"
+coverage = "==4.5.1"
 
 [requires]
 python_version = "3.6"

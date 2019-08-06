@@ -30,5 +30,5 @@ class TicketController(SQLBaseController):
         results = self.db.execute(query, named=True, commit=True)
         if not results:
             raise ValidationError('error', status_code=400, payload={
-                'message': f" seat {seat} in cinema_hal not available check available seats for showtime"})
+                'message': f" seat number ['{seat}'] in cinema hall not available check available seats for showtime"})
         return results
