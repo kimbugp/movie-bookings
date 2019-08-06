@@ -43,7 +43,7 @@ class TestAuthentication(EndToEndBase):
         })
         response = self.test_client.post(
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_login_succeeds(self):
         data = json.dumps({

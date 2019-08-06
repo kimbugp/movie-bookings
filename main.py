@@ -1,6 +1,5 @@
 from flask import Flask
 
-from apps import cinema_app
 from config import configurations
 from database import Connection
 from flask_restplus import Api
@@ -12,15 +11,17 @@ authorizations = {
         'name': 'Authorization'
     }
 }
-api = Api(cinema_app, authorizations=authorizations)
+api = Api(prefix='/api/v1')
 
 
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(configurations.get(config, 'development'))
 
+    # initialise flask restplus routes
+    api.init_app(app, authorizations=authorizations)
+
     app.register_blueprint(todo)
-    app.register_blueprint(cinema_app)
 
     db = Connection(app.config.get('DATABASE_URL'))
     app.db = db

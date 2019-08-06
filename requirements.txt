@@ -20,11 +20,11 @@ py==1.8.0
 PyJWT==1.7.1
 pyparsing==2.4.2
 pyrsistent==0.15.4
-pytest==5.0.1
-pytest-cov==2.7.1
 python-dotenv==0.10.3
 pytz==2019.2
 six==1.12.0
 wcwidth==0.1.7
 Werkzeug==0.15.5
 zipp==0.5.2
+pytest==4.2.0
+pytest-cov==2.6.1
