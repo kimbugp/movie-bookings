@@ -6,3 +6,4 @@ class Users(db):
     email = db.fields(db.string(100), db.unique(), db.not_null(True))
     password = db.fields(db.string(100), db.not_null(True))
     name = db.fields(db.string(100), db.not_null(False))
+    is_staff = db.fields(db.boolean(default=False), db.not_null())
