@@ -16,8 +16,8 @@ class SQLBaseController():
         results = self.db.execute(query, named=True, commit=True)
         return results[0]
 
-    def find(self, **kwargs):
-        query = self.instance.find('OR', **kwargs)
+    def find(self, operator='OR', **kwargs):
+        query = self.instance.find(operator, **kwargs)
         return self.db.execute(query, True)
 
     def find_one(self, **kwargs):

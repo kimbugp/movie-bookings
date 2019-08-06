@@ -22,13 +22,15 @@ schema = {
         'payment_method': {"allOf": [
             {"type": "string"},
             {"minLength": 5},
+            {"maxLength": 10}
         ]},
         'seat_number': {"allOf": [
             {"type": "string"},
         ]},
         'showtime_id': {"allOf": [
             {"type": "integer"},
-            {"minLength": 5}
+            {"minLength": 5},
+            {"maxLength": 10}
         ]},
     },
     'required': ['payment_method', 'seat_number', 'showtime_id']

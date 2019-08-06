@@ -19,3 +19,24 @@ class TicketBookings(Resource):
         controller = TicketController()
         ticket = controller.insert(**body)
         return ticket
+
+    @api.marshal_with(ticket_response_body, envelope='tickets')
+    @api.expect(ticket_schema)
+    @token_header
+    def get(self):
+        user_id = request.user.get('id')
+        controller = TicketController()
+        ticket = controller.find(user_id=user_id)
+        return ticket
+
+
+@api.route('/ticket/<int:ticket_id>', endpoint='ticket')
+class TicketBooking(Resource):
+    @api.marshal_with(ticket_response_body, envelope='tickets')
+    @api.expect(ticket_schema)
+    @token_header
+    def get(self, ticket_id):
+        user_id = request.user.get('id')
+        controller = TicketController()
+        ticket = controller.find(operator='AND', user_id=user_id, id=ticket_id)
+        return ticket
