@@ -74,11 +74,23 @@ class Model:
     def fields(cls, *args, **kwargs):
         return args
 
-    def insert_query(self, **kwargs):
+    def process_records(self, records):
+        if type(records) is list:
+            values = [str(tuple(record.values())) for record in records]
+            values = ', '.join(values)
+
+            columns = records[0].keys()
+        else:
+            values = tuple(records.values())
+            columns = records.keys()
+        return columns, values
+
+    def insert_query(self, records):
+        columns, values = self.process_records(records)
         record = {
             'table_name': self.__class__.__name__.lower(),
-            'columns': ','.join(kwargs.keys()),
-            'values': tuple(kwargs.values())
+            'columns': ','.join(columns),
+            'values': values
         }
         return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 

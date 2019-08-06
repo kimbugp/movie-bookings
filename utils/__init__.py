@@ -1,5 +1,5 @@
 from apps.middlewares.validation import ValidationError
-from .fixtures import cinemahall, movie, seat, showtime
+from .fixtures import *
 from models import *
 from collections import OrderedDict
 
@@ -34,13 +34,13 @@ def seed_data(db):
     db.drop_all()
     create_tables(db)
     fixtures = OrderedDict({
+        'user': Users,
         'cinemahall': CinemaHall,
         'movie': Movie,
         'showtime': ShowTime,
         'seat': Seat,
-
+        'ticket': Ticket,
     })
     for fixture, model in fixtures.items():
-        for item in eval(fixture):
-            query = model().insert_query(**item)
-            db.execute(query, named=True, commit=True)
+        query = model().insert_query(eval(fixture))
+        db.execute(query, named=True, commit=True)
