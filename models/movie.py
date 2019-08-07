@@ -1,4 +1,5 @@
 from database import Model as db
+from sql import get_cte_query
 
 
 class Movie(db):
@@ -17,9 +18,13 @@ class ShowTime(db):
     price = db.fields(db.numeric(), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
-    
+
     class _Meta_:
         unique_together = ('show_date_time', 'movie_id')
+
+    def insert_query(self, records):
+        query = super().insert_query(records)
+        return get_cte_query('showtime_insert').format(query)
 
 
 class Seat(db):

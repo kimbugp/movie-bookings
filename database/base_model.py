@@ -1,3 +1,4 @@
+
 class Model:
 
     def __init__(self, **kwargs):
@@ -11,7 +12,7 @@ class Model:
     @classmethod
     def integer(self):
         return 'INTEGER'
-    
+
     @classmethod
     def boolean(self, default=False):
         return 'BOOLEAN DEFAULT {}'.format(default)
