@@ -15,7 +15,7 @@ class TicketBookings(Resource):
     def post(self):
         body = api.payload or {}
         validate_json(body, schema)
-        body['user_id'] = request.user.get('id')
+        body['user_id'] = request.user.id
         controller = TicketController()
         ticket = controller.insert(**body)
         return ticket
@@ -24,10 +24,10 @@ class TicketBookings(Resource):
     @api.expect(ticket_schema)
     @token_header
     def get(self):
-        user_id = request.user.get('id')
+        user_id = request.user.id
         controller = TicketController()
-        ticket = controller.find(user_id=user_id)
-        return ticket
+        tickets = controller.find(user_id=user_id,serialize=True)
+        return tickets,200
 
 
 @api.route('/ticket/<int:ticket_id>', endpoint='ticket')
@@ -36,7 +36,7 @@ class TicketBooking(Resource):
     @api.expect(ticket_schema)
     @token_header
     def get(self, ticket_id):
-        user_id = request.user.get('id')
+        user_id = request.user.id
         controller = TicketController()
-        ticket = controller.find(operator='AND', user_id=user_id, id=ticket_id)
+        ticket = controller.find_one(operator='AND', user_id=user_id, id=ticket_id,serialize=True)
         return ticket
