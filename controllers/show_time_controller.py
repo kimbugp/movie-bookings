@@ -12,21 +12,40 @@ class ShowTimeController(SQLBaseController):
         return results
 
     def find(self, showtime_id):
-        item = f'and st.id ={showtime_id}'
-        results = self.db.execute(
-            self.get_query(item), named=True, commit=True)
+        item = f'where id ={showtime_id}'
+        results = self.db.execute(self.get_query(item), named=True, commit=True)
         return results
 
+    def get_cte_query(self):
+        """
+        Common table(cte) expression to get showtime rows including available seats
+        """
+        return '''
+            -- cte for seats , showtime ids, movie name and price
+            with seats as (select distinct s.seat_number,st.id as id,m.name movie, st.price, st.show_date_time::varchar,c.name cinemahall
+                from showtime st
+            --	right join seats to st to get all seats
+                right join seat s on  s.cinema_hall = st.cinema_hall
+            --	join movie table with st table to get movie name
+                inner join movie m on m.id = st.movie_id
+            --	join cinema table to get cinema name
+                join cinemahall c on c.id = st.cinema_hall
+            --	get only showtimes in the future
+                where st.show_date_time >now()::date
+            except
+            -- get seats which are already taken from tickets table
+            select t.seat_number,t.showtime_id,NULL,NULL,NULL,NULL
+                from 
+                ticket t)
+
+            '''
     def get_query(self, item=''):
-        return '''select st.id,CAST(st.show_date_time as varchar),
-            string_agg(distinct s.seat_number, ',') as available_seats,
-            c.name cinemahall,movie.name movie, st.price
-            from showtime st
-            inner join cinemahall c on c.id = st.cinema_hall
-            left join ticket t on t.showtime_id = st.id
-            left join seat s on s.cinema_hall = st.cinema_hall
-            join movie on movie.id = st.movie_id
-            where t.showtime_id is null and st.show_date_time> current_date {0}
-            group by s.cinema_hall, cinemahall,t.user_id, st.show_date_time ,movie, st.id
-            order by st.show_date_time asc
+        """
+        Query to filter though the sub table from the cte
+        """
+        return self.get_cte_query()+'''select string_agg(distinct seat_number, ',') as available_seats,
+            id,movie,price,show_date_time, cinemahall
+            from seats 
+            {0} 
+            group by id,movie,price,show_date_time,cinemahall
             '''.format(item)
