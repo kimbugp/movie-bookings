@@ -10,3 +10,24 @@ showtimes_schema = api.model('ShowTime', {
     'cinemahall': fields.String(required=True),
     'available_seats': fields.String()
 })
+
+schema = {
+    'type': 'object',
+    'properties': {
+        'show_date_time': {"allOf": [
+            {"type": "string"},
+            {"format": "date-time"}
+        ]},
+        'movie_id': {"allOf": [
+            {"type": "integer"},
+        ]},
+        'price': {"allOf": [
+            {"type": "number"},
+        ]},
+        'cinema_hall': {"allOf": [
+            {"type": "integer"}
+        ]},
+    },
+    'required': ['show_date_time', 'movie_id', 'price','cinema_hall']
+}
+

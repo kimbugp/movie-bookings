@@ -21,6 +21,9 @@ def token_header(f):
                 token, current_app.config['SECRET_KEY'], algorithm=['HS256'])
             controller = UserController()
             user = controller.find_one(email=data.get('email'))
+            if not user:
+                raise ValidationError(message='error', status_code=401, payload={
+                    'message': 'Invalid token'})
             request.user = user
         except Exception as error:
             raise ValidationError(message='error', status_code=401, payload={
@@ -36,6 +39,7 @@ def generate_token(user):
         datetime.timedelta(days=60), **user},
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     return token
+
 
 def is_admin(f):
     @wraps(f)

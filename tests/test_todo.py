@@ -13,6 +13,17 @@ class TestTodo(BaseTestCase):
             '/todo', data=data, headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 201)
 
+    def test_get_todo_succeeds(self):
+        data = json.dumps({
+            'name': 'Go for lunch',
+            'description': 'Go for lunch at 1pm'
+        })
+        self.test_client.post(
+            '/todo', data=data, headers={'Content-Type': 'application/json'})
+        response = self.test_client.get(
+            '/todo/1', headers={'Content-Type': 'application/json'})
+        self.assertEqual(response.status_code, 200)
+
     def test_update_todo_succeeds(self):
         data = json.dumps({
             'name': 'Go for lunch',
@@ -54,6 +65,6 @@ class TestTodo(BaseTestCase):
             'description': 'Go for lunch at 1pm'
         })
         response = self.test_client.put(
-            '/todo/1', data=data, headers={'Content-Type': 'application/json'})
+            '/todo/100', data=data, headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json['error'], 'Not found')

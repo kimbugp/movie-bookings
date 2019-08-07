@@ -7,12 +7,9 @@ from .end_to_end_base import EndToEndBase
 
 class TestAuthentication(EndToEndBase):
 
-    def setUp(self):
-        super().setUp()
-
     def test_registration_succeeds(self):
         data = json.dumps({
-            "email": "string@bb.com",
+            "email": "simonp@bb.com",
             "name": "string",
             "password": "string"
         })
@@ -38,7 +35,7 @@ class TestAuthentication(EndToEndBase):
 
     def test_login_fails_with_non_existing_user(self):
         data = json.dumps({
-            "email": "string@bb.com",
+            "email": "invalid@bb.com",
             "password": "dsfdsf"
         })
         response = self.test_client.post(
@@ -56,8 +53,8 @@ class TestAuthentication(EndToEndBase):
         response = self.test_client.post(
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
-    
+
     def test_get_current_user(self):
         response = self.test_client.get(
-            '/api/v1/auth',headers={'Content-Type': 'application/json','Authorization':self.get_token()})
+            '/api/v1/auth', headers={'Content-Type': 'application/json', 'Authorization': self.get_token()})
         self.assertEqual(response.status_code, 200)

@@ -28,3 +28,4 @@ Werkzeug==0.15.5
 zipp==0.5.2
 pytest==4.2.0
 pytest-cov==2.6.1
+strict-rfc3339==0.7
