@@ -22,7 +22,7 @@ class ShowTime(db):
     class _Meta_:
         unique_together = ('show_date_time', 'movie_id')
 
-    def insert_query(self, records):
+    def _insert_query(self, records):
         query = super().insert_query(records)
         return get_cte_query('showtime_insert').format(query)
 

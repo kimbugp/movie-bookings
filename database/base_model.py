@@ -72,7 +72,7 @@ class Model:
     @classmethod
     def parse_fields(cls):
         dict1 = {key: key+' '+' '.join(value) for (key, value)
-                 in cls.__dict__.items() if key[:1] != '_'}
+                 in cls.__dict__.items() if key[:1] != '_' or not isinstance(value, object)}
         return dict1
 
     @classmethod
