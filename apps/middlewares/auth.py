@@ -21,7 +21,10 @@ def token_header(f):
                 token, current_app.config['SECRET_KEY'], algorithm=['HS256'])
             controller = UserController()
             user = controller.find_one(email=data.get('email'))
-            request.user = user
+            if not user:
+                raise ValidationError(message='error', status_code=401, payload={
+                'message': 'Invalid token'})
+            request.user = user            
         except Exception as error:
             raise ValidationError(message='error', status_code=401, payload={
                 'message': 'Invalid token'})

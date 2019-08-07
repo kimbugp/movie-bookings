@@ -3,7 +3,8 @@ user = [
         "email": "string@bb.com",
         "id": 1,
         "password": "sha256$eVoNIGww$6ff130bdd7a375a75f1ed4e1a7f20acb04ff3b4c8c0ab599d38d30ae6be7e003",
-        "name": "string"
+        "name": "string",
+        "is_staff":True
     }
 ]
 cinemahall = [

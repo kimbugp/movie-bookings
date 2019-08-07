@@ -17,6 +17,9 @@ class ShowTime(db):
     price = db.fields(db.numeric(), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
+    
+    class _Meta_:
+        unique_together = ('show_date_time', 'movie_id')
 
 
 class Seat(db):
