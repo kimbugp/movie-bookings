@@ -13,7 +13,8 @@ class ShowTimeController(SQLBaseController):
 
     def find(self, showtime_id):
         item = f'where id ={showtime_id}'
-        results = self.db.execute(self.get_query(item), named=True, commit=True)
+        results = self.db.execute(
+            self.get_query(item), named=True, commit=True)
         return results
 
     def get_cte_query(self):
@@ -39,6 +40,7 @@ class ShowTimeController(SQLBaseController):
                 ticket t)
 
             '''
+
     def get_query(self, item=''):
         """
         Query to filter though the sub table from the cte
