@@ -1,6 +1,6 @@
 
 from flask import current_app
-
+from collections import namedtuple
 from apps.middlewares.validation import ValidationError
 
 
@@ -18,8 +18,13 @@ class SQLBaseController():
 
     def find(self, operator='OR', **kwargs):
         query = self.instance.find(operator, **kwargs)
-        return self.db.execute(query, True)
+        return self.dict_to_tuple(self.db.execute(query, True))
 
     def find_one(self, **kwargs):
-        item = self.find(**kwargs)
-        return item[0] if len(item) > 0 else []
+        items = self.find(**kwargs)
+        return items[0] if len(items) > 0 else []
+    
+    def dict_to_tuple(self,items):
+        return [namedtuple(self.table.__name__,item.keys(),rename=False)(*item.values()) for item in items]
+
+

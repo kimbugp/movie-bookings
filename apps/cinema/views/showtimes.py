@@ -1,6 +1,6 @@
 from apps.cinema import api
 from apps.cinema.schema.showtime_schema import *
-from apps.middlewares.auth import token_header
+from apps.middlewares.auth import token_header, is_admin
 from controllers.show_time_controller import ShowTimeController
 from flask_restplus import Resource
 from flask import request
@@ -11,6 +11,13 @@ class ShowTimeEndpoint(Resource):
     @api.marshal_with(showtimes_schema, envelope='showtimes')
     @token_header
     def get(self):
+        showtimes = ShowTimeController()
+        return showtimes.findall(), 200
+    
+    @api.marshal_with(showtimes_schema, envelope='showtimes')
+    @token_header
+    @is_admin
+    def post(self):
         showtimes = ShowTimeController()
         return showtimes.findall(), 200
 

@@ -56,3 +56,8 @@ class TestAuthentication(EndToEndBase):
         response = self.test_client.post(
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
+    
+    def test_get_current_user(self):
+        response = self.test_client.get(
+            '/api/v1/auth',headers={'Content-Type': 'application/json','Authorization':self.get_token()})
+        self.assertEqual(response.status_code, 200)
