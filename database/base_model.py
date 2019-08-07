@@ -11,6 +11,10 @@ class Model:
     @classmethod
     def integer(self):
         return 'INTEGER'
+    
+    @classmethod
+    def boolean(self, default=False):
+        return 'BOOLEAN DEFAULT {}'.format(default)
 
     @classmethod
     def text(self):

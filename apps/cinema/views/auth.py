@@ -29,7 +29,7 @@ class UserRegistration(Resource):
     @api.doc(security='Authorisation')
     @token_header
     def get(self):
-        return request.user, 200
+        return request.user._asdict(), 200
 
 
 @api.route('/login', endpoint='login')
@@ -41,8 +41,8 @@ class LoginResource(Resource):
         process_signin_json(request_data)
         controller = UserController()
         user = controller.find_one(email=request_data.get('email'))
-        if user and check_password_hash(user.get('password'), request_data['password']):
-            user['token'] = generate_token(user)
-            return user, 200
+        if user and check_password_hash(user.password, request_data['password']):
+            token = generate_token(user._asdict())
+            return {'token':token,**user._asdict()}, 200
         raise ValidationError(message='error', status_code=401, payload={
                               'message': 'Invalid credentials'})

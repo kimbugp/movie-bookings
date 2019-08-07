@@ -9,7 +9,7 @@ from controllers.user_controller import UserController
 
 
 def token_header(f):
-    ''' Function to get the token using the header'''
+    ''' Function to get  and check the jwt token'''
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization', None)
@@ -36,3 +36,12 @@ def generate_token(user):
         datetime.timedelta(days=60), **user},
         current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
     return token
+
+def is_admin(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not request.user.is_staff:
+            raise ValidationError(message='error', status_code=401, payload={
+                'message': 'You have not permission to perform this action'})
+        return f(*args, **kwargs)
+    return decorated
