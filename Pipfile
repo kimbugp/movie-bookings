@@ -17,6 +17,7 @@ jsonschema = "*"
 pyjwt = "*"
 click = "*"
 coverage = "==4.5.1"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
