@@ -13,7 +13,7 @@ class TicketController(SQLBaseController):
         showtime = self.validate_showtime(kwargs.get('showtime_id'))
         self.validate_seat(kwargs.get('seat_number'),
                            kwargs.get('showtime_id'))
-        return super().insert(**kwargs)
+        return super().insert(kwargs)
 
     def validate_showtime(self, showtime):
         return find_or_404(self.db, ShowTime, id=showtime)

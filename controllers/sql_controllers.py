@@ -15,7 +15,7 @@ class SQLBaseController():
         self.db = current_app.db
         self.instance = self.table()
 
-    def insert(self, **kwargs):
+    def insert(self, kwargs):
         query = self.instance.insert_query(kwargs)
         results = self.db.execute(query, named=True, commit=True)
         return results[0]

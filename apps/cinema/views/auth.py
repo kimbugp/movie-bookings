@@ -20,7 +20,7 @@ class UserRegistration(Resource):
             user['password'], method='sha256')
         controller = UserController()
         if not controller.find(email=user.get('email')):
-            user = controller.insert(**user)
+            user = controller.insert(user)
             return user, 201
         raise ValidationError(message='error', status_code=400, payload={
                               'message': 'User with email already exists'})

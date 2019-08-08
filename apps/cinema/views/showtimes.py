@@ -22,7 +22,7 @@ class ShowTimeEndpoint(Resource):
         body = api.payload
         validate_json(body, schema)
         showtimes = ShowTimeController()
-        return showtimes.create(**body), 200
+        return showtimes.create(**body), 201
 
 
 @api.route('/showtime/<int:showtime_id>', endpoint='showtime')
