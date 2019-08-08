@@ -32,3 +32,12 @@ class ShowTimeEndpoint(Resource):
     def get(self, showtime_id):
         showtimes = ShowTimeController()
         return showtimes.find(showtime_id), 200
+
+    @api.marshal_with(showtimes_schema, envelope='showtimes')
+    @token_header
+    @is_admin
+    def put(self, showtime_id):
+        body = api.payload
+        validate_json(body, schema)
+        showtimes = ShowTimeController()
+        return showtimes.update(id=showtime_id, **body), 200

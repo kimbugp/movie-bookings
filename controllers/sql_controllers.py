@@ -4,6 +4,7 @@ from collections import namedtuple
 from flask import current_app
 
 from apps.middlewares.validation import ValidationError
+from sql import get_cte_query
 from utils import dict_to_tuple
 
 
@@ -17,6 +18,12 @@ class SQLBaseController():
     def insert(self, **kwargs):
         query = self.instance.insert_query(kwargs)
         results = self.db.execute(query, named=True, commit=True)
+        return results[0]
+
+    def update(self, id, operator='OR', **kwargs):
+        query = self.instance.update(id, operator, **kwargs)
+        results = self.db.execute(get_cte_query(
+            'showtime_insert').format(query), named=True, commit=True)
         return results[0]
 
     def find(self, operator='OR', serialize=False, **kwargs):
