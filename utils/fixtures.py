@@ -1,10 +1,10 @@
 user = [
     {
-        "email": "string@bb.com",
+        "email": "peter@gmail.com",
         "id": 1,
-        "password": "sha256$eVoNIGww$6ff130bdd7a375a75f1ed4e1a7f20acb04ff3b4c8c0ab599d38d30ae6be7e003",
-        "name": "string",
-        "is_staff":True
+        "password": "sha256$UyheEiSQ$1e5b829d612f4134c0c4848804549652862e795245f5ed1de8c885a81953b3e1",
+        "name": "Simon Peter K",
+        "is_staff": "true"
     }
 ]
 cinemahall = [
@@ -33,14 +33,16 @@ movie = [
         "date_of_release": "2019-08-05 00:00:00",
         "name": "sim",
         "category": "horror",
-        "rating": 1
+        "rating": 1,
+        "length": "2:30"
     },
     {
         "id": 2,
         "date_of_release": "2019-08-06 00:00:00",
         "name": "lord of rings",
         "category": "times",
-        "rating": 5
+        "rating": 5,
+        "length": "2:30"
     }
 ]
 

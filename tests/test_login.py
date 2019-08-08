@@ -45,7 +45,6 @@ class TestAuthentication(EndToEndBase):
     def test_login_succeeds(self):
         data = json.dumps({
             "email": "string@bb.com",
-            "name": "string",
             "password": "dsfdsf"
         })
         self.test_client.post(

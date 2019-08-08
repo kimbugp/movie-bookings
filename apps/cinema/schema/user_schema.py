@@ -39,7 +39,8 @@ user_schema = {
             {"minLength": 5}
         ]},
     },
-    'required': ['email', 'password', 'name']
+    'required': ['email', 'password', 'name'],
+    'additionalProperties': False
 }
 
 user_login_schema = {
@@ -54,7 +55,8 @@ user_login_schema = {
             {"minLength": 5}
         ]},
     },
-    'required': ['email', 'password']
+    'required': ['email', 'password'],
+    'additionalProperties': False
 }
 
 

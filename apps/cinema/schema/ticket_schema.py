@@ -33,5 +33,6 @@ schema = {
             {"maxLength": 10}
         ]},
     },
-    'required': ['payment_method', 'seat_number', 'showtime_id']
+    'required': ['payment_method', 'seat_number', 'showtime_id'],
+    'additionalProperties': False
 }

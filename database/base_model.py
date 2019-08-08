@@ -1,3 +1,4 @@
+
 class Model:
 
     def __init__(self, **kwargs):
@@ -11,7 +12,7 @@ class Model:
     @classmethod
     def integer(self):
         return 'INTEGER'
-    
+
     @classmethod
     def boolean(self, default=False):
         return 'BOOLEAN DEFAULT {}'.format(default)
@@ -39,6 +40,10 @@ class Model:
     @classmethod
     def primary(self):
         return 'PRIMARY KEY'
+
+    @classmethod
+    def time(self):
+        return 'TIME '
 
     @classmethod
     def not_null(self, val=True):
@@ -71,7 +76,7 @@ class Model:
     @classmethod
     def parse_fields(cls):
         dict1 = {key: key+' '+' '.join(value) for (key, value)
-                 in cls.__dict__.items() if key[:1] != '_'}
+                 in cls.__dict__.items() if key[:1] != '_' and not callable(value)}
         return dict1
 
     @classmethod

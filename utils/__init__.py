@@ -1,7 +1,9 @@
+from collections import OrderedDict, namedtuple
+
 from apps.middlewares.validation import ValidationError
-from .fixtures import *
 from models import *
-from collections import OrderedDict
+
+from .fixtures import *
 
 
 class NotFound(Exception):
@@ -18,16 +20,21 @@ def create_tables(db):
             cursor.execute(string)
 
 
-def find_or_404(db, model, **kwargs):
+def dict_to_tuple(table_name, items, serialize):
+    return [namedtuple(table_name, item.keys(), rename=False)(*item.values()) if not serialize else namedtuple(table_name, item.keys(), rename=False)(*item.values())._asdict() for item in items]
+
+
+def find_or_404(db, model, serialize=False, **kwargs):
     query = model.find('OR', **kwargs)
-    results = db.execute(query, commit=True)
+    results = dict_to_tuple(model.__name__, db.execute(
+        query, commit=True), serialize)
     if not results:
-        result = []
+        message = []
         for item, value in kwargs.items():
-            result.append(f"{item} = '{value}'")
+            message.append(f"{item} = '{value}'")
         raise ValidationError('error', status_code=400, payload={
-                              'message': "{} not found".format(', '.join(result))})
-    return results
+                              'message': "{} not found".format(', '.join(message))})
+    return results[-1]
 
 
 def seed_data(db):

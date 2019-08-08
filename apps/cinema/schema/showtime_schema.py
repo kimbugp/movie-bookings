@@ -28,6 +28,6 @@ schema = {
             {"type": "integer"}
         ]},
     },
-    'required': ['show_date_time', 'movie_id', 'price','cinema_hall']
+    'required': ['show_date_time', 'movie_id', 'price', 'cinema_hall'],
+    'additionalProperties': False
 }
-

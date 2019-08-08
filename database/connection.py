@@ -53,7 +53,7 @@ class DBConnection():
             except(psycopg2.OperationalError, psycopg2.errors.UniqueViolation) as error:
                 raise ValidationError(error.args[0].split(
                     'DETAIL:')[1], status_code=400)
-        return data
+            return data
 
     def drop_all(self):
         query = '''SELECT table_schema,table_name FROM information_schema.tables\
