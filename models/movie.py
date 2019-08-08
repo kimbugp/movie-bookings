@@ -8,6 +8,7 @@ class Movie(db):
     category = db.fields(db.string(100), db.not_null(True))
     date_of_release = db.fields(db.datetime(), db.not_null())
     rating = db.fields(db.integer(), db.not_null())
+    length = db.fields(db.time(), db.not_null())
 
 
 class ShowTime(db):
@@ -22,7 +23,7 @@ class ShowTime(db):
     class _Meta_:
         unique_together = ('show_date_time', 'movie_id')
 
-    def _insert_query(self, records):
+    def insert_query(self, records):
         query = super().insert_query(records)
         return get_cte_query('showtime_insert').format(query)
 

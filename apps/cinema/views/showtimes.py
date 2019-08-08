@@ -6,6 +6,7 @@ from flask_restplus import Resource
 from flask import request
 from apps.cinema.schema import validate_json
 
+
 @api.route('/showtime', endpoint='showtimes')
 class ShowTimeEndpoint(Resource):
     @api.marshal_with(showtimes_schema, envelope='showtimes')
@@ -13,15 +14,15 @@ class ShowTimeEndpoint(Resource):
     def get(self):
         showtimes = ShowTimeController()
         return showtimes.findall(), 200
-    
+
     @api.marshal_with(showtimes_schema, envelope='showtimes')
     @token_header
     @is_admin
     def post(self):
         body = api.payload
-        validate_json(body,schema)
+        validate_json(body, schema)
         showtimes = ShowTimeController()
-        return showtimes.insert(**body), 200
+        return showtimes.create(**body), 200
 
 
 @api.route('/showtime/<int:showtime_id>', endpoint='showtime')

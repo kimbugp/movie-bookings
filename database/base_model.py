@@ -42,6 +42,10 @@ class Model:
         return 'PRIMARY KEY'
 
     @classmethod
+    def time(self):
+        return 'TIME '
+
+    @classmethod
     def not_null(self, val=True):
         return 'NOT NULL' if val else 'NULL'
 
@@ -72,7 +76,7 @@ class Model:
     @classmethod
     def parse_fields(cls):
         dict1 = {key: key+' '+' '.join(value) for (key, value)
-                 in cls.__dict__.items() if key[:1] != '_' or not isinstance(value, object)}
+                 in cls.__dict__.items() if key[:1] != '_' and not callable(value)}
         return dict1
 
     @classmethod
