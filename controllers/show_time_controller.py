@@ -13,13 +13,16 @@ class ShowTimeController(SQLBaseController):
     query = 'query'
 
     def create(self, **kwargs):
+        # self.validate_showtime(kwargs)
+        import pdb; pdb.set_trace()
         # validate  cinemahall
+
         # validate movie
         # check where cinemahall will be available for
         # the showtime period given the movie length
 
         # insert if success
-        return super().insert(**kwargs)
+        return self.insert(**kwargs)
 
     def findall(self):
         results = self.db.execute(self.get_query(), named=True, commit=True)
