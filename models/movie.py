@@ -27,6 +27,9 @@ class ShowTime(db):
         query = super().insert_query(records)
         return get_cte_query('showtime_insert').format(query)
 
+    def clean(self, query):
+        return get_cte_query('clean_showtime').format(**query)
+
 
 class Seat(db):
     id = db.fields(db.serial(), db.primary(), db.unique())

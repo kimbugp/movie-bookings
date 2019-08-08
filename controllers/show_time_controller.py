@@ -1,11 +1,12 @@
 
 import os
 
-from models import ShowTime
+from apps.middlewares.validation import ValidationError
+from models import CinemaHall, Movie, ShowTime
+from sql import get_cte_query
+from utils import find_or_404
 
 from .sql_controllers import SQLBaseController
-
-from sql import get_cte_query
 
 
 class ShowTimeController(SQLBaseController):
@@ -13,15 +14,15 @@ class ShowTimeController(SQLBaseController):
     query = 'query'
 
     def create(self, **kwargs):
-        # self.validate_showtime(kwargs)
-        import pdb; pdb.set_trace()
-        # validate  cinemahall
+        cinema_hall = find_or_404(
+            self.db, CinemaHall, id=kwargs.get('cinema_hall'))
 
-        # validate movie
+        movie = find_or_404(self.db, Movie, id=kwargs.get('movie_id'))
         # check where cinemahall will be available for
         # the showtime period given the movie length
-
-        # insert if success
+        if self.db.execute(self.instance.clean(kwargs)):
+            raise ValidationError('error', payload={
+                                  'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_date_time')}"})
         return self.insert(**kwargs)
 
     def findall(self):

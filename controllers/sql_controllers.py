@@ -4,6 +4,7 @@ from collections import namedtuple
 from flask import current_app
 
 from apps.middlewares.validation import ValidationError
+from utils import dict_to_tuple
 
 
 class SQLBaseController():
@@ -27,4 +28,4 @@ class SQLBaseController():
         return items[0] if len(items) > 0 else []
 
     def dict_to_tuple(self, items, serialize):
-        return [namedtuple(self.table.__name__, item.keys(), rename=False)(*item.values()) if not serialize else namedtuple(self.table.__name__, item.keys(), rename=False)(*item.values())._asdict() for item in items]
+        return dict_to_tuple(self.table.__name__, items, serialize)
