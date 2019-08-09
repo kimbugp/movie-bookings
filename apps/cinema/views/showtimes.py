@@ -40,4 +40,4 @@ class ShowTimeEndpoint(Resource):
         body = api.payload
         validate_json(body, schema)
         showtimes = ShowTimeController()
-        return showtimes.update(id=showtime_id, **body), 200
+        return showtimes.update(id=showtime_id, record=body, serialize=True), 200

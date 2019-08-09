@@ -5,7 +5,7 @@ from flask import current_app
 
 from apps.middlewares.validation import ValidationError
 from sql import get_cte_query
-from utils import dict_to_tuple
+from utils import dict_to_tuple, find_or_404
 
 
 class SQLBaseController():
@@ -20,11 +20,10 @@ class SQLBaseController():
         results = self.db.execute(query, named=True, commit=True)
         return results[0]
 
-    def update(self, id, operator='OR', **kwargs):
-        query = self.instance.update(id, operator, **kwargs)
-        results = self.db.execute(get_cte_query(
-            'showtime_insert').format(query), named=True, commit=True)
-        return results[0]
+    def update(self, id, record, operator='OR', serialize=False):
+        find_or_404(self.db, self.table, id=id)
+        query = self.instance.update(id, operator, **record)
+        return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
     def find(self, operator='OR', serialize=False, **kwargs):
         query = self.instance.find(operator, **kwargs)

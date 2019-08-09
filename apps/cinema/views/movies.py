@@ -12,7 +12,7 @@ from flask_restplus import Model, Resource, fields, marshal_with
 
 @api.route('/movie', endpoint='movies')
 class MoviesResource(Resource):
-    @api.marshal_with(movie_response_schema, envelope='Movie')
+    @api.marshal_with(movie_response_schema, envelope='movie')
     @token_header
     @is_admin
     def post(self):
@@ -22,7 +22,7 @@ class MoviesResource(Resource):
         movie = controller.insert(body)
         return movie, 201
 
-    @api.marshal_with(movie_response_schema, envelope='Movie')
+    @api.marshal_with(movie_response_schema, envelope='movies')
     @token_header
     @is_admin
     def get(self):
@@ -32,9 +32,17 @@ class MoviesResource(Resource):
 
 @api.route('/movie/<int:movie_id>', endpoint='movie')
 class SingleMovieResource(Resource):
-    @api.marshal_with(movie_response_schema, envelope='Movie')
+    @api.marshal_with(movie_response_schema, envelope='movie')
     @token_header
-    @is_admin
     def get(self, movie_id):
         controller = MovieController()
-        return controller.find(id=movie_id,serialize=True), 200
+        return controller.find(id=movie_id, serialize=True), 200
+
+    @api.marshal_with(movie_response_schema, envelope='movie')
+    @token_header
+    @is_admin
+    def put(self, movie_id):
+        body = api.payload
+        api.schema_model('movie', {**schema}).validate(body)
+        controller = MovieController()
+        return controller.update(id=movie_id, record=body, serialize=True), 200

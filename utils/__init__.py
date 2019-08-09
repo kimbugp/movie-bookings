@@ -32,7 +32,7 @@ def find_or_404(db, model, serialize=False, **kwargs):
         message = []
         for item, value in kwargs.items():
             message.append(f"{item} = '{value}'")
-        raise ValidationError('error', status_code=400, payload={
+        raise ValidationError('error', status_code=404, payload={
                               'message': "{} not found".format(', '.join(message))})
     return results[-1]
 
