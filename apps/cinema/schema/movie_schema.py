@@ -1,3 +1,6 @@
+from apps.cinema import api
+from flask_restplus import fields
+
 schema = {
     'type': 'object',
     'properties': {
@@ -38,3 +41,14 @@ schema = {
     'required': ['date_of_release', 'rating', 'name', 'length', 'category'],
     'additionalProperties': False
 }
+
+
+movie_response_schema = api.model('ShowTime', {
+    'id': fields.Integer(required=True),
+    'name': fields.String(required=True),
+    'date_of_release': fields.String(required=True),
+    'length': fields.String(required=True),
+    'summary': fields.String(required=True),
+    'category': fields.String(required=True),
+    'rating': fields.Integer(required=True),
+})

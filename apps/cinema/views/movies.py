@@ -1,4 +1,6 @@
-from flask import request
+import datetime
+
+from flask import jsonify, request
 
 from apps.cinema import api
 from apps.cinema.schema import validate_json
@@ -7,33 +9,32 @@ from apps.middlewares.auth import is_admin, token_header
 from controllers.movies_controller import MovieController
 from flask_restplus import Model, Resource, fields, marshal_with
 
-movie_response_schema = api.schema_model('Movie', {**schema})
-
 
 @api.route('/movie', endpoint='movies')
 class MoviesResource(Resource):
-    # @marshal_with(movie_response_schema, envelope='movie')
-    @api.response(200, "OK", movie_response_schema)
+    @api.marshal_with(movie_response_schema, envelope='Movie')
     @token_header
     @is_admin
     def post(self):
         body = api.payload
-        movie_response_schema.validate(body)
-        # validate_json(body, schema)
+        api.schema_model('Movie', {**schema}).validate(body)
         controller = MovieController()
-        return controller.insert(body), 201
+        movie = controller.insert(body)
+        return movie, 201
 
+    @api.marshal_with(movie_response_schema, envelope='Movie')
     @token_header
     @is_admin
     def get(self):
         controller = MovieController()
-        return controller.find(), 200
+        return controller.find(serialize=True), 200
 
 
 @api.route('/movie/<int:movie_id>', endpoint='movie')
 class SingleMovieResource(Resource):
+    @api.marshal_with(movie_response_schema, envelope='Movie')
     @token_header
     @is_admin
     def get(self, movie_id):
         controller = MovieController()
-        return controller.find(id=movie_id), 200
+        return controller.find(id=movie_id,serialize=True), 200

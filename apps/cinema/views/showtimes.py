@@ -20,7 +20,7 @@ class ShowTimeEndpoint(Resource):
     @is_admin
     def post(self):
         body = api.payload
-        validate_json(body, schema)
+        api.schema_model('ShowTime', {**schema}).validate(body)
         showtimes = ShowTimeController()
         return showtimes.insert(body), 201
 
