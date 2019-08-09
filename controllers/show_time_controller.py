@@ -13,7 +13,7 @@ class ShowTimeController(SQLBaseController):
     table = ShowTime
     query = 'query'
 
-    def create(self, **kwargs):
+    def insert(self, kwargs):
         cinema_hall = find_or_404(
             self.db, CinemaHall, id=kwargs.get('cinema_hall'))
 
@@ -23,7 +23,7 @@ class ShowTimeController(SQLBaseController):
         if self.db.execute(self.instance.clean(kwargs)):
             raise ValidationError('error', payload={
                                   'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_date_time')}"})
-        return self.insert(kwargs)
+        return super().insert(kwargs)
 
     def findall(self):
         results = self.db.execute(self.get_query(), named=True, commit=True)

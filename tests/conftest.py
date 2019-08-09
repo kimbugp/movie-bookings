@@ -116,3 +116,18 @@ def ticket(test_client, auth_header):
     response = test_client.post(
         '/api/v1/ticket', data=data, headers=auth_header)
     return response, data
+
+
+@pytest.fixture(scope='function')
+def movie(test_client, auth_header):
+    data = json.dumps({
+        "name": "Lord of the rings",
+        "date_of_release": "2019-11-09 00:00:00",
+        "rating": 1,
+        "length": "2:30",
+        "category": "somejr",
+        "summary": "Simoejnjlkanfwdybusnrj,"
+    })
+    response = test_client.post(
+        '/api/v1/showtime', data=data, headers=auth_header)
+    return response, data
