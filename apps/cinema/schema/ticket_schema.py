@@ -8,7 +8,7 @@ from .schema_utils import validate_json
 
 ticket_schema = api.model('Ticket', {
     'payment_method': fields.String(required=True),
-    'seat_number': fields.String(required=True),
+    'seat_id': fields.String(required=True),
     'showtime_id': fields.Integer(required=True),
 })
 
@@ -24,8 +24,8 @@ schema = {
             {"minLength": 5},
             {"maxLength": 10}
         ]},
-        'seat_number': {"allOf": [
-            {"type": "string"},
+        'seat_id': {"allOf": [
+            {"type": "integer"},
         ]},
         'showtime_id': {"allOf": [
             {"type": "integer"},
@@ -33,6 +33,6 @@ schema = {
             {"maxLength": 10}
         ]},
     },
-    'required': ['payment_method', 'seat_number', 'showtime_id'],
+    'required': ['payment_method', 'seat_id', 'showtime_id'],
     'additionalProperties': False
 }

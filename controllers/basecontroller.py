@@ -21,11 +21,8 @@ class BaseController():
 
     def update(self, id, data):
         self.get(id)
-        try:
-            self.data[id] = data
-            return data
-        except:
-            raise NotFound()
+        self.data[id] = data
+        return data
 
     def delete(self, id):
         todo = self.data.pop(id, None)

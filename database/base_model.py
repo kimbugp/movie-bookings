@@ -1,10 +1,6 @@
 
 class Model:
 
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
     @classmethod
     def string(self, length):
         return 'VARCHAR ({})'.format(length)
@@ -114,12 +110,27 @@ class Model:
         return'''SELECT {columns} from {table_name} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
+    def update(cls, id, operator, **kwargs):
+        record = {
+            'table_name': cls.__name__.lower(),
+            'columns': ','.join(cls.parse_fields().keys()),
+            'params': f'WHERE id = {id}',
+            'values': ', '.join(cls.parse_values(kwargs))
+        }
+        return'''UPDATE {table_name}  SET {values} {params}RETURNING * '''.format(**record)
+
+    @classmethod
     def get_kwargs(cls, operator, **kwargs):
         operator = " " + operator + " "
+        query = cls.parse_values(kwargs)
+        return " WHERE "+operator.join(query)
+
+    @staticmethod
+    def parse_values(kwargs):
         query = []
         for key, value in kwargs.items():
             if type(value) is int:
                 query.append(f"{key}={value}")
             else:
                 query.append(f"{key}='{value}'")
-        return " WHERE "+operator.join(query)
+        return query

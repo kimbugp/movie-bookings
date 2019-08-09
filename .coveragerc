@@ -1,2 +1,2 @@
 [report]
-omit = run.py
+omit = tests/* ,run.py

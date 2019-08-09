@@ -9,6 +9,7 @@ class Movie(db):
     date_of_release = db.fields(db.datetime(), db.not_null())
     rating = db.fields(db.integer(), db.not_null())
     length = db.fields(db.time(), db.not_null())
+    summary = db.fields(db.text(), db.not_null(False))
 
 
 class ShowTime(db):
@@ -33,9 +34,12 @@ class ShowTime(db):
 
 class Seat(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
-    seat_number = db.fields(db.string(100), db.not_null(), db.unique())
+    seat_number = db.fields(db.string(100), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
+
+    class _Meta_:
+        unique_together = ('seat_number', 'cinema_hall')
 
 
 class CinemaHall(db):
