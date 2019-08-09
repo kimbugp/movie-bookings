@@ -92,3 +92,15 @@ def showtime(test_client, auth_header):
     response = test_client.post(
         '/api/v1/showtime', data=data, headers=auth_header)
     return response, data
+
+
+@pytest.fixture(scope='function')
+def cinema(test_client, auth_header):
+    data = json.dumps({
+        "name": "CInema25",
+        "description": "sdfgd",
+        "seats": ["A13", "B34", "w23"]
+    })
+    response = test_client.post(
+        '/api/v1/cinema', data=data, headers=auth_header)
+    return response, data

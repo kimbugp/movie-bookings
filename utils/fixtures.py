@@ -9,17 +9,14 @@ user = [
 cinemahall = [
 
     {
-        "id": 1,
         "name": "Cinema1",
         "description": "SOme data"
     },
     {
-        "id": 2,
         "name": "Cimena2",
         "description": "something esle"
     },
     {
-        "id": 3,
         "name": "Cinema 3",
         "description": "slef"
     }

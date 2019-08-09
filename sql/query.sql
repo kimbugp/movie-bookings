@@ -1,6 +1,6 @@
 WITH seats AS (
     SELECT DISTINCT
-        s.id as seat_id,
+        s.id AS seat_id,
         st.id AS st_id
     FROM
         showtime st
@@ -24,14 +24,15 @@ SELECT
     st.show_date_time::varchar,
     c.name cinemahall
 FROM
-    seats 
+    seats
     INNER JOIN showtime st ON st.id = seats.st_id
     --  join movie table with st table to get movie name
     INNER JOIN movie m ON m.id = st.movie_id
     -- join seats table to get the seat name
-    join seat on seat.id = seats.seat_id
+    JOIN seat ON seat.id = seats.seat_id
     --  join cinema table to get cinema name
     JOIN cinemahall c ON c.id = st.cinema_hall
+    -- place holder for where clause
     {0}
 GROUP BY
     st.id,
@@ -39,4 +40,3 @@ GROUP BY
     price,
     show_date_time,
     cinemahall
-

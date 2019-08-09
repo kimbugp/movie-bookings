@@ -9,6 +9,7 @@ class Movie(db):
     date_of_release = db.fields(db.datetime(), db.not_null())
     rating = db.fields(db.integer(), db.not_null())
     length = db.fields(db.time(), db.not_null())
+    summary = db.fields(db.text(), db.not_null(False))
 
 
 class ShowTime(db):
