@@ -18,7 +18,7 @@ def token_header(f):
                 'message': 'No auth token'})
         try:
             data = jwt.decode(
-                token, current_app.config['SECRET_KEY'], algorithm=['HS256'])
+                token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
             controller = UserController()
             user = controller.find_one(email=data.get('email'))
             if not user:

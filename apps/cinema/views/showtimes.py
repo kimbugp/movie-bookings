@@ -20,9 +20,9 @@ class ShowTimeEndpoint(Resource):
     @is_admin
     def post(self):
         body = api.payload
-        validate_json(body, schema)
+        api.schema_model('ShowTime', {**schema}).validate(body)
         showtimes = ShowTimeController()
-        return showtimes.create(**body), 201
+        return showtimes.insert(body), 201
 
 
 @api.route('/showtime/<int:showtime_id>', endpoint='showtime')
@@ -40,4 +40,4 @@ class ShowTimeEndpoint(Resource):
         body = api.payload
         validate_json(body, schema)
         showtimes = ShowTimeController()
-        return showtimes.update(id=showtime_id, **body), 200
+        return showtimes.update(id=showtime_id, record=body, serialize=True), 200

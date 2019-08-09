@@ -32,7 +32,7 @@ class TestShowTime():
         })
         response = test_client.post(
             '/api/v1/showtime', data=data, headers=auth_header)
-        assert response.status_code == 400
+        assert response.status_code == 404
 
     def test_create_show_time_fails_with_cinema_hall_already_filled(self, test_client, auth_header, showtime):
         _, data = showtime
@@ -64,5 +64,5 @@ class TestShowTime():
             "cinema_hall": 1
         })
         response = test_client.put(
-            '/api/v1/showtime/1'.format(1), data=data, headers=auth_header)
+            '/api/v1/showtime/1', data=data, headers=auth_header)
         assert response.status_code == 200
