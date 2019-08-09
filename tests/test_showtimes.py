@@ -53,7 +53,7 @@ class TestShowTime():
     def test_update_show_time_by_id_with_same_time_slot_fails(self, test_client, showtime, auth_header):
         _, data = showtime
         response = test_client.put(
-            '/api/v1/showtime/1'.format(1), data=data, headers=auth_header)
+            '/api/v1/showtime/1', data=data, headers=auth_header)
         assert response.status_code == 400
 
     def test_update_show_time_by_id_succeeds(self, test_client, showtime, auth_header):

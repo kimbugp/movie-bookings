@@ -51,6 +51,12 @@ class TestAuthentication(BaseTestCase):
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
 
+    def test_get_user_fails_with_invalid_token(self, test_client, registration):
+        response = test_client.get(
+            '/api/v1/auth', headers={'Content-Type': 'application/json',
+                                     'Authorization': "adfsgdbf dsfegbfdvsfv"})
+        assert response.status_code == 401
+
     def test_get_current_user(self, auth_header, test_client):
         response = test_client.get(
             '/api/v1/auth', headers=auth_header)

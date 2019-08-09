@@ -51,7 +51,8 @@ user_login_schema = {
     'properties': {
         'email':  {"allOf": [
             {"type": "string"},
-            {"minLength": 5}
+            {"minLength": 5},
+            {"pattern": "[a-z0-9\\._%+!$&*=^|~#%{}/\\-]+@([a-z0-9\\-]+\\.){1,}([a-z]{2,22})"}
         ]},
         'password': {"allOf": [
             {"type": "string"},
@@ -61,19 +62,3 @@ user_login_schema = {
     'required': ['email', 'password'],
     'additionalProperties': False
 }
-
-
-def process_user_json(var, partial=False):
-    schema = user_schema.copy()
-    if partial:
-        schema.pop('required')
-    validate_json(var, schema)
-    if re.match(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', var['email'], re.I):
-        return var
-    raise ValidationError(
-        'error', payload={'message': 'provide a valid email'})
-
-
-def process_signin_json(var):
-    schema = user_login_schema.copy()
-    validate_json(var, schema)

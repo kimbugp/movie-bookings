@@ -104,3 +104,15 @@ def cinema(test_client, auth_header):
     response = test_client.post(
         '/api/v1/cinema', data=data, headers=auth_header)
     return response, data
+
+
+@pytest.fixture(scope='function')
+def ticket(test_client, auth_header):
+    data = json.dumps({
+        "payment_method": "mombile",
+        "seat_id": 1,
+        "showtime_id": 2
+    })
+    response = test_client.post(
+        '/api/v1/ticket', data=data, headers=auth_header)
+    return response, data

@@ -15,7 +15,7 @@ class UserRegistration(Resource):
     @api.expect(user_request_fields)
     def post(self):
         user = api.payload
-        process_user_json(user)
+        validate_json(user, user_schema)
         user['password'] = generate_password_hash(
             user['password'], method='sha256')
         controller = UserController()
@@ -38,7 +38,7 @@ class LoginResource(Resource):
     @api.expect(user_request_fields)
     def post(self):
         request_data = api.payload
-        process_signin_json(request_data)
+        validate_json(request_data, user_login_schema)
         controller = UserController()
         user = controller.find_one(email=request_data.get('email'))
         if user and check_password_hash(user.password, request_data['password']):

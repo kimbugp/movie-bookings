@@ -18,7 +18,7 @@ class TicketBookings(Resource):
         body['user_id'] = request.user.id
         controller = TicketController()
         ticket = controller.insert(body)
-        return ticket
+        return ticket, 201
 
     @api.marshal_with(ticket_response_body, envelope='tickets')
     @api.expect(ticket_schema)
