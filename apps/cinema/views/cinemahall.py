@@ -16,11 +16,20 @@ class CinemaEndpoint(Resource):
     @is_admin
     def post(self):
         body = api.payload
-        validate_json(body, schema)
+        api.schema_model('cinema', {**schema}).validate(body)
         seats = body.pop('seats')
         controller = CinemaController()
         cinema = controller.insert(body)
-        seats_dict = [{'cinema_hall': cinema.get(
-            'id'), 'seat_number': seat} for seat in seats]
+        seats_dict = process_seats(seats)
         SeatController().insert(seats_dict)
         return {'seats': seats, **cinema}, 201
+
+
+def process_seats(seats):
+    results = []
+    for col in seats:
+        numbers = col.get('number')
+        [results.append({'cinema_hall': 1, 'number': item,
+                        'name': col.get('name'), }) for item in numbers]
+        
+    return results

@@ -29,12 +29,21 @@ schema = {
         },
         "seats": {
             "type": "array",
-            "maxItems": 20,
             "uniqueItems": True,
-            "additionalItems": True,
             "items": {
-                "type": "string",
-                "pattern": "^(.*)$"
+                    "type": "object",
+                    "required": ["name", "number"],
+                "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "number": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                }
             }
         }
     }

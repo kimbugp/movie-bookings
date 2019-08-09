@@ -17,7 +17,7 @@ FROM
     ticket t)
 -- query to get showtime details field
 SELECT
-    string_agg(DISTINCT seat.seat_number, ',') AS available_seats,
+    string_agg(DISTINCT seat.name || seat.number , ',') AS available_seats,
     st.id,
     m.name movie,
     st.price,

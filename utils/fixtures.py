@@ -43,48 +43,40 @@ movie = [
 
 seat = [
     {
-        "seat_number": "string",
-        "cinema_hall": 1
+
+        "number": 1,
+        "cinema_hall": 1,
+        "name": "a"
     },
     {
-        "seat_number": "h34",
-        "cinema_hall": 1
+        "number": 2,
+        "cinema_hall": 1,
+        "name": "a"
     },
     {
-        "seat_number": "h56",
-        "cinema_hall": 1
+        "number": 3,
+        "cinema_hall": 1,
+        "name": "a"
     },
     {
-        "seat_number": "y56",
-        "cinema_hall": 1
+        "number": 2,
+        "cinema_hall": 1,
+        "name": "b"
     },
     {
-        "seat_number": "d45",
-        "cinema_hall": 1
+        "number": 4,
+        "cinema_hall": 1,
+        "name": "b"
     },
     {
-        "seat_number": "h23",
-        "cinema_hall": 2
+        "number": 1,
+        "cinema_hall": 2,
+        "name": "c"
     },
     {
-        "seat_number": "h12",
-        "cinema_hall": 2
-    },
-    {
-        "seat_number": "e34",
-        "cinema_hall": 2
-    },
-    {
-        "seat_number": "g34",
-        "cinema_hall": 3
-    },
-    {
-        "seat_number": "a12",
-        "cinema_hall": 3
-    },
-    {
-        "seat_number": "e45",
-        "cinema_hall": 2
+        "number": 4,
+        "cinema_hall": 2,
+        "name": "e"
     }
 ]
 

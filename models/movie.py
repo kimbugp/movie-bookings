@@ -38,15 +38,52 @@ class ShowTime(db):
 
 class Seat(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
-    seat_number = db.fields(db.string(100), db.not_null())
+    name = db.fields(db.string(100), db.not_null())
+    number = db.fields(db.integer(), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
 
     class _Meta_:
-        unique_together = ('seat_number', 'cinema_hall')
+        unique_together = ('name', 'cinema_hall', 'number')
 
 
 class CinemaHall(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
     name = db.fields(db.string(100), db.not_null(), db.unique())
     description = db.fields(db.string(100), db.not_null())
+
+    {
+        "definitions": {},
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$id": "http://example.com/root.json",
+        "type": "object",
+        "title": "The Root Schema",
+        "required": [
+            "name",
+            "description",
+            "seats"
+        ],
+        "properties": {
+            "seats": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "name",
+                        "number"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "number": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

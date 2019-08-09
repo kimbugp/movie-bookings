@@ -18,7 +18,7 @@ class TestCinema():
             '/api/v1/cinema')
         assert response.status_code == 401
 
-    def test_create_showtime_succeeds(self, cinema):
+    def test_create_cinema_succeeds(self, cinema):
         response, data = cinema
         assert response.status_code == 201
 
