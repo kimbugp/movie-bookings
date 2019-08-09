@@ -1,7 +1,7 @@
 WITH seats AS (
     SELECT DISTINCT
-        s.seat_number,
-        st.id AS id
+        s.id as seat_id,
+        st.id AS st_id
     FROM
         showtime st
     RIGHT JOIN seat s ON s.cinema_hall = st.cinema_hall
@@ -11,13 +11,13 @@ EXCEPT
 DISTINCT
 -- get seats which are already taken from tickets table
 SELECT
-    t.seat_number,
+    t.seat_id,
     t.showtime_id
 FROM
     ticket t)
 -- query to get showtime details field
 SELECT
-    string_agg(DISTINCT seats.seat_number, ',') AS available_seats,
+    string_agg(DISTINCT seat.seat_number, ',') AS available_seats,
     st.id,
     m.name movie,
     st.price,
@@ -25,9 +25,11 @@ SELECT
     c.name cinemahall
 FROM
     seats 
-    INNER JOIN showtime st ON st.id = seats.id
+    INNER JOIN showtime st ON st.id = seats.st_id
     --  join movie table with st table to get movie name
     INNER JOIN movie m ON m.id = st.movie_id
+    -- join seats table to get the seat name
+    join seat on seat.id = seats.seat_id
     --  join cinema table to get cinema name
     JOIN cinemahall c ON c.id = st.cinema_hall
     {0}
@@ -37,3 +39,4 @@ GROUP BY
     price,
     show_date_time,
     cinemahall
+

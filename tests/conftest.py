@@ -79,3 +79,16 @@ def get_admin_token(test_client, registration):
             "password": "dsfdsf"
         }), headers={'Content-Type': 'application/json'})
     return response.json.get('user').get('token')
+
+
+@pytest.fixture(scope='function')
+def showtime(test_client, auth_header):
+    data = json.dumps({
+        "show_date_time": "2019-11-09 24:00:00",
+        "movie_id": 1,
+        "price": 20000,
+        "cinema_hall": 1
+    })
+    response = test_client.post(
+        '/api/v1/showtime', data=data, headers=auth_header)
+    return response, data
