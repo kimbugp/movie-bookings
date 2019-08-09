@@ -38,6 +38,9 @@ user_schema = {
             {"type": "string"},
             {"minLength": 5}
         ]},
+        'is_staff': {"allOf": [
+            {"type": "boolean"},
+        ]},
     },
     'required': ['email', 'password', 'name'],
     'additionalProperties': False

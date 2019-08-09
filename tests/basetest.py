@@ -3,6 +3,7 @@ import pytest
 from unittest import TestCase
 
 
-@pytest.mark.usefixtures("base_test_case")
-class BaseTestCase(TestCase):
-    pass
+class BaseTestCase():
+    
+    def assertEqual(self, arg1, arg2):
+        assert arg1 == arg2
