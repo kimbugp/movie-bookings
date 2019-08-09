@@ -3,6 +3,8 @@ from database import Model as db
 
 class Ticket(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
+    date_created = db.fields(db.datetime(auto_add=True))
+
     payment_method = db.fields(db.string(10), db.not_null())
     user_id = db.fields(db.integer(), db.not_null(),
                         db.foreignkey('users.id', on_delete_cascade=True))

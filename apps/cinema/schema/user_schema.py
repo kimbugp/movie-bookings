@@ -9,7 +9,8 @@ from flask_restplus import fields
 user_schema_fields = api.model('User', {
     'email': fields.String(required=True),
     'name': fields.String(required=True),
-    'id': fields.Integer(required=True)
+    'id': fields.Integer(required=True),
+
 })
 
 user_request_fields = api.model('User', {
@@ -19,7 +20,8 @@ user_request_fields = api.model('User', {
 })
 
 login_schema = user_schema_fields.clone('User', {
-    'token': fields.String(required=True)
+    'token': fields.String(required=True),
+    'date_created': fields.DateTime(dt_format='rfc822')
 })
 
 user_schema = {

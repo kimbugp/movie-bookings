@@ -18,8 +18,9 @@ class Model:
         return 'TEXT'
 
     @classmethod
-    def datetime(self):
-        return 'TIMESTAMP'
+    def datetime(self, auto_add=False):
+        string = 'TIMESTAMP'
+        return string+' DEFAULT NOW()' if auto_add else string
 
     @classmethod
     def unique(self):

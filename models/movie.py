@@ -4,6 +4,8 @@ from sql import get_cte_query
 
 class Movie(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
+    date_created = db.fields(db.datetime(auto_add=True))
+
     name = db.fields(db.string(100), db.not_null(True))
     category = db.fields(db.string(100), db.not_null(True))
     date_of_release = db.fields(db.datetime(), db.not_null())
@@ -14,6 +16,8 @@ class Movie(db):
 
 class ShowTime(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
+    date_created = db.fields(db.datetime(auto_add=True))
+
     show_date_time = db.fields(db.datetime(), db.not_null())
     movie_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
         'movie.id', on_delete_cascade=True))
@@ -40,6 +44,8 @@ class Seat(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
     name = db.fields(db.string(100), db.not_null())
     number = db.fields(db.integer(), db.not_null())
+    date_created = db.fields(db.datetime(auto_add=True))
+    seat_number = db.fields(db.string(100), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
 
@@ -49,5 +55,7 @@ class Seat(db):
 
 class CinemaHall(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
+    date_created = db.fields(db.datetime(auto_add=True))
+
     name = db.fields(db.string(100), db.not_null(), db.unique())
     description = db.fields(db.string(100), db.not_null())
