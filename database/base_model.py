@@ -72,7 +72,7 @@ class Model:
 
     @classmethod
     def parse_fields(cls):
-        dict1 = {key: key+' '+' '.join(value) for (key, value)
+        dict1 = {cls.__name__.lower()+'.'+key: key+' '+' '.join(value) for (key, value)
                  in cls.__dict__.items() if key[:1] != '_' and not callable(value)}
         return dict1
 
@@ -101,37 +101,39 @@ class Model:
         return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 
     @classmethod
-    def find(cls, operator, **kwargs):
+    def find(cls, operator, joins='', check='=', **kwargs):
+        table = cls.__name__.lower()
         record = {
-            'table_name': cls.__name__.lower(),
+            'table_name': table,
             'columns': ','.join(cls.parse_fields().keys()),
             'number': 1000,
-            'params': cls.get_kwargs(operator, **kwargs) if kwargs else ''
-        }
-        return'''SELECT {columns} from {table_name} {params} LIMIT {number} '''.format(**record)
+            'params': cls.get_kwargs(operator, check, **kwargs) if kwargs else '',
+            'joins': joins}
+        return'''SELECT {columns} from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def update(cls, id, operator, **kwargs):
+        table = cls.__name__.lower()
         record = {
-            'table_name': cls.__name__.lower(),
+            'table_name': table,
             'columns': ','.join(cls.parse_fields().keys()),
-            'params': f'WHERE id = {id}',
+            'params': f'WHERE {table}.id = {id}',
             'values': ', '.join(cls.parse_values(kwargs))
         }
-        return'''UPDATE {table_name}  SET {values} {params}RETURNING * '''.format(**record)
+        return'''UPDATE {table_name}  SET {values} {params} RETURNING * '''.format(**record)
 
     @classmethod
-    def get_kwargs(cls, operator, **kwargs):
+    def get_kwargs(cls, operator, check='=', **kwargs):
         operator = " " + operator + " "
-        query = cls.parse_values(kwargs)
+        query = cls.parse_values(kwargs, check)
         return " WHERE "+operator.join(query)
 
     @staticmethod
-    def parse_values(kwargs):
+    def parse_values(kwargs, check='='):
         query = []
         for key, value in kwargs.items():
             if type(value) is int:
-                query.append(f"{key}={value}")
+                query.append(f"{key}{check}{value}")
             else:
-                query.append(f"{key}='{value}'")
+                query.append(f"{key}{check}'{value}'")
         return query

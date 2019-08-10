@@ -10,7 +10,8 @@ from webargs import fields
 from webargs.flaskparser import use_args
 
 ticket_args = {"user_id": fields.Int(),
-               'date_created': fields.Str(validate=validate_date)}
+               'date_created': fields.Str(validate=validate_date),
+               'showtime_date': fields.Str(validate=validate_date)}
 
 
 @api.route('/ticket', endpoint='tickets')
