@@ -2,15 +2,6 @@
 from apps.cinema import api
 from flask_restplus import fields
 
-cinema_schema = api.model('ShowTime', {
-    'id': fields.Integer(required=True),
-    'show_date_time': fields.String(required=True),
-    'movie': fields.String(required=True),
-    'price': fields.Integer(required=True),
-    'cinemahall': fields.String(required=True),
-    'available_seats': fields.String()
-})
-
 schema = {
     "type": "object",
     "required": ["name", "description", "seats"],
@@ -51,3 +42,13 @@ schema = {
         }
     }
 }
+
+
+def process_seats(seats):
+    results = []
+    for col in seats:
+        numbers = col.get('number')
+        [results.append({'cinema_hall': 1, 'number': item,
+                         'name': col.get('name'), }) for item in numbers]
+
+    return results

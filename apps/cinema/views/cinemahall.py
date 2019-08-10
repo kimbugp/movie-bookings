@@ -10,8 +10,8 @@ from flask_restplus import Resource
 from utils import dict_to_tuple
 
 
-@api.route('/cinema', endpoint='cinema')
-class CinemaEndpoint(Resource):
+@api.route('/cinema', endpoint='cinemas')
+class CinemasEndpoint(Resource):
     @token_header
     @is_admin
     def post(self):
@@ -25,11 +25,16 @@ class CinemaEndpoint(Resource):
         return {'seats': seats, **cinema}, 201
 
 
-def process_seats(seats):
-    results = []
-    for col in seats:
-        numbers = col.get('number')
-        [results.append({'cinema_hall': 1, 'number': item,
-                        'name': col.get('name'), }) for item in numbers]
-        
-    return results
+@api.route('/cinema/<int:cinema_id>', endpoint='cinema')
+class CinemaEndpoint(Resource):
+    @token_header
+    @is_admin
+    def put(self, cinema_id):
+        body = api.payload
+        api.schema_model('cinema', {**schema}).validate(body)
+        seats = body.pop('seats')
+        controller = CinemaController()
+        cinema = controller.update(cinema_id, body, serialize=True)
+        seats_dict = process_seats(seats)
+        SeatController().insert(seats_dict)
+        return {'seats': seats, **cinema[0]}, 200

@@ -27,3 +27,28 @@ class TestCinema():
         response = test_client.post(
             '/api/v1/cinema', data=data, headers=auth_header)
         assert response.status_code == 400
+
+    def test_update_cinema_by_id_succeeds(self, test_client, cinema, auth_header):
+        data = json.dumps({
+            "name": "simon",
+            "description": "sdfgd",
+            "seats": [
+                {
+                    "name": "C",
+                    "number": [1, 2]
+                },
+                {
+                    "name": "D",
+                    "number": [1, 2]
+                }
+            ]
+        })
+        response = test_client.put(
+            '/api/v1/cinema/1', data=data, headers=auth_header)
+        assert response.status_code == 200
+
+    def test_update_cinema_by_id_fails(self, test_client, cinema, auth_header):
+        _, data = cinema
+        response = test_client.put(
+            '/api/v1/cinema/1', data=data, headers=auth_header)
+        assert response.status_code == 400
