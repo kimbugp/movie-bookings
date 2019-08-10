@@ -1,17 +1,19 @@
 from datetime import datetime
 
 from flask import request
+from flask_restplus import Resource
+from webargs.flaskparser import use_args
 
 from apps.cinema import api
-from apps.cinema.schema import validate_json
+from apps.cinema.schema import validate_date, validate_json
 from apps.cinema.schema.showtime_schema import *
 from apps.middlewares.auth import is_admin, token_header
 from controllers.show_time_controller import ShowTimeController
-from flask_restplus import Resource
-from webargs import fields
-from webargs.flaskparser import use_args
 
-showtime_args = {"start_date": fields.Str(), 'id': fields.Int()}
+from webargs import fields # noqa
+
+
+showtime_args = {"start_date": fields.Str(validate=validate_date), 'id': fields.Int()}
 
 
 @api.route('/showtime', endpoint='showtimes')
