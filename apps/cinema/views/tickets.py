@@ -9,7 +9,7 @@ from flask_restplus import Resource
 
 @api.route('/ticket', endpoint='tickets')
 class TicketBookings(Resource):
-    @api.marshal_with(ticket_response_body, envelope='ticket')
+    @api.marshal_with(ticket_response_body, envelope='ticket',skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def post(self):
@@ -20,7 +20,7 @@ class TicketBookings(Resource):
         ticket = controller.insert(body)
         return ticket, 201
 
-    @api.marshal_with(ticket_response_body, envelope='tickets')
+    @api.marshal_with(ticket_response_body, envelope='tickets',skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def get(self):
@@ -32,7 +32,7 @@ class TicketBookings(Resource):
 
 @api.route('/ticket/<int:ticket_id>', endpoint='ticket')
 class TicketBooking(Resource):
-    @api.marshal_with(ticket_response_body, envelope='tickets')
+    @api.marshal_with(ticket_response_body, envelope='tickets',skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def get(self, ticket_id):

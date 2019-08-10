@@ -29,7 +29,8 @@ movie = [
         "name": "sim",
         "category": "horror",
         "rating": 1,
-        "length": "2:30"
+        "length": "2:30",
+        'summary':'sdfsdfdgdsd'
     },
     {
 
@@ -37,7 +38,8 @@ movie = [
         "name": "lord of rings",
         "category": "times",
         "rating": 5,
-        "length": "2:30"
+        "length": "2:30",
+        'summary':'sdfdsdfghferw'
     }
 ]
 

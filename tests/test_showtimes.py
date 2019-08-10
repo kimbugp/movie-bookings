@@ -45,19 +45,15 @@ class TestShowTime(BaseTestCase):
     def test_get_show_time(self, test_client, showtime, auth_header):
         response = test_client.get(
             '/api/v1/showtime', headers=auth_header)
-        self.assertEqual(response.json, {
-            'showtimes':
-            [{'id': 8,
-              'show_date_time': '2019-11-10 00:00:00',
-              'movie': 'sim', 'price': 20000,
-              'cinemahall': 'Cinema1',
-              'available_seats': '1-->a1,2-->a2,3-->a3,4-->b2,5-->b4'}]})
+        self.assertCountEqual(
+            response.json['showtimes'][0]['available_seats'], 5)
+        self.assertIn(response.json['showtimes'][0]['available_seats'],
+                      {'id': 4, 'name': 'b', 'number': '2', 'cinema_hall': 1})
         self.assertEqual(response.status_code, 200)
 
     def test_get_show_time_by_id(self, test_client, showtime, auth_header):
         response = test_client.get(
             '/api/v1/showtime/1'.format(1), headers=auth_header)
-
         self.assertEqual(response.status_code, 200)
 
     def test_update_show_time_by_id_with_same_time_slot_fails(self, test_client, showtime, auth_header):
@@ -76,10 +72,3 @@ class TestShowTime(BaseTestCase):
         response = test_client.put(
             '/api/v1/showtime/1', data=data, headers=auth_header)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'showtimes': [
-                         {'id': 1, 'show_date_time':
-                          '2019-10-10 00:00:00',
-                          'movie': 'sim',
-                          'price': 20000,
-                          'cinemahall': 'Cinema1',
-                          'available_seats': None}]})

@@ -2,6 +2,12 @@
 from apps.cinema import api
 from flask_restplus import fields
 
+cinema_response_schema = api.model('Seats', {
+    'id': fields.Integer(required=True),
+    'name': fields.String(required=True),
+    'description': fields.String(required=True),
+})
+
 schema = {
     "type": "object",
     "required": ["name", "description", "seats"],

@@ -18,12 +18,13 @@ FROM
     ticket t)
 -- query to get showtime details field
 SELECT
-    string_agg(DISTINCT seat.id || '-->' || seat.name || seat.number, ',') AS available_seats,
+    json_agg(seat) AS available_seats,
+    count(seat.id) AS number_of_seats,
     st.id,
-    m.name movie,
+    json_agg(DISTINCT m) AS movie,
     st.price,
     st.show_date_time::varchar,
-    c.name cinemahall
+    json_agg(DISTINCT c) AS cinemahall
 FROM
     seats
     INNER JOIN showtime st ON st.id = seats.st_id
@@ -36,8 +37,4 @@ FROM
     -- place holder for where clause
     {0}
 GROUP BY
-    st.id,
-    movie,
-    price,
-    show_date_time,
-    cinemahall
+    st.id

@@ -11,7 +11,7 @@ from flask_restplus import Resource
 
 @api.route('/auth', endpoint='users')
 class UserRegistration(Resource):
-    @api.marshal_with(user_schema_fields, envelope='user')
+    @api.marshal_with(user_schema_fields, envelope='user',skip_none=True)
     @api.expect(user_request_fields)
     def post(self):
         user = api.payload
@@ -25,7 +25,7 @@ class UserRegistration(Resource):
         raise ValidationError(message='error', status_code=400, payload={
                               'message': 'User with email already exists'})
 
-    @api.marshal_with(user_schema_fields, envelope='user')
+    @api.marshal_with(user_schema_fields, envelope='user',skip_none=True)
     @api.doc(security='Authorisation')
     @token_header
     def get(self):
@@ -34,7 +34,7 @@ class UserRegistration(Resource):
 
 @api.route('/login', endpoint='login')
 class LoginResource(Resource):
-    @api.marshal_with(login_schema, envelope='user')
+    @api.marshal_with(login_schema, envelope='user',skip_none=True)
     @api.expect(user_request_fields)
     def post(self):
         request_data = api.payload
