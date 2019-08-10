@@ -35,14 +35,15 @@ class TestTickets(BaseTestCase):
             '/api/v1/ticket', data=data, headers=auth_header)
         assert response.status_code == 400
 
-    def test_get_all_ticket(self, test_client, ticket, auth_header):
+    def test_get_all_ticket(self, test_client, auth_header):
         response = test_client.get(
             '/api/v1/ticket', headers=auth_header)
-        self.assertEqual(response.json, {
-            'tickets': [{'payment_method': 'mombile',
-                         'seat_id': '1', 'showtime_id': 2,
-                         'id': '7',
-                         'user_id': 2}]})
+        self.assertIn(response.json['tickets'], {
+                      'payment_method': 'mombile',
+                      'seat_id': '1',
+                      'showtime_id': 2,
+                      'id': '7',
+                      'user_id': 2})
         self.assertEqual(response.status_code, 200)
 
     def test_get_ticket_by_id(self, test_client, ticket, auth_header):
