@@ -18,7 +18,7 @@ class SQLBaseController():
     def insert(self, kwargs):
         query = self.instance.insert_query(kwargs)
         results = self.db.execute(query, named=True, commit=True)
-        return results[0]
+        return results
 
     def update(self, id, record, operator='OR', serialize=False):
         find_or_404(self.db, self.table, id=id)

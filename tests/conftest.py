@@ -28,7 +28,7 @@ def test_client(app_and_db, init_db):
     yield app.test_client()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='class')
 def init_db(app_and_db):
     app, db = app_and_db
     seed_data(db)
@@ -95,7 +95,7 @@ def showtime(test_client, auth_header, init_db):
 
 
 @pytest.fixture(scope='function')
-def cinema(test_client, auth_header, init_db):
+def cinema(test_client, auth_header):
     data = json.dumps({
         "name": "Simon Peter",
         "description": "sdfgd",
@@ -116,7 +116,7 @@ def cinema(test_client, auth_header, init_db):
 
 
 @pytest.fixture(scope='function')
-def ticket(test_client, auth_header, init_db):
+def ticket(test_client, auth_header):
     data = json.dumps({
         "payment_method": "mombile",
         "seat_id": 1,

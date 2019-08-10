@@ -45,7 +45,6 @@ class Seat(db):
     name = db.fields(db.string(100), db.not_null())
     number = db.fields(db.integer(), db.not_null())
     date_created = db.fields(db.datetime(auto_add=True))
-    seat_number = db.fields(db.string(100), db.not_null())
     cinema_hall = db.fields(db.integer(), db.foreignkey(
         'cinemahall.id', on_delete_cascade=True))
 

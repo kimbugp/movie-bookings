@@ -22,11 +22,11 @@ class TestMovies(BaseTestCase):
     def test_create_movie_succeeds(self, movie):
         response, data = movie
         self.assertEqual(response.json, {'movie':
-                                         {'id': 3, 'name': 'Lord of thmke rings',
-                                          'date_of_release': '2019-11-09 00:00:00',
-                                          'length': '02:30:00',
-                                          'summary': 'Simoejnjlkanfwdybusnrj,',
-                                          'category': 'somejr', 'rating': 1}})
+                                         [{'id': 3, 'name': 'Lord of thmke rings',
+                                           'date_of_release': '2019-11-09 00:00:00',
+                                           'length': '02:30:00',
+                                           'summary': 'Simoejnjlkanfwdybusnrj,',
+                                           'category': 'somejr', 'rating': 1}]})
         self.assertEqual(response.status_code, 201)
 
     def test_get_all_movies(self, test_client, movie, auth_header):

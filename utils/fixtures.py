@@ -53,32 +53,32 @@ seat = [
     {
         "number": 2,
         "cinema_hall": 1,
-        "name": "a"
+        "name": "b"
     },
     {
         "number": 3,
         "cinema_hall": 1,
-        "name": "a"
+        "name": "c"
     },
     {
         "number": 2,
         "cinema_hall": 1,
-        "name": "b"
+        "name": "d"
     },
     {
         "number": 4,
         "cinema_hall": 1,
-        "name": "b"
+        "name": "e"
     },
     {
         "number": 1,
         "cinema_hall": 2,
-        "name": "c"
+        "name": "f"
     },
     {
         "number": 4,
         "cinema_hall": 2,
-        "name": "e"
+        "name": "g"
     }
 ]
 
