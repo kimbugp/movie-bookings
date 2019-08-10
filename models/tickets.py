@@ -8,7 +8,7 @@ class Ticket(db):
                         db.foreignkey('users.id', on_delete_cascade=True))
     showtime_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
         'showtime.id', on_delete_cascade=True))
-    seat_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
+    seat_id = db.fields(db.integer(), db.foreignkey(
         'seat.id', on_delete_cascade=True))
 
     class _Meta_:

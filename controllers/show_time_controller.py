@@ -7,6 +7,7 @@ from sql import get_cte_query
 from utils import find_or_404
 
 from .sql_controllers import SQLBaseController
+from datetime import datetime
 
 
 class ShowTimeController(SQLBaseController):
@@ -25,18 +26,13 @@ class ShowTimeController(SQLBaseController):
                                   'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_date_time')}"})
         return super().insert(kwargs)
 
-    def findall(self):
-        results = self.db.execute(self.get_query(), named=True, commit=True)
+    def find(self, id=None, start_date=datetime.now()):
+        item = f'where st.id ={id}' if id else ''
+        results = self.db.execute(self.get_query(start_date=start_date, item=item), named=True, commit=True)
         return results
 
-    def find(self, showtime_id):
-        item = f'where st.id ={showtime_id}'
-        results = self.db.execute(
-            self.get_query(item), named=True, commit=True)
-        return results
-
-    def get_query(self, item=''):
+    def get_query(self, item='', start_date=datetime.now()):
         """
         Query to filter though the sub table from the cte
         """
-        return get_cte_query(self.query).format(item)
+        return get_cte_query(self.query).format(item, start_date=start_date)
