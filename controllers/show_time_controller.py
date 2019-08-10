@@ -32,12 +32,6 @@ class ShowTimeController(SQLBaseController):
             start_date=start_date, item=item), named=True, commit=True)
         return results
 
-    # def find(self, showtime_id):
-
-    #     results = self.db.execute(
-    #         self.get_query(item), named=True, commit=True)
-    #     return results
-
     def get_query(self, item='', start_date=datetime.now()):
         """
         Query to filter though the sub table from the cte

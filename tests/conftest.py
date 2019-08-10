@@ -82,7 +82,7 @@ def get_admin_token(test_client, registration):
 
 
 @pytest.fixture(scope='function')
-def showtime(test_client, auth_header):
+def showtime(test_client, auth_header, init_db):
     data = json.dumps({
         "show_date_time": "2019-11-09 24:00:00",
         "movie_id": 1,
@@ -91,13 +91,13 @@ def showtime(test_client, auth_header):
     })
     response = test_client.post(
         '/api/v1/showtime', data=data, headers=auth_header)
-    return response, data
+    yield response, data
 
 
 @pytest.fixture(scope='function')
-def cinema(test_client, auth_header):
+def cinema(test_client, auth_header, init_db):
     data = json.dumps({
-        "name": "nsfddd",
+        "name": "Simon Peter",
         "description": "sdfgd",
         "seats": [
             {
@@ -112,11 +112,11 @@ def cinema(test_client, auth_header):
     })
     response = test_client.post(
         '/api/v1/cinema', data=data, headers=auth_header)
-    return response, data
+    yield response, data
 
 
 @pytest.fixture(scope='function')
-def ticket(test_client, auth_header):
+def ticket(test_client, auth_header, init_db):
     data = json.dumps({
         "payment_method": "mombile",
         "seat_id": 1,
@@ -124,11 +124,11 @@ def ticket(test_client, auth_header):
     })
     response = test_client.post(
         '/api/v1/ticket', data=data, headers=auth_header)
-    return response, data
+    yield response, data
 
 
 @pytest.fixture(scope='function')
-def movie(test_client, auth_header):
+def movie(test_client, auth_header, init_db):
     data = json.dumps({
         "name": "Lord of thmke rings",
         "date_of_release": "2019-11-09 00:00:00",
@@ -139,4 +139,4 @@ def movie(test_client, auth_header):
     })
     response = test_client.post(
         '/api/v1/movie', data=data, headers=auth_header)
-    return response, data
+    yield response, data

@@ -44,11 +44,11 @@ schema = {
 }
 
 
-def process_seats(seats):
+def process_seats(seats, cinema_hall):
     results = []
     for col in seats:
         numbers = col.get('number')
-        [results.append({'cinema_hall': 1, 'number': item,
+        [results.append({'cinema_hall': cinema_hall, 'number': item,
                          'name': col.get('name'), }) for item in numbers]
 
     return results

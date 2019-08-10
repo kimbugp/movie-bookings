@@ -1,4 +1,4 @@
-from flask import request
+from flask import current_app, request
 
 from apps.cinema import api
 from apps.cinema.schema import validate_json
@@ -7,7 +7,8 @@ from apps.middlewares.auth import is_admin, token_header
 from controllers.cinema import CinemaController
 from controllers.seats import SeatController
 from flask_restplus import Resource
-from utils import dict_to_tuple
+from models import CinemaHall
+from utils import dict_to_tuple, find_or_404
 
 
 @api.route('/cinema', endpoint='cinemas')
@@ -20,7 +21,7 @@ class CinemasEndpoint(Resource):
         seats = body.pop('seats')
         controller = CinemaController()
         cinema = controller.insert(body)
-        seats_dict = process_seats(seats)
+        seats_dict = process_seats(seats, cinema.get('id'))
         SeatController().insert(seats_dict)
         return {'seats': seats, **cinema}, 201
 
@@ -31,10 +32,11 @@ class CinemaEndpoint(Resource):
     @is_admin
     def put(self, cinema_id):
         body = api.payload
+        schema['required'] = ["seats"]
         api.schema_model('cinema', {**schema}).validate(body)
         seats = body.pop('seats')
         controller = CinemaController()
-        cinema = controller.update(cinema_id, body, serialize=True)
-        seats_dict = process_seats(seats)
+        cinema = find_or_404(current_app.db, CinemaHall, id=cinema_id)
+        seats_dict = process_seats(seats, cinema.id)
         SeatController().insert(seats_dict)
-        return {'seats': seats, **cinema[0]}, 200
+        return {'seats': seats, **cinema._asdict()}, 200
