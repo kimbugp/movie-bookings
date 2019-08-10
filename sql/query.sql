@@ -7,6 +7,7 @@ WITH seats AS (
     RIGHT JOIN seat s ON s.cinema_hall = st.cinema_hall
 WHERE
     st.show_date_time > now()::date
+    OR st.show_date_time > '{start_date}'
 EXCEPT
 DISTINCT
 -- get seats which are already taken from tickets table
@@ -17,7 +18,7 @@ FROM
     ticket t)
 -- query to get showtime details field
 SELECT
-    string_agg(DISTINCT seat.name || seat.number , ',') AS available_seats,
+    string_agg(DISTINCT seat.id || '-->' || seat.name || seat.number, ',') AS available_seats,
     st.id,
     m.name movie,
     st.price,

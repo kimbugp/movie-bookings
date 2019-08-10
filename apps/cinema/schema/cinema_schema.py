@@ -31,18 +31,21 @@ schema = {
             "type": "array",
             "uniqueItems": True,
             "items": {
-                    "type": "object",
-                    "required": ["name", "number"],
-                "properties": {
-                        "name": {
-                            "type": "string"
-                        },
-                        "number": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            }
+                "type": "object",
+                "required": ["name", "number"],
+                "properties":
+                {
+                    "name": {
+                        "uniqueItems": True,
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "array",
+                        "uniqueItems": True,
+                        "items": {
+                            "type": "integer"
                         }
+                    }
                 }
             }
         }
