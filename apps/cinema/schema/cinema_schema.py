@@ -1,11 +1,13 @@
 
 from apps.cinema import api
 from flask_restplus import fields
+from .seats_schema import seats_schema
 
-cinema_response_schema = api.model('Seats', {
+cinema_response_schema = api.model('Cinema', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
     'description': fields.String(required=True),
+    'seats': fields.Nested(seats_schema)
 })
 
 schema = {

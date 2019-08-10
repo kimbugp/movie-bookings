@@ -42,7 +42,7 @@ class LoginResource(Resource):
         controller = UserController()
         user = controller.find_one(email=request_data.get('email'))
         if user and check_password_hash(user.password, request_data['password']):
-            token = generate_token(user._asdict())
+            token = generate_token(user)
             return {'token': token, **user._asdict()}, 200
         raise ValidationError(message='error', status_code=401, payload={
                               'message': 'Invalid credentials'})

@@ -23,11 +23,11 @@ class TestTickets(BaseTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json, {
             'ticket':
-            {'payment_method': 'mombile',
-             'seat_id': '1',
-             'showtime_id': 2,
-             'id': '7',
-             'user_id': 2}})
+            [{'payment_method': 'mombile',
+              'seat_id': '1',
+              'showtime_id': 2,
+              'id': '7',
+              'user_id': 2}]})
 
     def test_create_show_time_fails_with_cinema_hall_already_filled(self, test_client, auth_header, ticket):
         _, data = ticket

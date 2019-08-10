@@ -4,13 +4,7 @@ from flask_restplus import fields
 
 from .movie_schema import movie_response_schema
 from .cinema_schema import cinema_response_schema
-
-seats_schema = api.model('Seats', {
-    'id': fields.Integer(required=True),
-    'name': fields.String(required=True),
-    'number': fields.String(required=True),
-    'cinema_hall': fields.Integer(required=True),
-})
+from .seats_schema import seats_schema
 
 showtimes_schema = api.model('ShowTime', {
     'id': fields.Integer(required=True),
@@ -19,7 +13,7 @@ showtimes_schema = api.model('ShowTime', {
     'price': fields.Integer(required=True),
     'cinemahall': fields.Nested(cinema_response_schema),
     'available_seats': fields.Nested(seats_schema),
-    "number_of_seats":fields.Integer(required=True),
+    "number_of_seats": fields.Integer(required=True),
 })
 
 schema = {

@@ -18,21 +18,23 @@ class TestCinema(BaseTestCase):
             '/api/v1/cinema')
         self.assertEqual(response.status_code, 401)
 
-    def test_create_cinema_succeeds(self, cinema):
-        response, data = cinema
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json, {'seats':
-                                         [{'name': 'A', 'number': [1, 2]},
-                                          {'name': 'B', 'number': [1, 2]}],
-                                         'id': 4, 'name': 'Simon Peter',
-                                         'description': 'sdfgd'})
-
     def test_create_show_time_fails_with_cinema_hall_already_filled(self, test_client, auth_header, cinema):
         _, data = cinema
         response = test_client.post(
             '/api/v1/cinema', data=data, headers=auth_header)
         assert response.status_code == 400
 
+    def create_cinema_succeeds(self, cinema):
+        response, data = cinema
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json, {'seats':
+                                         [{'name': 'A', 'number': [1, 2]},
+                                             {'name': 'B', 'number': [1, 2]}],
+                                         'id': 4, 'name': 'Simon Peter',
+                                         'description': 'sdfgd'})
+
+
+class TestUpdateCinema(BaseTestCase):
     def test_update_cinema_by_id_succeeds(self, test_client, cinema, auth_header):
         data = json.dumps({
             "seats": [
@@ -49,11 +51,16 @@ class TestCinema(BaseTestCase):
         response = test_client.put(
             '/api/v1/cinema/1', data=data, headers=auth_header)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'seats': [
-            {'name': 'C', 'number': [1, 2]},
-            {'name': 'D', 'number': [1, 2]}],
-            'id': 1, 'name': 'Cinema1',
-            'description': 'SOme data'})
+        self.assertEqual(response.json, {
+            'cinema':
+            {'id': 1,
+             'name': 'Cinema1',
+             'description': 'SOme data',
+             'seats': [
+                 {'id': 13, 'name': 'C', 'number': '1', 'cinema_hall': 1},
+                 {'id': 14, 'name': 'C', 'number': '2', 'cinema_hall': 1},
+                 {'id': 15, 'name': 'D', 'number': '1', 'cinema_hall': 1},
+                 {'id': 16, 'name': 'D', 'number': '2', 'cinema_hall': 1}]}})
 
     def test_update_cinema_by_id_fails(self, test_client, cinema, auth_header):
         _, data = cinema
