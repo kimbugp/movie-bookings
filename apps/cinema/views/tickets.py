@@ -2,13 +2,15 @@ from flask import Blueprint, jsonify, request
 
 from apps.cinema import api
 from apps.cinema.schema.ticket_schema import *
+from apps.cinema.schema import validate_date
 from apps.middlewares.auth import token_header
 from controllers.ticket_controller import TicketController
 from flask_restplus import Resource
 from webargs import fields
 from webargs.flaskparser import use_args
 
-ticket_args = {"user_id": fields.Int(), 'date_created': fields.Str()}
+ticket_args = {"user_id": fields.Int(),
+               'date_created': fields.Str(validate=validate_date)}
 
 
 @api.route('/ticket', endpoint='tickets')

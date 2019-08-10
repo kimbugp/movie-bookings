@@ -51,6 +51,19 @@ class TestShowTime(BaseTestCase):
                       {'id': 4, 'name': 'd', 'number': '2', 'cinema_hall': 1})
         self.assertEqual(response.status_code, 200)
 
+    def test_get_show_time_fails_with_invalid_date(self, test_client, showtime, auth_header):
+        response = test_client.get(
+            '/api/v1/showtime?start_date=2019-14-14', headers=auth_header)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json, {'message': 'use datetime format YYYY-MM-DD', 'error': 'error'})
+
+    def test_get_show_time_fails_with_valid_date_succeeds(self, test_client, showtime, auth_header):
+        response = test_client.get(
+            '/api/v1/showtime?start_date=2019-10-10', headers=auth_header)
+        self.assertEqual(response.status_code, 200)
+        self.assertCountEqual(response.json['showtimes'][0], 7)
+
     def test_get_show_time_by_id(self, test_client, showtime, auth_header):
         response = test_client.get(
             '/api/v1/showtime/1'.format(1), headers=auth_header)
