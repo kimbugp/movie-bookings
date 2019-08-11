@@ -1,7 +1,6 @@
 from flask import current_app, request
 
 from apps.cinema import api
-from apps.cinema.schema import validate_json
 from apps.cinema.schema.cinema_schema import *
 from apps.middlewares.auth import is_admin, token_header
 from controllers.cinema import CinemaController

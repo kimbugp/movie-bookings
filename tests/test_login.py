@@ -3,6 +3,7 @@ import json
 import psycopg2
 
 from .basetest import BaseTestCase
+from .utils import registration
 
 
 class TestAuthentication(BaseTestCase):
@@ -42,7 +43,8 @@ class TestAuthentication(BaseTestCase):
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
         assert response.status_code == 401
 
-    def test_login_succeeds(self, test_client, registration):
+    def test_login_succeeds(self, test_client):
+        self.registration(test_client, True)
         data = json.dumps({
             "email": "string@bb.com",
             "password": "dsfdsf"
@@ -51,7 +53,8 @@ class TestAuthentication(BaseTestCase):
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
         assert response.status_code == 200
 
-    def test_get_user_fails_with_invalid_token(self, test_client, registration):
+    def test_get_user_fails_with_invalid_token(self, test_client):
+        self.registration(test_client, True)
         response = test_client.get(
             '/api/v1/auth', headers={'Content-Type': 'application/json',
                                      'Authorization': "adfsgdbf dsfegbfdvsfv"})

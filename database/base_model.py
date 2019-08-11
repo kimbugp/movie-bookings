@@ -109,7 +109,7 @@ class Model:
             'number': 1000,
             'params': cls.get_kwargs(operator, check, **kwargs) if kwargs else '',
             'joins': joins}
-        return'''SELECT {columns} from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
+        return'''SELECT * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def update(cls, id, operator, **kwargs):
@@ -118,7 +118,7 @@ class Model:
             'table_name': table,
             'columns': ','.join(cls.parse_fields().keys()),
             'params': f'WHERE {table}.id = {id}',
-            'values': ', '.join(cls.parse_values(kwargs))
+            'values': ', '.join(cls.parse_values(kwargs, update=True))
         }
         return'''UPDATE {table_name}  SET {values} {params} RETURNING * '''.format(**record)
 
@@ -128,12 +128,18 @@ class Model:
         query = cls.parse_values(kwargs, check)
         return " WHERE "+operator.join(query)
 
-    @staticmethod
-    def parse_values(kwargs, check='='):
+    @classmethod
+    def parse_values(cls, kwargs, check='=', update=False):
+        table = cls.__name__.lower()+'.'
+        if update:
+            table = ''
         query = []
         for key, value in kwargs.items():
             if type(value) is int:
-                query.append(f"{key}{check}{value}")
+                query.append(f"{table}{key}{check}{value}")
+            elif type(value) is dict:
+                query.append(
+                    f"{value.get('table')}.{key}{check}'{value.get('value')}'")
             else:
-                query.append(f"{key}{check}'{value}'")
+                query.append(f"{table}{key}{check}'{value}'")
         return query

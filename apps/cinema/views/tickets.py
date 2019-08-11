@@ -9,9 +9,11 @@ from flask_restplus import Resource
 from webargs import fields
 from webargs.flaskparser import use_args
 
-ticket_args = {"user_id": fields.Int(),
+ticket_args = {'user_id': fields.Int(),
                'date_created': fields.Str(validate=validate_date),
-               'showtime_date': fields.Str(validate=validate_date)}
+               'show_date_time': fields.Str(validate=validate_date),
+               'movie_id': fields.Int(),
+               'price': fields.Float()}
 
 
 @api.route('/ticket', endpoint='tickets')
@@ -21,10 +23,16 @@ class TicketBookings(Resource):
     @token_header
     def post(self):
         body = api.payload or {}
-        validate_json(body, schema)
+        api.schema_model('Tickets', {**schema}).validate(body)
         body['user_id'] = request.user.id
         controller = TicketController()
-        ticket = controller.insert(body)
+
+        seats_ids = body.pop('seat_id')
+        seat_list = seats_ids if type(seats_ids) is list else [seats_ids]
+
+        seats = process_tickets_seats(body, seat_list)
+        ticket = controller.insert(seats, seat_id=seat_list, **body)
+
         return ticket, 201
 
     @api.marshal_with(ticket_response_body, envelope='tickets', skip_none=True)
@@ -42,7 +50,7 @@ class TicketBookings(Resource):
 
 @api.route('/ticket/<int:ticket_id>', endpoint='ticket')
 class TicketBooking(Resource):
-    @api.marshal_with(ticket_response_body, envelope='tickets', skip_none=True)
+    @api.marshal_with(ticket_response_body, envelope='ticket', skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def get(self, ticket_id):
