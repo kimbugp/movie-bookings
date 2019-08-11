@@ -25,6 +25,13 @@ class CinemasEndpoint(Resource):
         SeatController().insert(seats_dict)
         return {'seats': SeatController().insert(seats_dict), **cinema}, 201
 
+    @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
+    @token_header
+    @is_admin
+    def get(self):
+        controller = CinemaController()
+        return controller.find(serialize=True), 200
+
 
 @api.route('/cinema/<int:cinema_id>', endpoint='cinema')
 class CinemaEndpoint(Resource):
