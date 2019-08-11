@@ -87,3 +87,31 @@ class TestNormalUserTickets(BaseTestCase):
             '/api/v1/ticket', headers=user_auth_header)
         self.assertCountEqual(response.json['tickets'], 0)
         self.assertEqual(response.status_code, 200)
+
+    def test_create_bulk_ticket_succeeds(self, test_client, user_auth_header):
+        data = json.dumps({
+            "payment_method": "mombile",
+            "seat_id": [1, 2],
+            "showtime_id": 2
+        })
+        response = test_client.post(
+            '/api/v1/ticket', data=data, headers=user_auth_header)
+        self.assertEqual(response.status_code, 201)
+        self.assertCountEqual(response.json['ticket'][0], 6)
+        self.assertKeys(response.json['ticket'][0], {
+            'payment_method': 'mombile',
+            'seat_id': '1', 'showtime_id': 2,
+            'id': '7',
+            'user_id': 2})
+
+    def test_create_bulk_ticket_fails_with_invalid_seats(self, test_client, user_auth_header):
+        data = json.dumps({
+            "payment_method": "mombile",
+            "seat_id": [6, 7, 8, 9, 10],
+            "showtime_id": 2
+        })
+        response = test_client.post(
+            '/api/v1/ticket', data=data, headers=user_auth_header)
+        self.assertEqual(response.status_code, 400)
+        self.assertKeys(response.json, {
+                        'message': "seat numbers '{6, 7, 8, 9, 10}' in cinema hall not available check available seats for showtime", 'error': 'error'})

@@ -1,7 +1,5 @@
 import re
 
-from .schema_utils import validate_json
-
 from apps.cinema import api
 from apps.middlewares.validation import ValidationError
 from flask_restplus import fields
@@ -20,8 +18,7 @@ user_request_fields = api.model('User', {
 })
 
 login_schema = user_schema_fields.clone('User', {
-    'token': fields.String(required=True),
-    'date_created': fields.DateTime(dt_format='rfc822')
+    'token': fields.String(required=True)
 })
 
 user_schema = {

@@ -9,23 +9,24 @@ from .sql_controllers import SQLBaseController
 class TicketController(SQLBaseController):
     table = Ticket
 
-    def insert(self, kwargs):
-        showtime = self.validate_showtime(kwargs.get('showtime_id'))
-        self.validate_seat(kwargs.get('seat_id'),
-                           kwargs.get('showtime_id'))
-        return super().insert(kwargs)
+    def insert(self, seats, showtime_id, seat_id, **kwargs):
+        showtime = self.validate_showtime(showtime_id)
+        self.validate_seat(set(seat_id), showtime_id)
+        return super().insert(seats)
 
     def validate_showtime(self, showtime):
         return find_or_404(self.db, ShowTime, id=showtime)
 
-    def validate_seat(self, seat, showtime_id):
+    def validate_seat(self, seats, showtime_id):
         query = get_cte_query('available_seats').format(
-            seat_id=seat, showtime_id=showtime_id)
-        results = self.db.execute(query, named=True, commit=True)
-        if not results:
+            showtime_id=showtime_id)
+        results = self.db.execute(query, named=False)
+        available_seats = [] if results[0][0] is None else results[0][0]
+        seat_diff = seats.difference(set(available_seats))
+        if seat_diff:
             raise ValidationError('error', status_code=400, payload={
-                'message': f" seat number ['{seat}'] in cinema hall not available check available seats for showtime"})
-        return results
+                'message': f"seat numbers '{seat_diff}' in cinema hall not available check available seats for showtime"})
+        return
 
     def find(self, operator='OR', serialize=False, **kwargs):
         joins = ''

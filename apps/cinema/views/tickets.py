@@ -23,10 +23,16 @@ class TicketBookings(Resource):
     @token_header
     def post(self):
         body = api.payload or {}
-        validate_json(body, schema)
+        api.schema_model('Tickets', {**schema}).validate(body)
         body['user_id'] = request.user.id
         controller = TicketController()
-        ticket = controller.insert(body)
+
+        seats_ids = body.pop('seat_id')
+        seat_list = seats_ids if type(seats_ids) is list else [seats_ids]
+
+        seats = process_tickets_seats(body, seat_list)
+        ticket = controller.insert(seats, seat_id=seat_list, **body)
+
         return ticket, 201
 
     @api.marshal_with(ticket_response_body, envelope='tickets', skip_none=True)

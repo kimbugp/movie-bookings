@@ -11,11 +11,11 @@ from flask_restplus import Resource
 
 @api.route('/auth', endpoint='users')
 class UserRegistration(Resource):
-    @api.marshal_with(user_schema_fields, envelope='user',skip_none=True)
+    @api.marshal_with(user_schema_fields, envelope='user', skip_none=True)
     @api.expect(user_request_fields)
     def post(self):
         user = api.payload
-        validate_json(user, user_schema)
+        api.schema_model('User', {**user_schema}).validate(user)
         user['password'] = generate_password_hash(
             user['password'], method='sha256')
         controller = UserController()
@@ -25,7 +25,7 @@ class UserRegistration(Resource):
         raise ValidationError(message='error', status_code=400, payload={
                               'message': 'User with email already exists'})
 
-    @api.marshal_with(user_schema_fields, envelope='user',skip_none=True)
+    @api.marshal_with(user_schema_fields, envelope='user', skip_none=True)
     @api.doc(security='Authorisation')
     @token_header
     def get(self):
@@ -34,11 +34,12 @@ class UserRegistration(Resource):
 
 @api.route('/login', endpoint='login')
 class LoginResource(Resource):
-    @api.marshal_with(login_schema, envelope='user',skip_none=True)
+    @api.marshal_with(login_schema, envelope='user', skip_none=True)
     @api.expect(user_request_fields)
     def post(self):
         request_data = api.payload
-        validate_json(request_data, user_login_schema)
+        api.schema_model(
+            'User', {**user_login_schema}).validate(request_data)
         controller = UserController()
         user = controller.find_one(email=request_data.get('email'))
         if user and check_password_hash(user.password, request_data['password']):
