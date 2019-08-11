@@ -28,10 +28,10 @@ class TicketController(SQLBaseController):
         return results
 
     def find(self, operator='OR', serialize=False, **kwargs):
-        showtime_date = kwargs.pop('showtime_date', None)
         joins = ''
-        if showtime_date:
-            kwargs['showtime.show_date_time'] = showtime_date
+        for item in ['show_date_time', 'movie_id', 'price']:
             joins = 'left join showtime on showtime.id = ticket.showtime_id'
-        query = self.instance.find(operator, joins, check='>=', ** kwargs)
+            if item in kwargs.keys():
+                kwargs[item] = {'table': 'showtime', 'value': kwargs[item]}
+        query = self.instance.find(operator, joins, check='>=', **kwargs)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)

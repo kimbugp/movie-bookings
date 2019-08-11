@@ -4,6 +4,7 @@ from main import create_app
 from utils import NotFound, create_tables, seed_data
 import json
 
+from .utils import registration
 
 def raise_not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -43,26 +44,20 @@ def base_test_case(request, test_client, init_db):
 
 
 @pytest.fixture(scope='function')
-def auth_header(get_token):
+def auth_header(get_admin_token):
+    return {'Content-Type': 'application/json',
+            'Authorization': get_admin_token}
+
+
+@pytest.fixture(scope='function')
+def user_auth_header(get_token):
     return {'Content-Type': 'application/json',
             'Authorization': get_token}
 
 
 @pytest.fixture(scope='function')
-def registration(test_client):
-    data = json.dumps({
-        "email": "string@bb.com",
-        "name": "string",
-        "password": "dsfdsf",
-        "is_staff": True
-    })
-    response = test_client.post(
-        '/api/v1/auth', data=data, headers={'Content-Type': 'application/json'})
-    return response
-
-
-@pytest.fixture(scope='function')
-def get_token(test_client, registration):
+def get_admin_token(test_client):
+    registration(test_client, True)
     response = test_client.post(
         '/api/v1/login', data=json.dumps({
             "email": "string@bb.com",
@@ -72,7 +67,8 @@ def get_token(test_client, registration):
 
 
 @pytest.fixture(scope='function')
-def get_admin_token(test_client, registration):
+def get_token(test_client):
+    registration(test_client, False)
     response = test_client.post(
         '/api/v1/login', data=json.dumps({
             "email": "string@bb.com",

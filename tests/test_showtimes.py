@@ -85,3 +85,13 @@ class TestShowTime(BaseTestCase):
         response = test_client.put(
             '/api/v1/showtime/1', data=data, headers=auth_header)
         self.assertEqual(response.status_code, 200)
+
+
+class TestShowTimeUsers(BaseTestCase):
+    def test_create_showtime_fails_when_not_admin(self, test_client,
+                                                  user_auth_header):
+        data = json.dumps({
+        })
+        response = test_client.post(
+            '/api/v1/showtime', data=data, headers=user_auth_header)
+        assert response.status_code == 401

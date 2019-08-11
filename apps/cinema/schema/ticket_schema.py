@@ -14,8 +14,14 @@ ticket_schema = api.model('Ticket', {
 
 ticket_response_body = ticket_schema.clone('Ticket', {
     'id': fields.String(required=True),
-    'user_id': fields.Integer(required=True)
+    'user_id': fields.Integer(required=True),
+    'date_created': fields.String(),
+    'show_date_time': fields.String(),
+    'movie_id': fields.Integer(),
+    'price': fields.Float()
 })
+
+
 schema = {
     'type': 'object',
     'properties': {
