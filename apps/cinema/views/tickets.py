@@ -13,7 +13,8 @@ ticket_args = {'user_id': fields.Int(),
                'date_created': fields.Str(validate=validate_date),
                'show_date_time': fields.Str(validate=validate_date),
                'movie_id': fields.Int(),
-               'price': fields.Float()}
+               'price': fields.Float(),
+               'id': fields.Int()}
 
 
 @api.route('/ticket', endpoint='tickets')
@@ -44,7 +45,8 @@ class TicketBookings(Resource):
         controller = TicketController()
         if not request.user.is_staff:
             args['user_id'] = request.user.id
-        tickets = controller.find(serialize=True, operator='AND', **args)
+        tickets = controller.find(
+            serialize=True, operator='AND', check='=', ** args)
         return tickets, 200
 
 

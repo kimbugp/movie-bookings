@@ -8,6 +8,7 @@ user_schema_fields = api.model('User', {
     'email': fields.String(required=True),
     'name': fields.String(required=True),
     'id': fields.Integer(required=True),
+    'total': fields.Float()
 
 })
 

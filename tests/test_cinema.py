@@ -1,6 +1,7 @@
 import json
 
 import psycopg2
+
 from .basetest import BaseTestCase
 
 
@@ -17,6 +18,11 @@ class TestCinema(BaseTestCase):
         response = test_client.post(
             '/api/v1/cinema')
         self.assertEqual(response.status_code, 401)
+    
+    def test_get_cinema(self, test_client, auth_header):
+        response = test_client.get(
+            '/api/v1/cinema', headers=auth_header)
+        self.assertEqual(response.status_code, 200)
 
     def test_create_show_time_fails_with_cinema_hall_already_filled(self, test_client, auth_header, cinema):
         _, data = cinema

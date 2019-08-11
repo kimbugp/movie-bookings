@@ -26,7 +26,7 @@ def token_header(f):
                     'message': 'Invalid token'})
             request.user = user
         except Exception as error:
-            raise ValidationError(message='error', status_code=401, payload={
+            raise ValidationError(message=str(error), status_code=401, payload={
                 'message': 'Invalid token'})
         return f(*args, **kwargs)
     return decorated

@@ -109,7 +109,7 @@ class Model:
             'number': 1000,
             'params': cls.get_kwargs(operator, check, **kwargs) if kwargs else '',
             'joins': joins}
-        return'''SELECT * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
+        return'''SELECT distinct * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def update(cls, id, operator, **kwargs):

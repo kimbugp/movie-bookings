@@ -8,6 +8,10 @@ from controllers.seats import SeatController
 from flask_restplus import Resource
 from models import CinemaHall
 from utils import dict_to_tuple, find_or_404
+from webargs import fields as flds
+from webargs.flaskparser import use_args
+
+cinema_args = {'id': flds.Int()}
 
 
 @api.route('/cinema', endpoint='cinemas')
@@ -28,9 +32,10 @@ class CinemasEndpoint(Resource):
     @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
     @token_header
     @is_admin
-    def get(self):
+    @use_args(cinema_args)
+    def get(self, args):
         controller = CinemaController()
-        return controller.find(serialize=True), 200
+        return controller.find(serialize=True, **args), 200
 
 
 @api.route('/cinema/<int:cinema_id>', endpoint='cinema')

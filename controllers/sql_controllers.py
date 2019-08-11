@@ -25,8 +25,8 @@ class SQLBaseController():
         query = self.instance.update(id, operator, **record)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
-    def find(self, operator='OR', serialize=False, joins='', **kwargs):
-        query = self.instance.find(operator, joins, **kwargs)
+    def find(self, operator='OR', serialize=False, joins='', check='=', **kwargs):
+        query = self.instance.find(operator, joins, check, **kwargs)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
     def find_one(self, serialize=False, **kwargs):

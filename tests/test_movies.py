@@ -33,14 +33,6 @@ class TestMovies(BaseTestCase):
         response = test_client.get(
             '/api/v1/movie', headers=auth_header)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['movies'][0],
-                         {'id': 1,
-                          'name': 'sim',
-                          'date_of_release': '2019-08-05 00:00:00',
-                          'length': '02:30:00',
-                          'summary': 'sdfsdfdgdsd',
-                          'category': 'horror',
-                          'rating': 1})
 
     def test_get_movie_by_id(self, test_client, movie, auth_header):
         response = test_client.get(

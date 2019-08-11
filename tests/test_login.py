@@ -51,7 +51,7 @@ class TestAuthentication(BaseTestCase):
         })
         response = test_client.post(
             '/api/v1/login', data=data, headers={'Content-Type': 'application/json'})
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_get_user_fails_with_invalid_token(self, test_client):
         self.registration(test_client, True)
@@ -63,4 +63,23 @@ class TestAuthentication(BaseTestCase):
     def test_get_current_user(self, auth_header, test_client):
         response = test_client.get(
             '/api/v1/auth', headers=auth_header)
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
+
+
+class TestUserFiltering(BaseTestCase):
+    def test_get_user_all_users_with_tickets(self, auth_header, test_client):
+        response = test_client.get(
+            '/api/v1/users', headers=auth_header)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_user_greater_than_10000(self, auth_header, test_client):
+        response = test_client.get(
+            '/api/v1/users?ticket_startdate=2017-01-11\
+                &ticket_enddate=2019-10-11\
+                    &total=100000&report=True', headers=auth_header)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_user_greater_than_10000(self, auth_header, test_client):
+        response = test_client.get(
+            '/api/v1/users?report=True', headers=auth_header)
+        self.assertEqual(response.status_code, 200)

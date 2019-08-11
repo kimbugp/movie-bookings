@@ -28,11 +28,9 @@ class TicketController(SQLBaseController):
                 'message': f"seat numbers '{seat_diff}' in cinema hall not available check available seats for showtime"})
         return
 
-    def find(self, operator='OR', serialize=False, **kwargs):
-        joins = ''
+    def find(self, operator='OR', serialize=False, check='=', ** kwargs):
         for item in ['show_date_time', 'movie_id', 'price']:
             joins = 'left join showtime on showtime.id = ticket.showtime_id'
             if item in kwargs.keys():
                 kwargs[item] = {'table': 'showtime', 'value': kwargs[item]}
-        query = self.instance.find(operator, joins, check='>=', **kwargs)
-        return self.dict_to_tuple(self.db.execute(query, True), serialize)
+        return super().find(operator, serialize, joins, check, **kwargs)
