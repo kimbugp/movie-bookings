@@ -74,12 +74,10 @@ class TestUserFiltering(BaseTestCase):
 
     def test_get_user_greater_than_10000(self, auth_header, test_client):
         response = test_client.get(
-            '/api/v1/users?ticket_startdate=2017-01-11\
-                &ticket_enddate=2019-10-11\
-                    &total=100000&report=True', headers=auth_header)
+            '/api/v1/users?ticket_startdate__gt=2017-01-11&ticket_enddate__lt=2019-10-11&total=100000&report=True',headers=auth_header)
         self.assertEqual(response.status_code, 200)
 
-    def test_get_user_greater_than_10000(self, auth_header, test_client):
+    def test_get_user_reports(self, auth_header, test_client):
         response = test_client.get(
             '/api/v1/users?report=True', headers=auth_header)
         self.assertEqual(response.status_code, 200)

@@ -101,15 +101,15 @@ class Model:
         return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 
     @classmethod
-    def find(cls, operator, joins='', check='=', **kwargs):
+    def find(cls, operator, joins, kwargs):
         table = cls.__name__.lower()
         record = {
             'table_name': table,
             'columns': ','.join(cls.parse_fields().keys()),
             'number': 1000,
-            'params': cls.get_kwargs(operator, check, **kwargs) if kwargs else '',
-            'joins': joins}
-        return'''SELECT distinct * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
+            'params': cls.get_kwargs(operator, kwargs) if kwargs else '',
+            'joins': joins if joins else ''}
+        return'''SELECT * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
     def update(cls, id, operator, **kwargs):
@@ -123,23 +123,30 @@ class Model:
         return'''UPDATE {table_name}  SET {values} {params} RETURNING * '''.format(**record)
 
     @classmethod
-    def get_kwargs(cls, operator, check='=', **kwargs):
+    def get_kwargs(cls, operator, kwargs):
         operator = " " + operator + " "
-        query = cls.parse_values(kwargs, check)
+        query = cls.parse_values(kwargs)
         return " WHERE "+operator.join(query)
 
     @classmethod
-    def parse_values(cls, kwargs, check='=', update=False):
+    def parse_values(cls, parameters, update=False):
         table = cls.__name__.lower()+'.'
         if update:
             table = ''
+        check = '='
         query = []
-        for key, value in kwargs.items():
-            if type(value) is int:
-                query.append(f"{table}{key}{check}{value}")
-            elif type(value) is dict:
-                query.append(
-                    f"{value.get('table')}.{key}{check}'{value.get('value')}'")
-            else:
-                query.append(f"{table}{key}{check}'{value}'")
+        # allow backward compatibility for previous implemented queries
+        if type(parameters) is dict:
+            for key, value in parameters.items():
+                if type(value) is int:
+                    query.append(f"{table}{key}{check}{value}")
+                else:
+                    query.append(f"{table}{key}{check}'{value}'")
+
+        # allow advanced query passing with operators such as greater than
+        # equal etc
+        elif type(parameters) is list:
+            for item in parameters:
+                query.append("{table}.{field}{operator}'{value}'".format(
+                    table=item.pop('table',cls.__name__.lower()), **item))
         return query

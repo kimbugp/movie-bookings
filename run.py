@@ -1,7 +1,6 @@
 import os
 
 from flask import jsonify, make_response
-
 from main import create_app
 from utils import NotFound, create_tables, seed_data
 
@@ -27,7 +26,6 @@ def test():
 @app.errorhandler(NotFound)
 def raise_not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
-
 
 if __name__ == "__main__":
     app.run()

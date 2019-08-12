@@ -24,7 +24,7 @@ class MoviesResource(Resource):
     @api.marshal_with(movie_response_schema, envelope='movies', skip_none=True)
     @token_header
     @is_admin
-    def get(self):
+    def get(self, **kwargs):
         controller = MovieController()
         return controller.find(serialize=True), 200
 
@@ -33,9 +33,9 @@ class MoviesResource(Resource):
 class SingleMovieResource(Resource):
     @api.marshal_with(movie_response_schema, envelope='movie', skip_none=True)
     @token_header
-    def get(self, movie_id):
+    def get(self, movie_id, **kwargs):
         controller = MovieController()
-        return controller.find(id=movie_id, serialize=True), 200
+        return controller.find_one(id=movie_id, serialize=True), 200
 
     @api.marshal_with(movie_response_schema, envelope='movie', skip_none=True)
     @token_header
