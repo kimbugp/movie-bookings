@@ -19,9 +19,9 @@ class Users(db):
                 'ticket_startdate': datetime.now().strftime("%Y-%m-%d"),
                 'total':0
             }
-            for index ,item in enumerate(list(kwargs)):
+            for  item in kwargs:
                 if item.get('field') in ['ticket_enddate', 'ticket_startdate', 'total']:
-                    dict_[index][item.get('field')] = item.get('value')
+                    dict_[item.get('field')] = item.get('value')
             return get_cte_query('user_filtering').format(**dict_)
 
         update = []
