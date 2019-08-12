@@ -78,6 +78,7 @@ class TestUserFiltering(BaseTestCase):
                 &ticket_enddate__lt=2019-10-11\
                     &total=100000&report=True', headers=auth_header)
         self.assertEqual(response.status_code, 200)
+        assert response.json =='dd'
 
     def test_get_user_reports(self, auth_header, test_client):
         response = test_client.get(
