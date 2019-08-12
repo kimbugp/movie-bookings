@@ -101,14 +101,14 @@ class Model:
         return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
 
     @classmethod
-    def find(cls, operator, joins='', **kwargs):
+    def find(cls, operator, joins, kwargs):
         table = cls.__name__.lower()
         record = {
             'table_name': table,
             'columns': ','.join(cls.parse_fields().keys()),
             'number': 1000,
-            'params': cls.get_kwargs(operator, **kwargs) if kwargs else '',
-            'joins': joins}
+            'params': cls.get_kwargs(operator, kwargs) if kwargs else '',
+            'joins': joins if joins else ''}
         return'''SELECT * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
 
     @classmethod
@@ -123,7 +123,7 @@ class Model:
         return'''UPDATE {table_name}  SET {values} {params} RETURNING * '''.format(**record)
 
     @classmethod
-    def get_kwargs(cls, operator, **kwargs):
+    def get_kwargs(cls, operator, kwargs):
         operator = " " + operator + " "
         query = cls.parse_values(kwargs)
         return " WHERE "+operator.join(query)
@@ -135,7 +135,6 @@ class Model:
             table = ''
         check = '='
         query = []
-
         # allow backward compatibility for previous implemented queries
         if type(parameters) is dict:
             for key, value in parameters.items():
@@ -150,8 +149,7 @@ class Model:
         # allow advanced query passing with operators such as greater than
         # equal etc
         elif type(parameters) is list:
-            for item in kwargs:
-                query.append("{table}.{col}{check}'{value}'".format(
+            for item in parameters:
+                query.append("{table}{field}{operator}'{value}'".format(
                     table=table, **item))
-
         return query

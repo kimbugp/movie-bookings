@@ -4,14 +4,14 @@ from webargs import core
 from webargs.flaskparser import FlaskParser
 from functools import wraps
 
-param_regex = re.compile(r"(^[a-zA-Z]+[_]?[a-zA-Z]+)|(gt|lt)\b")
+suffix = {'ne': '!=', 'gt': '>', 'gte': '>=',
+          'lt': '<', 'lte': '<=', 'eq': '='}
+
+
+param_regex = re.compile(r"(^[a-zA-Z]+[_]?[a-zA-Z]+)|(gt|lt|lte|eq|ne)\b")
 
 
 class CustomParamsParser(FlaskParser):
-    operators = ('ne', 'gt', 'gte', 'lt', 'lte', 'eq')
-    string = ('contains', 'icontains', 'startswith',
-              'istartswith', 'endswith', 'iendswith', 'iexact')
-
     def parse_querystring(self, req, name, field):
         return core.get_value(_structure_dict(req.args), name, field)
 
@@ -25,7 +25,8 @@ def _structure_dict(dict_):
             if t:
                 (*_, (*_, operator)) = t
             if r.get(col) is None:
-                r[col] = {'operator': operator, 'value': value, 'field': col}
+                r[col] = {'operator': suffix.get(
+                    operator), 'value': value, 'field': col}
     r = {}
     for key, value in dict_.items():
         structure_dict_pair(r, key, value)

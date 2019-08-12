@@ -1,7 +1,7 @@
-from database import Model as db
-
-from sql import get_cte_query
 from datetime import datetime
+
+from database import Model as db
+from sql import get_cte_query
 
 
 class Users(db):
@@ -12,15 +12,16 @@ class Users(db):
     name = db.fields(db.string(100), db.not_null(False))
     is_staff = db.fields(db.boolean(default=False), db.not_null())
 
-    def find(self, operator, joins='', **kwargs):
-        if kwargs.get('report', False):
+    def find(self, operator, joins, kwargs):
+        if any('report' in item.values() for item in kwargs):
             kwargs['total'] = kwargs.get('total', 0)
             for item in ['ticket_enddate', 'ticket_startdate']:
                 if item not in kwargs.keys():
                     kwargs[item] = datetime.now().strftime("%Y-%m-%d")
             return get_cte_query('user_filtering').format(**kwargs)
 
-        else:
-            [kwargs.pop(item, None) for item in list(kwargs) if item in [
-                'ticket_enddate', 'ticket_startdate', 'total', 'report']]
-        return super().find(operator, joins, **kwargs)
+        update = []
+        for item in kwargs:
+            if item.get('field') not in ['ticket_enddate', 'ticket_startdate', 'total', 'report']:
+                update.append(item)
+        return super().find(operator, joins, update)

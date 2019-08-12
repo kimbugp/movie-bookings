@@ -13,7 +13,7 @@ from webargs import fields as flds
 
 user_args = {'id': param(flds.Int(required=True)),
              'email': param(flds.Str()),
-             'report': param(flds.Bool()),
+            #  'report': param(flds.Bool()),
              'name': param(flds.Str()),
              'ticket_startdate': param(flds.Str(validate=validate_date)),
              'ticket_enddate': param(flds.Str(validate=validate_date)),

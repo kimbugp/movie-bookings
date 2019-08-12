@@ -25,12 +25,15 @@ class SQLBaseController():
         query = self.instance.update(id, operator, **record)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
-    def find(self, operator='OR', serialize=False, joins='', params=[], **kwargs):
-        query = self.instance.find(operator, joins, **kwargs)
+    def find(self, operator='AND', serialize=False, joins='', params=[], **kwargs):
+        query = self.instance.find(operator, joins, params)
+        import pdb; pdb.set_trace()
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
     def find_one(self, serialize=False, **kwargs):
-        items = self.find(serialize=serialize, **kwargs)
+        params = [{'operator': '=', 'value': value, 'field': key}
+                  for key, value in kwargs.items()]
+        items = self.find(serialize=serialize, params=params)
         return items[0] if len(items) > 0 else []
 
     def dict_to_tuple(self, items, serialize):

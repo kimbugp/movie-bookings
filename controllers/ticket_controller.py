@@ -31,6 +31,4 @@ class TicketController(SQLBaseController):
     def find(self, operator='OR', serialize=False, params=[], **kwargs):
         for item in ['show_date_time', 'movie_id', 'price']:
             joins = 'left join showtime on showtime.id = ticket.showtime_id'
-            if item in kwargs.keys():
-                kwargs[item] = {'table': 'showtime', 'value': kwargs[item]}
-        return super().find(operator, serialize, joins, **kwargs)
+        return super().find(operator, serialize, joins, params)

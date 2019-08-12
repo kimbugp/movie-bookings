@@ -26,8 +26,9 @@ def token_header(f):
                     'message': 'Invalid token'})
             request.user = user
         except Exception as error:
-            raise ValidationError(message=str(error), status_code=401, payload={
-                'message': 'AN error occurred when checking credential'})
+            raise error
+            # raise ValidationError(message=str(error), status_code=401, payload={
+            #     'message': 'AN error occurred when checking credential'})
         return f(*args, **kwargs)
     return decorated
 
