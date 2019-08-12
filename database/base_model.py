@@ -140,9 +140,6 @@ class Model:
             for key, value in parameters.items():
                 if type(value) is int:
                     query.append(f"{table}{key}{check}{value}")
-                elif type(value) is dict:
-                    query.append(
-                        f"{value.get('table')}.{key}{check}'{value.get('value')}'")
                 else:
                     query.append(f"{table}{key}{check}'{value}'")
 
