@@ -129,18 +129,29 @@ class Model:
         return " WHERE "+operator.join(query)
 
     @classmethod
-    def parse_values(cls, kwargs, update=False):
+    def parse_values(cls, parameters, update=False):
         table = cls.__name__.lower()+'.'
         if update:
             table = ''
         check = '='
         query = []
-        for key, value in kwargs.items():
-            if type(value) is int:
-                query.append(f"{table}{key}{check}{value}")
-            elif type(value) is dict:
-                query.append(
-                    f"{value.get('table')}.{key}{check}'{value.get('value')}'")
-            else:
-                query.append(f"{table}{key}{check}'{value}'")
+
+        # allow backward compatibility for previous implemented queries
+        if type(parameters) is dict:
+            for key, value in parameters.items():
+                if type(value) is int:
+                    query.append(f"{table}{key}{check}{value}")
+                elif type(value) is dict:
+                    query.append(
+                        f"{value.get('table')}.{key}{check}'{value.get('value')}'")
+                else:
+                    query.append(f"{table}{key}{check}'{value}'")
+
+        # allow advanced query passing with operators such as greater than
+        # equal etc
+        elif type(parameters) is list:
+            for item in kwargs:
+                query.append("{table}.{col}{check}'{value}'".format(
+                    table=table, **item))
+
         return query

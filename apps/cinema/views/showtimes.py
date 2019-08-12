@@ -1,18 +1,21 @@
 from datetime import datetime
 
 from flask import request
+from flask_restplus import Resource
+from webargs import fields as flds  # noqa
 
 from apps.cinema import api
 from apps.cinema.schema import validate_date
+from apps.cinema.schema.parser import use_args
 from apps.cinema.schema.showtime_schema import *
 from apps.middlewares.auth import is_admin, token_header
 from controllers.show_time_controller import ShowTimeController
-from flask_restplus import Resource
-from webargs import fields as flds  # noqa
-from webargs.flaskparser import use_args
+from apps.cinema.schema import param
 
-showtime_args = {"start_date": flds.Str(
-    validate=validate_date), 'id': flds.Int()}
+showtime_args = {
+    "start_date": param(flds.Str(required=True)),
+    'id': param(flds.Int(required=True))
+}
 
 
 @api.route('/showtime', endpoint='showtimes')
@@ -20,9 +23,10 @@ class ShowTimeEndpoint(Resource):
     @api.marshal_with(showtimes_schema, envelope='showtimes', skip_none=True)
     @token_header
     @use_args(showtime_args)
-    def get(self, args):
+    def get(self, params):
         showtimes = ShowTimeController()
-        return showtimes.find(**args), 200
+        params = {items.get('field'): items.get('value') for items in params}
+        return showtimes.find(**params), 200
 
     @api.marshal_with(showtimes_schema, envelope='showtimes', skip_none=True)
     @token_header
@@ -38,7 +42,7 @@ class ShowTimeEndpoint(Resource):
 class ShowTimeEndpoint(Resource):
     @api.marshal_with(showtimes_schema, envelope='showtime', skip_none=True)
     @token_header
-    def get(self, showtime_id):
+    def get(self, showtime_id, **kwargs):
         showtimes = ShowTimeController()
         return showtimes.find(id=showtime_id, start_date=datetime(2018, 1, 1)), 200
 

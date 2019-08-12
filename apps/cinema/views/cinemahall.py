@@ -1,7 +1,9 @@
 from flask import current_app, request
 
 from apps.cinema import api
+from apps.cinema.schema import param, validate_date
 from apps.cinema.schema.cinema_schema import *
+from apps.cinema.schema.parser import use_args
 from apps.middlewares.auth import is_admin, token_header
 from controllers.cinema import CinemaController
 from controllers.seats import SeatController
@@ -9,9 +11,8 @@ from flask_restplus import Resource
 from models import CinemaHall
 from utils import dict_to_tuple, find_or_404
 from webargs import fields as flds
-from webargs.flaskparser import use_args
 
-cinema_args = {'id': flds.Int()}
+cinema_args = {'id': param(flds.Int(required=True))}
 
 
 @api.route('/cinema', endpoint='cinemas')
@@ -33,9 +34,9 @@ class CinemasEndpoint(Resource):
     @token_header
     @is_admin
     @use_args(cinema_args)
-    def get(self, args):
+    def get(self, params, **kwargs):
         controller = CinemaController()
-        return controller.find(serialize=True, **args), 200
+        return controller.find(serialize=True, params=params), 200
 
 
 @api.route('/cinema/<int:cinema_id>', endpoint='cinema')
