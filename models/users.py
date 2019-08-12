@@ -23,4 +23,4 @@ class Users(db):
         else:
             [kwargs.pop(item, None) for item in list(kwargs) if item in [
                 'ticket_enddate', 'ticket_startdate', 'total', 'report']]
-        return super().find(operator, joins, check, **kwargs)
+        return super().find(operator, joins, **kwargs)
