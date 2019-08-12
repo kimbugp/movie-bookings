@@ -14,11 +14,15 @@ class Users(db):
 
     def find(self, operator, joins, kwargs):
         if any('report' in item.values() for item in kwargs):
-            kwargs['total'] = kwargs.get('total', 0)
-            for item in ['ticket_enddate', 'ticket_startdate']:
-                if item not in kwargs.keys():
-                    kwargs[item] = datetime.now().strftime("%Y-%m-%d")
-            return get_cte_query('user_filtering').format(**kwargs)
+            dict_={
+                'ticket_enddate': datetime.now().strftime("%Y-%m-%d"),
+                'ticket_startdate': datetime.now().strftime("%Y-%m-%d"),
+                'total':0
+            }
+            for index ,item in enumerate(list(kwargs)):
+                if item.get('field') in ['ticket_enddate', 'ticket_startdate', 'total']:
+                    dict_[index][item.get('field')] = item.get('value')
+            return get_cte_query('user_filtering').format(**dict_)
 
         update = []
         for item in kwargs:
