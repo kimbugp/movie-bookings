@@ -8,3 +8,4 @@
 .pytest_cache/v/cache/lastfailed
 .coverage
 htmlcov
+prod.env

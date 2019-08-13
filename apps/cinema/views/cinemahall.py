@@ -27,7 +27,6 @@ class CinemasEndpoint(Resource):
         controller = CinemaController()
         cinema = controller.insert(body)[0]
         seats_dict = process_seats(seats, cinema.get('id'))
-        SeatController().insert(seats_dict)
         return {'seats': SeatController().insert(seats_dict), **cinema}, 201
 
     @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
