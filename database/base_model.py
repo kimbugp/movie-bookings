@@ -151,5 +151,5 @@ class Model:
         elif type(parameters) is list:
             for item in parameters:
                 query.append("{table}.{field}{operator}'{value}'".format(
-                    table=item.pop('table',table), **item))
+                    table=item.pop('table',cls.__name__.lower()), **item))
         return query
