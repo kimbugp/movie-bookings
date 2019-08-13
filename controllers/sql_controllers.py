@@ -27,7 +27,6 @@ class SQLBaseController():
 
     def find(self, operator='AND', serialize=False, joins='', params=[], **kwargs):
         query = self.instance.find(operator, joins, params)
-        import pdb; pdb.set_trace()
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
     def find_one(self, serialize=False, **kwargs):
