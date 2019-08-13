@@ -45,7 +45,8 @@ class TicketBookings(Resource):
         user_id = request.user.id
         controller = TicketController()
         if not request.user.is_staff:
-            args['user_id'] = request.user.id
+            params.append({'operator':'=','value':request.user.id,'field':'user_id'})
+            
         tickets = controller.find(serialize=True, operator='AND', params=params, **kwargs)
         return tickets, 200
 
