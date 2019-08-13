@@ -28,7 +28,8 @@ class ShowTimeController(SQLBaseController):
 
     def find(self, id=None, start_date=datetime.now()):
         item = f'where st.id ={id}' if id else ''
-        results = self.db.execute(self.get_query(start_date=start_date, item=item), named=True, commit=True)
+        results = self.db.execute(self.get_query(
+            start_date=start_date, item=item), named=True, commit=True)
         return results
 
     def get_query(self, item='', start_date=datetime.now()):

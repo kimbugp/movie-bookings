@@ -19,6 +19,7 @@ To setup for development with Docker after cloning the repository please do/run 
 
 -   `cd <project dir>` to check into the dir
 -   create a `.env` file from the template `.env.example` and update the variables
+-   create a `prod.env` file from the template `prod.env.example` and update the variables
 -   `docker-compose build` to build the application images
 -   `docker-compose up -d` to start the api after the previous command is successful
 

@@ -1,7 +1,7 @@
-from database import Model as db
-
-from sql import get_cte_query
 from datetime import datetime
+
+from database import Model as db
+from sql import get_cte_query
 
 
 class Users(db):
@@ -12,15 +12,20 @@ class Users(db):
     name = db.fields(db.string(100), db.not_null(False))
     is_staff = db.fields(db.boolean(default=False), db.not_null())
 
-    def find(self, operator, joins='', check='=', **kwargs):
-        if kwargs.get('report', False):
-            kwargs['total'] = kwargs.get('total', 0)
-            for item in ['ticket_enddate', 'ticket_startdate']:
-                if item not in kwargs.keys():
-                    kwargs[item] = datetime.now().strftime("%Y-%m-%d")
-            return get_cte_query('user_filtering').format(**kwargs)
+    def find(self, operator, joins, kwargs):
+        if any('report' in item.values() for item in kwargs):
+            dict_={
+                'ticket_enddate': datetime.now().strftime("%Y-%m-%d"),
+                'ticket_startdate': datetime.now().strftime("%Y-%m-%d"),
+                'total':0
+            }
+            for  item in kwargs:
+                if item.get('field') in ['ticket_enddate', 'ticket_startdate', 'total']:
+                    dict_[item.get('field')] = item.get('value')
+            return get_cte_query('user_filtering').format(**dict_)
 
-        else:
-            [kwargs.pop(item, None) for item in list(kwargs) if item in [
-                'ticket_enddate', 'ticket_startdate', 'total', 'report']]
-        return super().find(operator, joins, check, **kwargs)
+        update = []
+        for item in kwargs:
+            if item.get('field') not in ['ticket_enddate', 'ticket_startdate', 'total', 'report']:
+                update.append(item)
+        return super().find(operator, joins, update)

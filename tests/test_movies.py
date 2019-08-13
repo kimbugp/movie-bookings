@@ -40,13 +40,13 @@ class TestMovies(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {
             'movie':
-            [{'id': 1,
+            {'id': 1,
               'name': 'sim',
               'date_of_release': '2019-08-05 00:00:00',
               'length': '02:30:00',
               'summary': 'sdfsdfdgdsd',
               'category': 'horror',
-              'rating': 1}]})
+              'rating': 1}})
 
     def test_update_movie_by_id_succeeds(self, test_client, movie, auth_header):
         _, data = movie

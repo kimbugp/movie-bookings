@@ -28,9 +28,9 @@ class TicketController(SQLBaseController):
                 'message': f"seat numbers '{seat_diff}' in cinema hall not available check available seats for showtime"})
         return
 
-    def find(self, operator='OR', serialize=False, check='=', ** kwargs):
-        for item in ['show_date_time', 'movie_id', 'price']:
-            joins = 'left join showtime on showtime.id = ticket.showtime_id'
-            if item in kwargs.keys():
-                kwargs[item] = {'table': 'showtime', 'value': kwargs[item]}
-        return super().find(operator, serialize, joins, check, **kwargs)
+    def find(self, operator='OR', serialize=False, params=[], **kwargs):
+        for index ,item in enumerate(list(params)):
+            if item.get('field') in ['show_date_time', 'movie_id', 'price']:
+                params[index]['table'] = 'showtime'
+        joins = 'left join showtime on showtime.id = ticket.showtime_id'
+        return super().find(operator, serialize, joins, params)

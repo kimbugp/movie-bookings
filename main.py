@@ -11,7 +11,7 @@ authorizations = {
         'name': 'Authorization'
     }
 }
-api = Api(prefix='/api/v1')
+api = Api(prefix='/api/v1', doc='/docs')
 
 
 def create_app(config):
