@@ -32,6 +32,5 @@ class TicketController(SQLBaseController):
         for index ,item in enumerate(list(params)):
             if item.get('field') in ['show_date_time', 'movie_id', 'price']:
                 params[index]['table'] = 'showtime'
-        print('\n'*100,params,'\n'*100)
         joins = 'left join showtime on showtime.id = ticket.showtime_id'
         return super().find(operator, serialize, joins, params)
