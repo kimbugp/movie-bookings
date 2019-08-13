@@ -46,7 +46,7 @@ class TicketBookings(Resource):
         controller = TicketController()
         if not request.user.is_staff:
             params.append({'operator':'=','value':request.user.id,'field':'user_id'})
-        print('\n'*100,params,'\n'*100)
+        
         tickets = controller.find(serialize=True, operator='AND', params=params, **kwargs)
         return tickets, 200
 
@@ -59,6 +59,5 @@ class TicketBooking(Resource):
     def get(self, ticket_id, **kwargs):
         user_id = request.user.id
         controller = TicketController()
-        ticket = controller.find_one(
-            operator='AND', user_id=user_id, id=ticket_id, serialize=True)
+        ticket = controller.find_one(user_id=user_id, id=ticket_id, serialize=True)
         return ticket
