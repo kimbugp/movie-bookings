@@ -31,6 +31,6 @@ class TicketController(SQLBaseController):
     def find(self, operator='OR', serialize=False, params=[], **kwargs):
         for index ,item in enumerate(params):
             if item.get('field') in ['show_date_time', 'movie_id', 'price']:
-                params[index]['table'] = 'ticket'
+                params[index]['table'] = 'showtime'
         joins = 'left join showtime on showtime.id = ticket.showtime_id'
         return super().find(operator, serialize, joins, params)
