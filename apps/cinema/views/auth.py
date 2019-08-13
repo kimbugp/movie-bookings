@@ -30,7 +30,7 @@ class UserRegistration(Resource):
         user['password'] = generate_password_hash(
             user['password'], method='sha256')
         controller = UserController()
-        if not controller.find(email=user.get('email')):
+        if not controller.find_one(email=user.get('email')):
             user = controller.insert(user)
             return user, 201
         raise ValidationError(message='error', status_code=400, payload={
