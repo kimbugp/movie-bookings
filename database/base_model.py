@@ -130,7 +130,7 @@ class Model:
 
     @classmethod
     def parse_values(cls, parameters, update=False):
-        table = cls.__name__.lower()
+        table = cls.__name__.lower()+'.'
         if update:
             table = ''
         check = '='
@@ -139,12 +139,12 @@ class Model:
         if type(parameters) is dict:
             for key, value in parameters.items():
                 if type(value) is int:
-                    query.append(f"{table}.{key}{check}{value}")
+                    query.append(f"{table}{key}{check}{value}")
                 elif type(value) is dict:
                     query.append(
                         f"{value.get('table')}.{key}{check}'{value.get('value')}'")
                 else:
-                    query.append(f"{table}.{key}{check}'{value}'")
+                    query.append(f"{table}{key}{check}'{value}'")
 
         # allow advanced query passing with operators such as greater than
         # equal etc
