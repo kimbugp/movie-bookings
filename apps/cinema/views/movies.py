@@ -35,7 +35,7 @@ class SingleMovieResource(Resource):
     @token_header
     def get(self, movie_id, **kwargs):
         controller = MovieController()
-        return controller.find(id=movie_id, serialize=True), 200
+        return controller.find_one(id=movie_id, serialize=True), 200
 
     @api.marshal_with(movie_response_schema, envelope='movie', skip_none=True)
     @token_header
