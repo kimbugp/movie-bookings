@@ -1,24 +1,32 @@
-
-version: '2'
+version: "2.1"
 
 services:
   database:
     restart: always
     image: postgres
-    env_file:
-      - prod.env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cinema
     ports:
       - "5433:5432"
     expose:
-      - '5432'
+      - "5432"
+    healthcheck:
+      test: ["CMD", "pg_isready --dbname=cinema"]
+      timeout: 20s
+      retries: 10
   web:
     build: .
-    command: bash startup.sh
     volumes:
       - .:/tickets
     ports:
       - "5000:5000"
     env_file:
       - prod.env
+    environment:
+      - DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@database:5432/cinema
     depends_on:
       - database
+    command: bash startup.sh
+    
