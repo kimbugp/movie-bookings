@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/kimbugp/ticket-bookings.svg?branch=master)](https://travis-ci.com/kimbugp/ticket-bookings)
-[![Coverage Status](https://coveralls.io/repos/github/kimbugp/ticket-bookings/badge.svg?branch=master)](https://coveralls.io/github/kimbugp/ticket-bookings?branch=master)
+[![Build Status](https://travis-ci.com/kimbugp/movie-bookings.svg?branch=master)](https://travis-ci.com/kimbugp/movie-bookings)
+[![Coverage Status](https://coveralls.io/repos/github/kimbugp/movie-bookings/badge.svg?branch=master)](https://coveralls.io/github/kimbugp/movie-bookings?branch=master)
 # Ticket-bookings
 A ticket booking app
 
