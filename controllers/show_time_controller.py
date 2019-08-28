@@ -23,7 +23,7 @@ class ShowTimeController(SQLBaseController):
         # the showtime period given the movie length
         if self.db.execute(self.instance.clean(kwargs)):
             raise ValidationError('error', payload={
-                                  'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_date_time')}"})
+                                  'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_datetime')}"})
         return super().insert(kwargs)
 
     def find(self, id=None, start_date=datetime.now()):

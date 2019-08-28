@@ -1,7 +1,14 @@
+from datetime import datetime as dt, timedelta as td
+
+
+def get_date(hours=0):
+    return (dt.now() + td(hours=hours)).strftime('%Y-%m-%d %H:%M:%S')
+
+
 user = [
     {
         "email": "peter@gmail.com",
-        "password": "sha256$UyheEiSQ$1e5b829d612f4134c0c4848804549652862e795245f5ed1de8c885a81953b3e1",
+        "password": "sha256$HwJeg0Ig$24f5e0f26fe2eb7ffa116b681f90e2f8383c4d0802dd48f5259d43885b38a23d",
         "name": "Simon Peter K",
         "is_staff": "true"
     }
@@ -30,7 +37,7 @@ movie = [
         "category": "horror",
         "rating": 1,
         "length": "2:30",
-        'summary':'sdfsdfdgdsd'
+        'summary': 'sdfsdfdgdsd'
     },
     {
 
@@ -39,7 +46,7 @@ movie = [
         "category": "times",
         "rating": 5,
         "length": "2:30",
-        'summary':'sdfdsdfghferw'
+        'summary': 'sdfdsdfghferw'
     }
 ]
 
@@ -81,48 +88,47 @@ seat = [
         "name": "g"
     }
 ]
-
 showtime = [
     {
         "cinema_hall": 1,
         "movie_id": 1,
-        "show_date_time": "2019-08-09 08:00:00",
+        "show_datetime": get_date(),
         "price": 20000
     },
     {
         "cinema_hall": 1,
         "movie_id": 1,
-        "show_date_time": "2019-08-07 00:00:00",
+        "show_datetime": get_date(2),
         "price": 30000
     },
     {
         "cinema_hall": 2,
         "movie_id": 2,
-        "show_date_time": "2019-08-07 00:00:00",
+        "show_datetime": get_date(4),
         "price": 20000
     },
     {
         "cinema_hall": 2,
         "movie_id": 1,
-        "show_date_time": "2019-08-07 10:00:00",
+        "show_datetime": get_date(6),
         "price": 20000
     },
     {
         "cinema_hall": 3,
         "movie_id": 1,
-        "show_date_time": "2019-08-06 10:00:00",
+        "show_datetime": get_date(8),
         "price": 20000
     },
     {
         "cinema_hall": 2,
         "movie_id": 2,
-        "show_date_time": "2019-08-06 12:00:00",
+        "show_datetime": "2019-08-06 12:00:00",
         "price": 20000
     },
     {
         "cinema_hall": 2,
         "movie_id": 2,
-        "show_date_time": "2019-08-04 12:00:00",
+        "show_datetime": "2019-08-04 12:00:00",
         "price": 20000
     }
 ]

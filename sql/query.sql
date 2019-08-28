@@ -6,8 +6,8 @@ WITH seats AS (
         showtime st
     RIGHT JOIN seat s ON s.cinema_hall = st.cinema_hall
 WHERE
-    st.show_date_time > now()::date
-    OR st.show_date_time > '{start_date}'
+    st.show_datetime > now()::date
+    OR st.show_datetime > '{start_date}'
 EXCEPT
 DISTINCT
 -- get seats which are already taken from tickets table
@@ -23,7 +23,7 @@ SELECT
     st.id,
     json_agg(DISTINCT m) AS movie,
     st.price,
-    st.show_date_time::varchar,
+    st.show_datetime::varchar,
     json_agg(DISTINCT c) AS cinemahall
 FROM
     seats

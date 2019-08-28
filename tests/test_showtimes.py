@@ -23,11 +23,11 @@ class TestShowTime(BaseTestCase):
         response, data = showtime
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json['showtimes'][0]
-                         ['show_date_time'], '2019-11-10 00:00:00')
+                         ['show_datetime'], '2019-11-10 00:00:00')
 
     def test_create_showtime_fails_with_not_found_args(self, test_client, auth_header):
         data = json.dumps({
-            "show_date_time": "2019-11-09 24:00:00",
+            "show_datetime": "2019-11-09 24:00:00",
             "movie_id": 100,
             "price": 20000,
             "cinema_hall": 1
@@ -46,7 +46,7 @@ class TestShowTime(BaseTestCase):
         response = test_client.get(
             '/api/v1/showtime', headers=auth_header)
         self.assertCountEqual(
-            response.json['showtimes'][0]['available_seats'], 5)
+            response.json['showtimes'][0]['available_seats'], 2)
         self.assertIn(response.json['showtimes'][0]['available_seats'],
                       {'id': 4, 'name': 'd', 'number': '2', 'cinema_hall': 1})
         self.assertEqual(response.status_code, 200)
@@ -77,7 +77,7 @@ class TestShowTime(BaseTestCase):
 
     def test_update_show_time_by_id_succeeds(self, test_client, showtime, auth_header):
         data = json.dumps({
-            "show_date_time": "2019-10-09 24:00:00",
+            "show_datetime": "2019-10-09 24:00:00",
             "movie_id": 1,
             "price": 20000,
             "cinema_hall": 1

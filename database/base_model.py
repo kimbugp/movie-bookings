@@ -147,6 +147,8 @@ class Model:
         # equal etc
         elif type(parameters) is list:
             for item in parameters:
-                query.append("{table}.{field}{operator}'{value}'".format(
-                    table=item.pop('table',cls.__name__.lower()), **item))
+                for operator in item.pop('operator'):
+                    query.append("{table}.{field}{operator}'{value}'".format(
+                        table=item.pop('table', cls.__name__.lower()),
+                        operator=operator, **item))
         return query

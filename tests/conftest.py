@@ -80,7 +80,7 @@ def get_token(test_client):
 @pytest.fixture(scope='function')
 def showtime(test_client, auth_header, init_db):
     data = json.dumps({
-        "show_date_time": "2019-11-09 24:00:00",
+        "show_datetime": "2019-11-09 24:00:00",
         "movie_id": 1,
         "price": 20000,
         "cinema_hall": 1

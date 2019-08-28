@@ -13,7 +13,7 @@ from controllers.show_time_controller import ShowTimeController
 from apps.cinema.schema import param
 
 showtime_args = {
-    "start_date": param(flds.Str(required=True,validate=validate_date)),
+    "start_date": param(flds.Str(required=True, validate=validate_date)),
     'id': param(flds.Int(required=True))
 }
 

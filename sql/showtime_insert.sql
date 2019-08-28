@@ -3,7 +3,7 @@ WITH record AS (
 )
 SELECT
     record.id,
-    show_date_time,
+    show_datetime,
     json_agg(DISTINCT m) AS movie,
     json_agg(DISTINCT c) AS cinemahall,
     price
@@ -13,5 +13,5 @@ FROM
     LEFT JOIN cinemahall c ON c.id = record.cinema_hall
 GROUP BY 
     record.id,
-    show_date_time,
+    show_datetime,
     price

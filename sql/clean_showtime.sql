@@ -1,9 +1,9 @@
 SELECT
     st.id,
-    st.show_date_time,
+    st.show_datetime,
     m.name,
     m.length,
-    st.show_date_time + m.length endtime,
+    st.show_datetime + m.length endtime,
     st.cinema_hall
 FROM
     showtime st
@@ -11,5 +11,5 @@ FROM
 WHERE
     cinema_hall = {cinema_hall}
     AND movie_id = {movie_id}
-    AND '{show_date_time}' BETWEEN st.show_date_time
-    AND st.show_date_time + m.length
+    AND '{show_datetime}' BETWEEN st.show_datetime
+    AND st.show_datetime + m.length

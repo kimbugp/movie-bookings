@@ -52,7 +52,6 @@ class TestTickets(BaseTestCase):
         self.assertKeys(response.json['tickets'][0], {
             'payment_method': 'mm',
             'user_id': 1,
-            'show_date_time': '2019-08-09 08:00:00',
             'price': 20000.0})
         self.assertEqual(response.status_code, 200)
 
@@ -65,7 +64,6 @@ class TestTickets(BaseTestCase):
             'showtime_id': 2,
             'id': '2',
             'user_id': 2,
-            'show_date_time': '2019-08-07 00:00:00',
             'movie_id': 1,
             'price': 30000.0})
         self.assertEqual(response.status_code, 200)

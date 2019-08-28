@@ -18,7 +18,7 @@ class ShowTime(db):
     id = db.fields(db.serial(), db.primary(), db.unique())
     date_created = db.fields(db.datetime(auto_add=True))
 
-    show_date_time = db.fields(db.datetime(), db.not_null())
+    show_datetime = db.fields(db.datetime(), db.not_null())
     movie_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
         'movie.id', on_delete_cascade=True))
     price = db.fields(db.numeric(), db.not_null())
@@ -26,7 +26,7 @@ class ShowTime(db):
         'cinemahall.id', on_delete_cascade=True))
 
     class _Meta_:
-        unique_together = ('show_date_time', 'movie_id')
+        unique_together = ('show_datetime', 'movie_id')
 
     def insert_query(self, records):
         query = super().insert_query(records)

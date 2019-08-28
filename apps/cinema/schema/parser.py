@@ -8,7 +8,7 @@ suffix = {'ne': '!=', 'gt': '>', 'gte': '>=',
           'lt': '<', 'lte': '<=', 'eq': '='}
 
 
-param_regex = re.compile(r"(^[a-zA-Z]+[_]?[a-zA-Z]+)|(gt|lt|lte|eq|ne)\b")
+param_regex = re.compile(r"(^[a-zA-Z]+[_]?[a-zA-Z]+)|(gt|lt|lte|eq|ne|gte)\b")
 
 
 class CustomParamsParser(FlaskParser):
@@ -25,8 +25,10 @@ def _structure_dict(dict_):
             if t:
                 (*_, (*_, operator)) = t
             if r.get(col) is None:
-                r[col] = {'operator': suffix.get(
-                    operator), 'value': value, 'field': col}
+                r[col] = {'operator': [suffix.get(
+                    operator)], 'value': value, 'field': col}
+            else:
+                r[col]['operator'].append(suffix.get(operator))
     r = {}
     for key, value in dict_.items():
         structure_dict_pair(r, key, value)

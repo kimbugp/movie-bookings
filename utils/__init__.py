@@ -25,7 +25,7 @@ def dict_to_tuple(table_name, items, serialize):
 
 
 def find_or_404(db, model, serialize=False, **kwargs):
-    query = model.find('OR','',kwargs)
+    query = model.find('AND', '', kwargs)
     results = dict_to_tuple(model.__name__, db.execute(
         query, commit=True), serialize)
     if not results:
