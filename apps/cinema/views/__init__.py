@@ -4,3 +4,4 @@ from .showtimes import *  # noqa
 from .tickets import *  # noqa
 from .cinemahall import *  # noqa
 from .movies import *  # noqa
+from .payments import *  # noqa
