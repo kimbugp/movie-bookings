@@ -2,7 +2,11 @@ from flask import current_app
 
 from apps.cinema import api
 from apps.cinema.schema import param
-from apps.cinema.schema.cinema_schema import cinema_response_schema, process_seats, schema
+from apps.cinema.schema.cinema_schema import (
+    cinema_response_schema,
+    process_seats,
+    schema,
+)
 from apps.cinema.schema.parser import use_args
 from apps.middlewares.auth import is_admin, token_header
 from controllers.cinema import CinemaController

@@ -1,4 +1,3 @@
-
 from flask import current_app
 
 from utils import dict_to_tuple, find_or_404

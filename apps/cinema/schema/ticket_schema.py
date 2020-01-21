@@ -1,4 +1,3 @@
-
 from flask_restplus import fields
 
 from apps.cinema import api

@@ -1,4 +1,3 @@
-
 from models import Movie
 
 from .sql_controllers import SQLBaseController

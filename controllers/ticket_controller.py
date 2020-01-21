@@ -1,5 +1,5 @@
 from apps.middlewares.validation import ValidationError
-from models import Seat, ShowTime, Ticket # noqa
+from models import Seat, ShowTime, Ticket  # noqa
 from sql import get_cte_query
 from utils import find_or_404
 

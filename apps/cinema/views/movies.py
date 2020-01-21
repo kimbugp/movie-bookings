@@ -1,5 +1,3 @@
-
-
 from apps.cinema import api
 from apps.cinema.schema.movie_schema import movie_response_schema, schema
 from apps.middlewares.auth import is_admin, token_header

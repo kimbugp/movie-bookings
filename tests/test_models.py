@@ -1,4 +1,3 @@
-
 from .basetest import BaseTestCase
 from utils import create_tables
 
