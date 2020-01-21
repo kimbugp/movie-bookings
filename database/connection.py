@@ -7,7 +7,7 @@ from psycopg2.pool import ThreadedConnectionPool
 from apps.middlewares.validation import ValidationError
 
 
-class DBConnection():
+class DBConnection:
     def __init__(self, db, *args, **kwargs):
         self.pool = ThreadedConnectionPool(1, 20, db)
         self.obj = None
@@ -23,8 +23,7 @@ class DBConnection():
     @contextmanager
     def dict_cursor(self, commit=False):
         with self.connect() as connection:
-            cursor = connection.cursor(
-                cursor_factory=RealDictCursor)
+            cursor = connection.cursor(cursor_factory=RealDictCursor)
             try:
                 yield cursor
 
@@ -50,15 +49,21 @@ class DBConnection():
             try:
                 cursor.execute(query)
                 data = list(cursor)
-            except(psycopg2.OperationalError, psycopg2.errors.UniqueViolation) as error:
-                raise ValidationError(error.args[0].split(
-                    'DETAIL:')[1], status_code=400)
+            except (
+                psycopg2.OperationalError,
+                psycopg2.errors.UniqueViolation,
+            ) as error:
+                raise ValidationError(
+                    error.args[0].split("DETAIL:")[1], status_code=400
+                )
             return data
 
     def drop_all(self):
-        query = '''SELECT table_schema,table_name FROM information_schema.tables\
-             WHERE table_schema = 'public' ORDER BY table_schema,table_name'''
+        query = """SELECT table_schema,table_name FROM information_schema.tables\
+             WHERE table_schema = 'public' ORDER BY table_schema,table_name"""
         rows = self.execute(query, named=False)
         with self.cursor(commit=True) as cursor:
-            [cursor.execute("drop table " + row[1] + " cascade")
-             for row in rows]
+            [
+                cursor.execute("drop table " + row[1] + " cascade")
+                for row in rows
+            ]

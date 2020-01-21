@@ -1,10 +1,10 @@
 import os
 
 
-class BaseConfig():
+class BaseConfig:
     DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    DATABASE_URL = os.environ.get('DATABASE_URL')
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 class DevelopmentConfig(BaseConfig):
@@ -16,11 +16,11 @@ class ProductionConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
-    DATABASE_URL = os.environ.get('TEST_DATABASE_URL')
+    DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 
 
 configurations = {
-    'development': DevelopmentConfig,
-    'production': ProductionConfig,
-    'testing': TestingConfig
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+    "testing": TestingConfig,
 }

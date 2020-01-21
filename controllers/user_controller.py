@@ -1,6 +1,4 @@
-from flask import current_app
-
-from models import Ticket, Users
+from models import Ticket, Users  # noqa
 
 from .sql_controllers import SQLBaseController
 

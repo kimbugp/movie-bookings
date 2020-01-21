@@ -1,4 +1,3 @@
-
 from models import Seat
 
 from .sql_controllers import SQLBaseController

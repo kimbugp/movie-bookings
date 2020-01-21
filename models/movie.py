@@ -19,25 +19,29 @@ class ShowTime(db):
     date_created = db.fields(db.datetime(auto_add=True))
 
     show_datetime = db.fields(db.datetime(), db.not_null())
-    movie_id = db.fields(db.integer(), db.not_null(), db.foreignkey(
-        'movie.id', on_delete_cascade=True))
+    movie_id = db.fields(
+        db.integer(),
+        db.not_null(),
+        db.foreignkey("movie.id", on_delete_cascade=True),
+    )
     price = db.fields(db.numeric(), db.not_null())
-    cinema_hall = db.fields(db.integer(), db.foreignkey(
-        'cinemahall.id', on_delete_cascade=True))
+    cinema_hall = db.fields(
+        db.integer(), db.foreignkey("cinemahall.id", on_delete_cascade=True)
+    )
 
     class _Meta_:
-        unique_together = ('show_datetime', 'movie_id')
+        unique_together = ("show_datetime", "movie_id")
 
     def insert_query(self, records):
         query = super().insert_query(records)
-        return get_cte_query('showtime_insert').format(query)
+        return get_cte_query("showtime_insert").format(query)
 
     def clean(self, query):
-        return get_cte_query('clean_showtime').format(**query)
+        return get_cte_query("clean_showtime").format(**query)
 
     def update(self, id, operator, **kwargs):
         query = super().update(id, operator, **kwargs)
-        return get_cte_query('showtime_insert').format(query)
+        return get_cte_query("showtime_insert").format(query)
 
 
 class Seat(db):
@@ -45,11 +49,12 @@ class Seat(db):
     name = db.fields(db.string(100), db.not_null())
     number = db.fields(db.integer(), db.not_null())
     date_created = db.fields(db.datetime(auto_add=True))
-    cinema_hall = db.fields(db.integer(), db.foreignkey(
-        'cinemahall.id', on_delete_cascade=True))
+    cinema_hall = db.fields(
+        db.integer(), db.foreignkey("cinemahall.id", on_delete_cascade=True)
+    )
 
     class _Meta_:
-        unique_together = ('name', 'cinema_hall', 'number')
+        unique_together = ("name", "cinema_hall", "number")
 
 
 class CinemaHall(db):

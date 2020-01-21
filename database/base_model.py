@@ -1,79 +1,79 @@
-
 class Model:
-
     @classmethod
     def string(self, length):
-        return 'VARCHAR ({})'.format(length)
+        return "VARCHAR ({})".format(length)
 
     @classmethod
     def integer(self):
-        return 'INTEGER'
+        return "INTEGER"
 
     @classmethod
     def boolean(self, default=False):
-        return 'BOOLEAN DEFAULT {}'.format(default)
+        return "BOOLEAN DEFAULT {}".format(default)
 
     @classmethod
     def text(self):
-        return 'TEXT'
+        return "TEXT"
 
     @classmethod
     def datetime(self, auto_add=False):
-        string = 'TIMESTAMP'
-        return string+' DEFAULT NOW()' if auto_add else string
+        string = "TIMESTAMP"
+        return string + " DEFAULT NOW()" if auto_add else string
 
     @classmethod
     def unique(self):
-        return 'UNIQUE'
+        return "UNIQUE"
 
     @classmethod
     def serial(self):
-        return 'SERIAL'
+        return "SERIAL"
 
     @classmethod
     def numeric(self):
-        return 'numeric'
+        return "numeric"
 
     @classmethod
     def primary(self):
-        return 'PRIMARY KEY'
+        return "PRIMARY KEY"
 
     @classmethod
     def time(self):
-        return 'TIME '
+        return "TIME "
 
     @classmethod
     def not_null(self, val=True):
-        return 'NOT NULL' if val else 'NULL'
+        return "NOT NULL" if val else "NULL"
 
     @classmethod
     def foreignkey(self, ref, on_delete_cascade=True):
-        cascade = 'ON DELETE CASCADE' if on_delete_cascade \
-            else 'ON DELETE RESTRICT'
-        table, column = ref.split('.')
-        return 'REFERENCES {}({}) {}'.format(
-            table,
-            column,
-            cascade)
+        cascade = (
+            "ON DELETE CASCADE" if on_delete_cascade else "ON DELETE RESTRICT"
+        )
+        table, column = ref.split(".")
+        return "REFERENCES {}({}) {}".format(table, column, cascade)
 
     @classmethod
     def create(cls):
-        string = '''CREATE TABLE IF NOT EXISTS {} ({}{})'''.format(
+        string = """CREATE TABLE IF NOT EXISTS {} ({}{})""".format(
             cls.__name__.lower(),
-            ','.join([i for i in cls.parse_fields().values()]),
-            cls.format_meta())
+            ",".join([i for i in cls.parse_fields().values()]),
+            cls.format_meta(),
+        )
         return string
 
     @classmethod
     def format_meta(cls):
-        if getattr(cls, '_Meta_', None):
-            return ', UNIQUE({})'.format(','.join(cls._Meta_.unique_together))
-        return ''
+        if getattr(cls, "_Meta_", None):
+            return ", UNIQUE({})".format(",".join(cls._Meta_.unique_together))
+        return ""
 
     @classmethod
     def parse_fields(cls):
-        dict1 = {cls.__name__.lower()+'.'+key: key+' '+' '.join(value) for (key, value)
-                 in cls.__dict__.items() if key[:1] != '_' and not callable(value)}
+        dict1 = {
+            cls.__name__.lower() + "." + key: key + " " + " ".join(value)
+            for (key, value) in cls.__dict__.items()
+            if key[:1] != "_" and not callable(value)
+        }
         return dict1
 
     @classmethod
@@ -83,7 +83,7 @@ class Model:
     def process_records(self, records):
         if type(records) is list:
             values = [str(tuple(record.values())) for record in records]
-            values = ', '.join(values)
+            values = ", ".join(values)
 
             columns = records[0].keys()
         else:
@@ -94,46 +94,53 @@ class Model:
     def insert_query(self, records):
         columns, values = self.process_records(records)
         record = {
-            'table_name': self.__class__.__name__.lower(),
-            'columns': ','.join(columns),
-            'values': values
+            "table_name": self.__class__.__name__.lower(),
+            "columns": ",".join(columns),
+            "values": values,
         }
-        return '''INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *'''.format(**record)
+        return """INSERT INTO {table_name}({columns}) VALUES {values} RETURNING *""".format(
+            **record
+        )
 
     @classmethod
     def find(cls, operator, joins, kwargs):
         table = cls.__name__.lower()
         record = {
-            'table_name': table,
-            'columns': ','.join(cls.parse_fields().keys()),
-            'number': 1000,
-            'params': cls.get_kwargs(operator, kwargs) if kwargs else '',
-            'joins': joins if joins else ''}
-        return'''SELECT * from {table_name} {joins} {params} LIMIT {number} '''.format(**record)
+            "table_name": table,
+            "columns": ",".join(cls.parse_fields().keys()),
+            "number": 1000,
+            "params": cls.get_kwargs(operator, kwargs) if kwargs else "",
+            "joins": joins if joins else "",
+        }
+        return """SELECT * from {table_name} {joins} {params} LIMIT {number} """.format(
+            **record
+        )
 
     @classmethod
     def update(cls, id, operator, **kwargs):
         table = cls.__name__.lower()
         record = {
-            'table_name': table,
-            'columns': ','.join(cls.parse_fields().keys()),
-            'params': f'WHERE {table}.id = {id}',
-            'values': ', '.join(cls.parse_values(kwargs, update=True))
+            "table_name": table,
+            "columns": ",".join(cls.parse_fields().keys()),
+            "params": f"WHERE {table}.id = {id}",
+            "values": ", ".join(cls.parse_values(kwargs, update=True)),
         }
-        return'''UPDATE {table_name}  SET {values} {params} RETURNING * '''.format(**record)
+        return """UPDATE {table_name}  SET {values} {params} RETURNING * """.format(
+            **record
+        )
 
     @classmethod
     def get_kwargs(cls, operator, kwargs):
         operator = " " + operator + " "
         query = cls.parse_values(kwargs)
-        return " WHERE "+operator.join(query)
+        return " WHERE " + operator.join(query)
 
     @classmethod
     def parse_values(cls, parameters, update=False):
-        table = cls.__name__.lower()+'.'
+        table = cls.__name__.lower() + "."
         if update:
-            table = ''
-        check = '='
+            table = ""
+        check = "="
         query = []
         # allow backward compatibility for previous implemented queries
         if type(parameters) is dict:
@@ -147,8 +154,12 @@ class Model:
         # equal etc
         elif type(parameters) is list:
             for item in parameters:
-                for operator in item.pop('operator'):
-                    query.append("{table}.{field}{operator}'{value}'".format(
-                        table=item.pop('table', cls.__name__.lower()),
-                        operator=operator, **item))
+                for operator in item.pop("operator"):
+                    query.append(
+                        "{table}.{field}{operator}'{value}'".format(
+                            table=item.pop("table", cls.__name__.lower()),
+                            operator=operator,
+                            **item,
+                        )
+                    )
         return query
