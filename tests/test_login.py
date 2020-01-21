@@ -1,9 +1,7 @@
 import json
 
-import psycopg2
 
 from .basetest import BaseTestCase
-from .utils import registration
 
 
 class TestAuthentication(BaseTestCase):

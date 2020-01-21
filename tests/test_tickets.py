@@ -1,6 +1,5 @@
 import json
 
-import psycopg2
 from .basetest import BaseTestCase
 
 

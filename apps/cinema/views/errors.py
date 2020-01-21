@@ -1,4 +1,3 @@
-from flask import jsonify, make_response
 from apps.cinema import api
 from apps.middlewares.validation import ValidationError
 from apps.cinema.schema.parser import parser

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import request
 from flask_restplus import Resource
 from webargs import fields as flds
 from werkzeug.security import check_password_hash, generate_password_hash

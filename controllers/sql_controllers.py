@@ -1,9 +1,6 @@
-from collections import namedtuple
 
 from flask import current_app
 
-from apps.middlewares.validation import ValidationError
-from sql import get_cte_query
 from utils import dict_to_tuple, find_or_404
 
 

@@ -1,4 +1,4 @@
-from .schema_utils import validate_date
+from .schema_utils import validate_date  # noqa
 
 
 from webargs import fields as flds

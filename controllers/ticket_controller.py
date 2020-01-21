@@ -1,5 +1,5 @@
 from apps.middlewares.validation import ValidationError
-from models import Seat, ShowTime, Ticket
+from models import Seat, ShowTime, Ticket # noqa
 from sql import get_cte_query
 from utils import find_or_404
 
@@ -10,7 +10,7 @@ class TicketController(SQLBaseController):
     table = Ticket
 
     def insert(self, seats, showtime_id, seat_id, **kwargs):
-        showtime = self.validate_showtime(showtime_id)
+        self.validate_showtime(showtime_id)
         self.validate_seat(set(seat_id), showtime_id)
         return super().insert(seats)
 

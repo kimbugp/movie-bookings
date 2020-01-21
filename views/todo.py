@@ -10,7 +10,7 @@ def create():
     todo = request.get_json()
     controller = TodoController(todo)
     new_todo = controller.save()
-    return jsonify(**todo), 201
+    return jsonify(**new_todo), 201
 
 
 @todo.route("/<string:id>", methods=["GET"])
@@ -23,7 +23,7 @@ def get(id):
 @todo.route("/<string:id>", methods=["DELETE"])
 def delete(id):
     controller = TodoController()
-    todo = controller.delete(id)
+    controller.delete(id)
     return jsonify(message="Item has been deleted"), 200
 
 

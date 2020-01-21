@@ -1,12 +1,10 @@
-import datetime
 
-from flask import jsonify, request
 
 from apps.cinema import api
 from apps.cinema.schema.movie_schema import movie_response_schema, schema
 from apps.middlewares.auth import is_admin, token_header
 from controllers.movies_controller import MovieController
-from flask_restplus import Model, Resource, fields, marshal_with
+from flask_restplus import Resource
 
 
 @api.route("/movie", endpoint="movies")

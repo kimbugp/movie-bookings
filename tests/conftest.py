@@ -1,4 +1,4 @@
-from flask import jsonify, make_response, current_app
+from flask import jsonify, make_response
 import pytest
 from main import create_app
 from utils import NotFound, seed_data

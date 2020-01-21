@@ -1,7 +1,6 @@
-import psycopg2
 
 from .basetest import BaseTestCase
-from utils import NotFound, create_tables
+from utils import create_tables
 
 
 class TestModels(BaseTestCase):

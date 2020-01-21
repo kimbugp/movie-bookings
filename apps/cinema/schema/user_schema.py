@@ -1,7 +1,5 @@
-import re
 
 from apps.cinema import api
-from apps.middlewares.validation import ValidationError
 from flask_restplus import fields
 
 user_schema_fields = api.model(
