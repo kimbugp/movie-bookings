@@ -28,17 +28,10 @@ class ShowTimeController(SQLBaseController):
             )
         return super().insert(kwargs)
 
-    def find(
-        self,
-        operator="AND",
-        serialize=False,
-        joins="",
-        params=[],
-        id=None,
-        start_date=datetime.now(),
-        **kwargs,
-    ):
-        item = f"where st.id ={id}" if id else ""
+    def find(self, operator="AND", serialize=False, joins="", params=[], **kwargs):
+        record_id = kwargs.get("id", None)
+        start_date = kwargs.get("start_date", datetime.now())
+        item = f"where st.id ={record_id}" if record_id else ""
         results = self.db.execute(
             self.get_query(start_date=start_date, item=item), named=True, commit=True
         )

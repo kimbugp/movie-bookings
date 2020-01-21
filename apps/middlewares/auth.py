@@ -63,7 +63,8 @@ def is_admin(f):
             raise ValidationError(
                 message="error",
                 status_code=401,
-                payload={"message": "You have not permission to perform this action"},
+                payload={
+                    "message": "You have not permission to perform this action"},
             )
         return f(*args, **kwargs)
 

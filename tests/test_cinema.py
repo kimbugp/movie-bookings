@@ -25,7 +25,8 @@ class TestCinema(BaseTestCase):
         self, test_client, auth_header, cinema
     ):
         _, data = cinema
-        response = test_client.post("/api/v1/cinema", data=data, headers=auth_header)
+        response = test_client.post(
+            "/api/v1/cinema", data=data, headers=auth_header)
         assert response.status_code == 400
 
     def create_cinema_succeeds(self, cinema):
@@ -55,7 +56,8 @@ class TestUpdateCinema(BaseTestCase):
                 ]
             }
         )
-        response = test_client.put("/api/v1/cinema/1", data=data, headers=auth_header)
+        response = test_client.put(
+            "/api/v1/cinema/1", data=data, headers=auth_header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json,
@@ -76,7 +78,8 @@ class TestUpdateCinema(BaseTestCase):
 
     def test_update_cinema_by_id_fails(self, test_client, cinema, auth_header):
         _, data = cinema
-        response = test_client.put("/api/v1/cinema/100", data=data, headers=auth_header)
+        response = test_client.put(
+            "/api/v1/cinema/100", data=data, headers=auth_header)
         self.assertEqual(response.status_code, 404)
 
     def test_update_cinema_by_id_fails_wth_same_seats(self, test_client, auth_header):
@@ -88,7 +91,8 @@ class TestUpdateCinema(BaseTestCase):
                 ]
             }
         )
-        response = test_client.put("/api/v1/cinema/4", data=data, headers=auth_header)
+        response = test_client.put(
+            "/api/v1/cinema/4", data=data, headers=auth_header)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.json,
