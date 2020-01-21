@@ -48,11 +48,36 @@ seat = [
     {"number": 4, "cinema_hall": 2, "name": "g"},
 ]
 showtime = [
-    {"cinema_hall": 1, "movie_id": 1, "show_datetime": get_date(), "price": 20000},
-    {"cinema_hall": 1, "movie_id": 1, "show_datetime": get_date(2), "price": 30000},
-    {"cinema_hall": 2, "movie_id": 2, "show_datetime": get_date(4), "price": 20000},
-    {"cinema_hall": 2, "movie_id": 1, "show_datetime": get_date(6), "price": 20000},
-    {"cinema_hall": 3, "movie_id": 1, "show_datetime": get_date(8), "price": 20000},
+    {
+        "cinema_hall": 1,
+        "movie_id": 1,
+        "show_datetime": get_date(),
+        "price": 20000,
+    },
+    {
+        "cinema_hall": 1,
+        "movie_id": 1,
+        "show_datetime": get_date(2),
+        "price": 30000,
+    },
+    {
+        "cinema_hall": 2,
+        "movie_id": 2,
+        "show_datetime": get_date(4),
+        "price": 20000,
+    },
+    {
+        "cinema_hall": 2,
+        "movie_id": 1,
+        "show_datetime": get_date(6),
+        "price": 20000,
+    },
+    {
+        "cinema_hall": 3,
+        "movie_id": 1,
+        "show_datetime": get_date(8),
+        "price": 20000,
+    },
     {
         "cinema_hall": 2,
         "movie_id": 2,

@@ -17,7 +17,9 @@ cinema_args = {"id": param(flds.Int(required=True))}
 
 @api.route("/cinema", endpoint="cinemas")
 class CinemasEndpoint(Resource):
-    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
+    @api.marshal_with(
+        cinema_response_schema, envelope="cinema", skip_none=True
+    )
     @token_header
     @is_admin
     def post(self):
@@ -29,7 +31,9 @@ class CinemasEndpoint(Resource):
         seats_dict = process_seats(seats, cinema.get("id"))
         return {"seats": SeatController().insert(seats_dict), **cinema}, 201
 
-    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
+    @api.marshal_with(
+        cinema_response_schema, envelope="cinema", skip_none=True
+    )
     @token_header
     @is_admin
     @use_args(cinema_args)
@@ -40,7 +44,9 @@ class CinemasEndpoint(Resource):
 
 @api.route("/cinema/<int:cinema_id>", endpoint="cinema")
 class CinemaEndpoint(Resource):
-    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
+    @api.marshal_with(
+        cinema_response_schema, envelope="cinema", skip_none=True
+    )
     @token_header
     @token_header
     @is_admin

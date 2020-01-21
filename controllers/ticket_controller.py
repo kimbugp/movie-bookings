@@ -18,7 +18,9 @@ class TicketController(SQLBaseController):
         return find_or_404(self.db, ShowTime, id=showtime)
 
     def validate_seat(self, seats, showtime_id):
-        query = get_cte_query("available_seats").format(showtime_id=showtime_id)
+        query = get_cte_query("available_seats").format(
+            showtime_id=showtime_id
+        )
         results = self.db.execute(query, named=False)
         available_seats = [] if results[0][0] is None else results[0][0]
         seat_diff = seats.difference(set(available_seats))

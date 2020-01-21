@@ -4,7 +4,14 @@ from webargs import core
 from webargs.flaskparser import FlaskParser
 from functools import wraps
 
-suffix = {"ne": "!=", "gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "="}
+suffix = {
+    "ne": "!=",
+    "gt": ">",
+    "gte": ">=",
+    "lt": "<",
+    "lte": "<=",
+    "eq": "=",
+}
 
 
 param_regex = re.compile(r"(^[a-zA-Z]+[_]?[a-zA-Z]+)|(gt|lt|lte|eq|ne|gte)\b")

@@ -21,7 +21,9 @@ showtimes_schema = api.model(
 schema = {
     "type": "object",
     "properties": {
-        "show_datetime": {"allOf": [{"type": "string"}, {"format": "date-time"}]},
+        "show_datetime": {
+            "allOf": [{"type": "string"}, {"format": "date-time"}]
+        },
         "movie_id": {"allOf": [{"type": "integer"}]},
         "price": {"allOf": [{"type": "number"}]},
         "cinema_hall": {"allOf": [{"type": "integer"}]},

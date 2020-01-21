@@ -14,12 +14,17 @@ schema = {
         },
         "id": {"allOf": [{"type": "integer"}]},
         "length": {"allOf": [{"type": "string"}, {"format": "date-time"}]},
-        "name": {"allOf": [{"type": "string"}, {"minLength": 1}, {"maxLength": 100}]},
+        "name": {
+            "allOf": [{"type": "string"}, {"minLength": 1}, {"maxLength": 100}]
+        },
         "category": {
             "allOf": [{"type": "string"}, {"minLength": 1}, {"maxLength": 100}]
         },
         "rating": {
-            "allOf": [{"type": "integer"}, {"enum": [1, 2, 3, 4, 5, 6, 7, 8, 9]}]
+            "allOf": [
+                {"type": "integer"},
+                {"enum": [1, 2, 3, 4, 5, 6, 7, 8, 9]},
+            ]
         },
     },
     "required": ["date_of_release", "rating", "name", "length", "category"],

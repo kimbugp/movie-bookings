@@ -20,7 +20,9 @@ class ShowTime(db):
 
     show_datetime = db.fields(db.datetime(), db.not_null())
     movie_id = db.fields(
-        db.integer(), db.not_null(), db.foreignkey("movie.id", on_delete_cascade=True)
+        db.integer(),
+        db.not_null(),
+        db.foreignkey("movie.id", on_delete_cascade=True),
     )
     price = db.fields(db.numeric(), db.not_null())
     cinema_hall = db.fields(

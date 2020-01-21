@@ -20,7 +20,11 @@ class Users(db):
                 "total": 0,
             }
             for item in kwargs:
-                if item.get("field") in ["ticket_enddate", "ticket_startdate", "total"]:
+                if item.get("field") in [
+                    "ticket_enddate",
+                    "ticket_startdate",
+                    "total",
+                ]:
                     dict_[item.get("field")] = item.get("value")
             return get_cte_query("user_filtering").format(**dict_)
 

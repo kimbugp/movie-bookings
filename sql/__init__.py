@@ -12,6 +12,8 @@ def get_cte_query(file_name):
             query = ofile.read()
     except FileNotFoundError as error:
         raise ValidationError(
-            message="error", status_code=500, payload={"message": "Unknown error"}
+            message=str(error),
+            status_code=500,
+            payload={"message": "Unknown error"},
         )
     return query

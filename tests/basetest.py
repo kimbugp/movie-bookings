@@ -1,5 +1,4 @@
 import json
-from unittest import TestCase
 
 import pytest
 
@@ -34,6 +33,8 @@ class BaseTestCase:
             }
         )
         response = test_client.post(
-            "/api/v1/auth", data=data, headers={"Content-Type": "application/json"}
+            "/api/v1/auth",
+            data=data,
+            headers={"Content-Type": "application/json"},
         )
         return response

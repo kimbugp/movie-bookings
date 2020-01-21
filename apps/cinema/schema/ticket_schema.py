@@ -1,8 +1,10 @@
 import re
 
+from flask_restplus import fields
+
 from apps.cinema import api
 from apps.middlewares.validation import ValidationError
-from flask_restplus import fields
+
 from .seats_schema import seats_schema
 
 ticket_schema = api.model(

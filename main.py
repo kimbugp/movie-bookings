@@ -24,6 +24,6 @@ def create_app(config):
     app.db = db
 
     # import views
-    import apps.cinema.views
+    import apps.cinema.views # noqa
 
     return app, db

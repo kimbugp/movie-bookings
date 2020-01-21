@@ -63,4 +63,7 @@ class DBConnection:
              WHERE table_schema = 'public' ORDER BY table_schema,table_name"""
         rows = self.execute(query, named=False)
         with self.cursor(commit=True) as cursor:
-            [cursor.execute("drop table " + row[1] + " cascade") for row in rows]
+            [
+                cursor.execute("drop table " + row[1] + " cascade")
+                for row in rows
+            ]

@@ -1,7 +1,7 @@
 from flask import jsonify, make_response, current_app
 import pytest
 from main import create_app
-from utils import NotFound, create_tables, seed_data
+from utils import NotFound, seed_data
 import json
 
 from .utils import registration
@@ -46,7 +46,10 @@ def base_test_case(request, test_client, init_db):
 
 @pytest.fixture(scope="function")
 def auth_header(get_admin_token):
-    return {"Content-Type": "application/json", "Authorization": get_admin_token}
+    return {
+        "Content-Type": "application/json",
+        "Authorization": get_admin_token,
+    }
 
 
 @pytest.fixture(scope="function")
@@ -86,7 +89,9 @@ def showtime(test_client, auth_header, init_db):
             "cinema_hall": 1,
         }
     )
-    response = test_client.post("/api/v1/showtime", data=data, headers=auth_header)
+    response = test_client.post(
+        "/api/v1/showtime", data=data, headers=auth_header
+    )
     yield response, data
 
 
@@ -96,17 +101,26 @@ def cinema(test_client, auth_header):
         {
             "name": "Simon Peter",
             "description": "sdfgd",
-            "seats": [{"name": "A", "number": [1, 2]}, {"name": "B", "number": [1, 2]}],
+            "seats": [
+                {"name": "A", "number": [1, 2]},
+                {"name": "B", "number": [1, 2]},
+            ],
         }
     )
-    response = test_client.post("/api/v1/cinema", data=data, headers=auth_header)
+    response = test_client.post(
+        "/api/v1/cinema", data=data, headers=auth_header
+    )
     yield response, data
 
 
 @pytest.fixture(scope="function")
 def ticket(test_client, auth_header):
-    data = json.dumps({"payment_method": "mombile", "seat_id": 1, "showtime_id": 2})
-    response = test_client.post("/api/v1/ticket", data=data, headers=auth_header)
+    data = json.dumps(
+        {"payment_method": "mombile", "seat_id": 1, "showtime_id": 2}
+    )
+    response = test_client.post(
+        "/api/v1/ticket", data=data, headers=auth_header
+    )
     yield response, data
 
 
@@ -122,5 +136,7 @@ def movie(test_client, auth_header, init_db):
             "summary": "Simoejnjlkanfwdybusnrj,",
         }
     )
-    response = test_client.post("/api/v1/movie", data=data, headers=auth_header)
+    response = test_client.post(
+        "/api/v1/movie", data=data, headers=auth_header
+    )
     yield response, data

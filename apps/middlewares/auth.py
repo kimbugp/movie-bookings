@@ -2,7 +2,7 @@ import datetime
 from functools import wraps
 
 import jwt
-from flask import current_app, jsonify, make_response, request
+from flask import current_app, request
 
 from apps.middlewares.validation import ValidationError
 from controllers.user_controller import UserController
@@ -16,7 +16,9 @@ def token_header(f):
         token = request.headers.get("Authorization", None)
         if not token:
             raise ValidationError(
-                message="error", status_code=401, payload={"message": "No auth token"}
+                message="error",
+                status_code=401,
+                payload={"message": "No auth token"},
             )
         try:
             data = jwt.decode(
@@ -35,7 +37,9 @@ def token_header(f):
             raise ValidationError(
                 message=str(error),
                 status_code=401,
-                payload={"message": "AN error occurred when checking credential"},
+                payload={
+                    "message": "AN error occurred when checking credential"
+                },
             )
         return f(*args, **kwargs)
 
@@ -64,7 +68,8 @@ def is_admin(f):
                 message="error",
                 status_code=401,
                 payload={
-                    "message": "You have not permission to perform this action"},
+                    "message": "You have not permission to perform this action"
+                },
             )
         return f(*args, **kwargs)
 

@@ -1,15 +1,21 @@
 from flask import Blueprint, jsonify, request
+from flask_restplus import Resource
+from webargs import fields as flds
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from apps.cinema import api
 from apps.cinema.schema import param, validate_date
 from apps.cinema.schema.parser import use_args
-from apps.cinema.schema.user_schema import *
+from apps.cinema.schema.user_schema import (
+    login_schema,
+    user_login_schema,
+    user_request_fields,
+    user_schema,
+    user_schema_fields,
+)
 from apps.middlewares.auth import generate_token, is_admin, token_header
 from apps.middlewares.validation import ValidationError
 from controllers.user_controller import UserController
-from flask_restplus import Resource, abort
-from webargs import fields as flds
 
 user_args = {
     "id": param(flds.Int(required=True)),
@@ -29,7 +35,9 @@ class UserRegistration(Resource):
     def post(self):
         user = api.payload
         api.schema_model("User", {**user_schema}).validate(user)
-        user["password"] = generate_password_hash(user["password"], method="sha256")
+        user["password"] = generate_password_hash(
+            user["password"], method="sha256"
+        )
         controller = UserController()
         if not controller.find_one(email=user.get("email")):
             user = controller.insert(user)
@@ -56,11 +64,15 @@ class LoginResource(Resource):
         api.schema_model("User", {**user_login_schema}).validate(request_data)
         controller = UserController()
         user = controller.find_one(email=request_data.get("email"))
-        if user and check_password_hash(user.password, request_data["password"]):
+        if user and check_password_hash(
+            user.password, request_data["password"]
+        ):
             token = generate_token(user)
             return {"token": token, **user._asdict()}, 200
         raise ValidationError(
-            message="error", status_code=401, payload={"message": "Invalid credentials"}
+            message="error",
+            status_code=401,
+            payload={"message": "Invalid credentials"},
         )
 
 

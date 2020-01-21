@@ -8,7 +8,9 @@ class TestTickets(BaseTestCase):
     def test_create_ticket_fails_with_no_authentication(self, test_client):
         data = json.dumps({})
         response = test_client.post(
-            "/api/v1/ticket", data=data, headers={"Content-Type": "application/json"}
+            "/api/v1/ticket",
+            data=data,
+            headers={"Content-Type": "application/json"},
         )
         assert response.status_code == 401
 
@@ -35,7 +37,9 @@ class TestTickets(BaseTestCase):
         self, test_client, auth_header, ticket
     ):
         _, data = ticket
-        response = test_client.post("/api/v1/ticket", data=data, headers=auth_header)
+        response = test_client.post(
+            "/api/v1/ticket", data=data, headers=auth_header
+        )
         assert response.status_code == 400
 
     def test_get_all_ticket(self, test_client, auth_header):
@@ -43,12 +47,15 @@ class TestTickets(BaseTestCase):
         self.assertCountEqual(response.json["tickets"], 7)
         self.assertCountEqual(response.json["tickets"][0], 9)
         self.assertKeys(
-            response.json["tickets"][0], {"payment_method": "mm", "price": 20000.0}
+            response.json["tickets"][0],
+            {"payment_method": "mm", "price": 20000.0},
         )
         self.assertEqual(response.status_code, 200)
 
     def test_filter_tickets_by_query_params(self, test_client, auth_header):
-        response = test_client.get("/api/v1/ticket?movie_id=1", headers=auth_header)
+        response = test_client.get(
+            "/api/v1/ticket?movie_id=1", headers=auth_header
+        )
         self.assertCountEqual(response.json["tickets"], 7)
         self.assertCountEqual(response.json["tickets"][0], 9)
         self.assertKeys(
@@ -105,7 +112,11 @@ class TestNormalUserTickets(BaseTestCase):
         self, test_client, user_auth_header
     ):
         data = json.dumps(
-            {"payment_method": "mombile", "seat_id": [6, 7, 8, 9, 10], "showtime_id": 2}
+            {
+                "payment_method": "mombile",
+                "seat_id": [6, 7, 8, 9, 10],
+                "showtime_id": 2,
+            }
         )
         response = test_client.post(
             "/api/v1/ticket", data=data, headers=user_auth_header

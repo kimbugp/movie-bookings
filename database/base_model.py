@@ -46,7 +46,9 @@ class Model:
 
     @classmethod
     def foreignkey(self, ref, on_delete_cascade=True):
-        cascade = "ON DELETE CASCADE" if on_delete_cascade else "ON DELETE RESTRICT"
+        cascade = (
+            "ON DELETE CASCADE" if on_delete_cascade else "ON DELETE RESTRICT"
+        )
         table, column = ref.split(".")
         return "REFERENCES {}({}) {}".format(table, column, cascade)
 

@@ -23,12 +23,20 @@ user_request_fields = api.model(
     },
 )
 
-login_schema = user_schema_fields.clone("User", {"token": fields.String(required=True)})
+login_schema = user_schema_fields.clone(
+    "User", {"token": fields.String(required=True)}
+)
 
 user_schema = {
     "type": "object",
     "properties": {
-        "email": {"allOf": [{"type": "string"}, {"minLength": 5}, {"format": "email"}]},
+        "email": {
+            "allOf": [
+                {"type": "string"},
+                {"minLength": 5},
+                {"format": "email"},
+            ]
+        },
         "password": {"allOf": [{"type": "string"}, {"minLength": 5}]},
         "name": {"allOf": [{"type": "string"}, {"minLength": 5}]},
         "is_staff": {"allOf": [{"type": "boolean"}]},

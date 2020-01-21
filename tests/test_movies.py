@@ -9,7 +9,9 @@ class TestMovies(BaseTestCase):
     def test_create_movie_fails_with_no_authentication(self, test_client):
         data = json.dumps({})
         response = test_client.post(
-            "/api/v1/movie", data=data, headers={"Content-Type": "application/json"}
+            "/api/v1/movie",
+            data=data,
+            headers={"Content-Type": "application/json"},
         )
         assert response.status_code == 401
 
@@ -59,9 +61,13 @@ class TestMovies(BaseTestCase):
             },
         )
 
-    def test_update_movie_by_id_succeeds(self, test_client, movie, auth_header):
+    def test_update_movie_by_id_succeeds(
+        self, test_client, movie, auth_header
+    ):
         _, data = movie
-        response = test_client.put("/api/v1/movie/1", data=data, headers=auth_header)
+        response = test_client.put(
+            "/api/v1/movie/1", data=data, headers=auth_header
+        )
         self.assertEqual(
             response.json["movie"][0],
             {
@@ -76,7 +82,11 @@ class TestMovies(BaseTestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_update_show_time_by_id_fails(self, test_client, movie, auth_header):
+    def test_update_show_time_by_id_fails(
+        self, test_client, movie, auth_header
+    ):
         _, data = movie
-        response = test_client.put("/api/v1/movie/100", data=data, headers=auth_header)
+        response = test_client.put(
+            "/api/v1/movie/100", data=data, headers=auth_header
+        )
         self.assertEqual(response.status_code, 404)

@@ -1,13 +1,18 @@
-from flask import Blueprint, jsonify, request
+from flask import request
+from flask_restplus import Resource
+from webargs import fields as flds
 
 from apps.cinema import api
 from apps.cinema.schema import param, validate_date
 from apps.cinema.schema.parser import use_args
-from apps.cinema.schema.ticket_schema import *
+from apps.cinema.schema.ticket_schema import (
+    process_tickets_seats,
+    schema,
+    ticket_response_body,
+    ticket_schema,
+)
 from apps.middlewares.auth import token_header
 from controllers.ticket_controller import TicketController
-from flask_restplus import Resource
-from webargs import fields as flds
 
 ticket_args = {
     "user_id": param(flds.Int(required=True)),
@@ -47,7 +52,7 @@ class TicketBookings(Resource):
         controller = TicketController()
         if not request.user.is_staff:
             params.append(
-                {"operator": "=", "value": request.user.id, "field": "user_id"}
+                {"operator": "=", "value": user_id, "field": "user_id"}
             )
         tickets = controller.find(
             serialize=True, operator="AND", params=params, **kwargs
@@ -63,5 +68,7 @@ class TicketBooking(Resource):
     def get(self, ticket_id, **kwargs):
         user_id = request.user.id
         controller = TicketController()
-        ticket = controller.find_one(user_id=user_id, id=ticket_id, serialize=True)
+        ticket = controller.find_one(
+            user_id=user_id, id=ticket_id, serialize=True
+        )
         return ticket

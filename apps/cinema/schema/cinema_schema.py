@@ -50,7 +50,11 @@ def process_seats(seats, cinema_hall):
         numbers = col.get("number")
         [
             results.append(
-                {"cinema_hall": cinema_hall, "number": item, "name": col.get("name")}
+                {
+                    "cinema_hall": cinema_hall,
+                    "number": item,
+                    "name": col.get("name"),
+                }
             )
             for item in numbers
         ]

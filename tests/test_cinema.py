@@ -9,7 +9,9 @@ class TestCinema(BaseTestCase):
     def test_create_cinema_fails_with_no_authentication(self, test_client):
         data = json.dumps({})
         response = test_client.post(
-            "/api/v1/cinema", data=data, headers={"Content-Type": "application/json"}
+            "/api/v1/cinema",
+            data=data,
+            headers={"Content-Type": "application/json"},
         )
         self.assertEqual(response.status_code, 401)
 
@@ -26,7 +28,8 @@ class TestCinema(BaseTestCase):
     ):
         _, data = cinema
         response = test_client.post(
-            "/api/v1/cinema", data=data, headers=auth_header)
+            "/api/v1/cinema", data=data, headers=auth_header
+        )
         assert response.status_code == 400
 
     def create_cinema_succeeds(self, cinema):
@@ -47,7 +50,9 @@ class TestCinema(BaseTestCase):
 
 
 class TestUpdateCinema(BaseTestCase):
-    def test_update_cinema_by_id_succeeds(self, test_client, cinema, auth_header):
+    def test_update_cinema_by_id_succeeds(
+        self, test_client, cinema, auth_header
+    ):
         data = json.dumps(
             {
                 "seats": [
@@ -57,7 +62,8 @@ class TestUpdateCinema(BaseTestCase):
             }
         )
         response = test_client.put(
-            "/api/v1/cinema/1", data=data, headers=auth_header)
+            "/api/v1/cinema/1", data=data, headers=auth_header
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json,
@@ -67,10 +73,30 @@ class TestUpdateCinema(BaseTestCase):
                     "name": "Cinema1",
                     "description": "SOme data",
                     "seats": [
-                        {"id": 12, "name": "C", "number": "1", "cinema_hall": 1},
-                        {"id": 13, "name": "C", "number": "2", "cinema_hall": 1},
-                        {"id": 14, "name": "D", "number": "1", "cinema_hall": 1},
-                        {"id": 15, "name": "D", "number": "2", "cinema_hall": 1},
+                        {
+                            "id": 12,
+                            "name": "C",
+                            "number": "1",
+                            "cinema_hall": 1,
+                        },
+                        {
+                            "id": 13,
+                            "name": "C",
+                            "number": "2",
+                            "cinema_hall": 1,
+                        },
+                        {
+                            "id": 14,
+                            "name": "D",
+                            "number": "1",
+                            "cinema_hall": 1,
+                        },
+                        {
+                            "id": 15,
+                            "name": "D",
+                            "number": "2",
+                            "cinema_hall": 1,
+                        },
                     ],
                 }
             },
@@ -79,10 +105,13 @@ class TestUpdateCinema(BaseTestCase):
     def test_update_cinema_by_id_fails(self, test_client, cinema, auth_header):
         _, data = cinema
         response = test_client.put(
-            "/api/v1/cinema/100", data=data, headers=auth_header)
+            "/api/v1/cinema/100", data=data, headers=auth_header
+        )
         self.assertEqual(response.status_code, 404)
 
-    def test_update_cinema_by_id_fails_wth_same_seats(self, test_client, auth_header):
+    def test_update_cinema_by_id_fails_wth_same_seats(
+        self, test_client, auth_header
+    ):
         data = json.dumps(
             {
                 "seats": [
@@ -92,7 +121,8 @@ class TestUpdateCinema(BaseTestCase):
             }
         )
         response = test_client.put(
-            "/api/v1/cinema/4", data=data, headers=auth_header)
+            "/api/v1/cinema/4", data=data, headers=auth_header
+        )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.json,
