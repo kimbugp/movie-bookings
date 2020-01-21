@@ -1,7 +1,7 @@
 from utils import NotFound
 
 
-class BaseController():
+class BaseController:
     data = {}
     id = 0
 
@@ -32,4 +32,4 @@ class BaseController():
 
     @classmethod
     def id_generator(cls):
-        return str(cls.id+1)
+        return str(cls.id + 1)

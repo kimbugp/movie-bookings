@@ -12,24 +12,24 @@ from models import CinemaHall
 from utils import dict_to_tuple, find_or_404
 from webargs import fields as flds
 
-cinema_args = {'id': param(flds.Int(required=True))}
+cinema_args = {"id": param(flds.Int(required=True))}
 
 
-@api.route('/cinema', endpoint='cinemas')
+@api.route("/cinema", endpoint="cinemas")
 class CinemasEndpoint(Resource):
-    @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
+    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
     @token_header
     @is_admin
     def post(self):
         body = api.payload
-        api.schema_model('cinema', {**schema}).validate(body)
-        seats = body.pop('seats')
+        api.schema_model("cinema", {**schema}).validate(body)
+        seats = body.pop("seats")
         controller = CinemaController()
         cinema = controller.insert(body)[0]
-        seats_dict = process_seats(seats, cinema.get('id'))
-        return {'seats': SeatController().insert(seats_dict), **cinema}, 201
+        seats_dict = process_seats(seats, cinema.get("id"))
+        return {"seats": SeatController().insert(seats_dict), **cinema}, 201
 
-    @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
+    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
     @token_header
     @is_admin
     @use_args(cinema_args)
@@ -38,18 +38,18 @@ class CinemasEndpoint(Resource):
         return controller.find(serialize=True, params=params), 200
 
 
-@api.route('/cinema/<int:cinema_id>', endpoint='cinema')
+@api.route("/cinema/<int:cinema_id>", endpoint="cinema")
 class CinemaEndpoint(Resource):
-    @api.marshal_with(cinema_response_schema, envelope='cinema', skip_none=True)
+    @api.marshal_with(cinema_response_schema, envelope="cinema", skip_none=True)
     @token_header
     @token_header
     @is_admin
     def put(self, cinema_id):
         body = api.payload
-        schema['required'] = ["seats"]
-        api.schema_model('cinema', {**schema}).validate(body)
-        seats = body.pop('seats')
+        schema["required"] = ["seats"]
+        api.schema_model("cinema", {**schema}).validate(body)
+        seats = body.pop("seats")
         controller = CinemaController()
         cinema = find_or_404(current_app.db, CinemaHall, id=cinema_id)
         seats_dict = SeatController().insert(process_seats(seats, cinema.id))
-        return {'seats': seats_dict, **cinema._asdict()}, 200
+        return {"seats": seats_dict, **cinema._asdict()}, 200

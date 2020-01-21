@@ -1,5 +1,3 @@
-
-
 class ValidationError(Exception):
     status_code = 400
 
@@ -12,5 +10,5 @@ class ValidationError(Exception):
 
     def to_dict(self):
         rv = dict(self.payload or ())
-        rv['error'] = self.message
+        rv["error"] = self.message
         return rv

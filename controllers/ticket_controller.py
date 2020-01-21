@@ -18,19 +18,23 @@ class TicketController(SQLBaseController):
         return find_or_404(self.db, ShowTime, id=showtime)
 
     def validate_seat(self, seats, showtime_id):
-        query = get_cte_query('available_seats').format(
-            showtime_id=showtime_id)
+        query = get_cte_query("available_seats").format(showtime_id=showtime_id)
         results = self.db.execute(query, named=False)
         available_seats = [] if results[0][0] is None else results[0][0]
         seat_diff = seats.difference(set(available_seats))
         if seat_diff:
-            raise ValidationError('error', status_code=400, payload={
-                'message': f"seat numbers '{seat_diff}' in cinema hall not available check available seats for showtime"})
+            raise ValidationError(
+                "error",
+                status_code=400,
+                payload={
+                    "message": f"seat numbers '{seat_diff}' in cinema hall not available check available seats for showtime"
+                },
+            )
         return
 
-    def find(self, operator='OR', serialize=False, params=[], **kwargs):
+    def find(self, operator="OR", serialize=False, params=[], **kwargs):
         for index, item in enumerate(list(params)):
-            if item.get('field') in ['show_datetime', 'movie_id', 'price']:
-                params[index]['table'] = 'showtime'
-        joins = 'left join showtime on showtime.id = ticket.showtime_id'
+            if item.get("field") in ["show_datetime", "movie_id", "price"]:
+                params[index]["table"] = "showtime"
+        joins = "left join showtime on showtime.id = ticket.showtime_id"
         return super().find(operator, serialize, joins, params)

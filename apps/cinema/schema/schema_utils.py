@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 import jsonschema
@@ -11,5 +10,6 @@ def validate_date(obj):
         date = datetime.strptime(obj, "%Y-%m-%d")
     except Exception as error:
         raise ValidationError(
-            'error', payload={'message': 'use datetime format YYYY-MM-DD'})
+            "error", payload={"message": "use datetime format YYYY-MM-DD"}
+        )
     return True

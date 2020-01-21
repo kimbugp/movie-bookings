@@ -1,4 +1,3 @@
-
 from flask import jsonify, make_response
 from apps.cinema import api
 from apps.middlewares.validation import ValidationError
@@ -12,4 +11,4 @@ def handle_invalid_usage(error):
 
 @parser.error_handler
 def handle_request_parsing_error(err, req, schema, error_status_code, error_headers):
-    raise ValidationError('error', payload={**err.messages})
+    raise ValidationError("error", payload={**err.messages})

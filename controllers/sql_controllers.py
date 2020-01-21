@@ -1,4 +1,3 @@
-
 from collections import namedtuple
 
 from flask import current_app
@@ -8,8 +7,8 @@ from sql import get_cte_query
 from utils import dict_to_tuple, find_or_404
 
 
-class SQLBaseController():
-    table = 'users'
+class SQLBaseController:
+    table = "users"
 
     def __init__(self, cursor=None):
         self.db = current_app.db
@@ -20,18 +19,20 @@ class SQLBaseController():
         results = self.db.execute(query, named=True, commit=True)
         return results
 
-    def update(self, id, record, operator='OR', serialize=False):
+    def update(self, id, record, operator="OR", serialize=False):
         find_or_404(self.db, self.table, id=id)
         query = self.instance.update(id, operator, **record)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
-    def find(self, operator='AND', serialize=False, joins='', params=[], **kwargs):
+    def find(self, operator="AND", serialize=False, joins="", params=[], **kwargs):
         query = self.instance.find(operator, joins, params)
         return self.dict_to_tuple(self.db.execute(query, True), serialize)
 
     def find_one(self, serialize=False, **kwargs):
-        params = [{'operator': '=', 'value': value, 'field': key}
-                  for key, value in kwargs.items()]
+        params = [
+            {"operator": "=", "value": value, "field": key}
+            for key, value in kwargs.items()
+        ]
         items = self.find(serialize=serialize, params=params)
         return items[0] if len(items) > 0 else []
 

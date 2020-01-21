@@ -1,4 +1,3 @@
-
 import os
 
 from apps.middlewares.validation import ValidationError
@@ -12,27 +11,40 @@ from datetime import datetime
 
 class ShowTimeController(SQLBaseController):
     table = ShowTime
-    query = 'query'
+    query = "query"
 
     def insert(self, kwargs):
-        cinema_hall = find_or_404(
-            self.db, CinemaHall, id=kwargs.get('cinema_hall'))
+        cinema_hall = find_or_404(self.db, CinemaHall, id=kwargs.get("cinema_hall"))
 
-        movie = find_or_404(self.db, Movie, id=kwargs.get('movie_id'))
+        movie = find_or_404(self.db, Movie, id=kwargs.get("movie_id"))
         # check where cinemahall will be available for
         # the showtime period given the movie length
         if self.db.execute(self.instance.clean(kwargs)):
-            raise ValidationError('error', payload={
-                                  'message': f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_datetime')}"})
+            raise ValidationError(
+                "error",
+                payload={
+                    "message": f"Cinema hall {cinema_hall.name} already occupied for the showtime {kwargs.get('show_datetime')}"
+                },
+            )
         return super().insert(kwargs)
 
-    def find(self, id=None, start_date=datetime.now()):
-        item = f'where st.id ={id}' if id else ''
-        results = self.db.execute(self.get_query(
-            start_date=start_date, item=item), named=True, commit=True)
+    def find(
+        self,
+        operator="AND",
+        serialize=False,
+        joins="",
+        params=[],
+        id=None,
+        start_date=datetime.now(),
+        **kwargs,
+    ):
+        item = f"where st.id ={id}" if id else ""
+        results = self.db.execute(
+            self.get_query(start_date=start_date, item=item), named=True, commit=True
+        )
         return results
 
-    def get_query(self, item='', start_date=datetime.now()):
+    def get_query(self, item="", start_date=datetime.now()):
         """
         Query to filter though the sub table from the cte
         """

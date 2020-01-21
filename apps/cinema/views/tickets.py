@@ -9,26 +9,28 @@ from controllers.ticket_controller import TicketController
 from flask_restplus import Resource
 from webargs import fields as flds
 
-ticket_args = {'user_id': param(flds.Int(required=True)),
-               'date_created': param(flds.Str(validate=validate_date)),
-               'show_datetime': param(flds.Str(validate=validate_date)),
-               'movie_id': param(flds.Int()),
-               'price': param(flds.Float()),
-               'id': param(flds.Int())}
+ticket_args = {
+    "user_id": param(flds.Int(required=True)),
+    "date_created": param(flds.Str(validate=validate_date)),
+    "show_datetime": param(flds.Str(validate=validate_date)),
+    "movie_id": param(flds.Int()),
+    "price": param(flds.Float()),
+    "id": param(flds.Int()),
+}
 
 
-@api.route('/ticket', endpoint='tickets')
+@api.route("/ticket", endpoint="tickets")
 class TicketBookings(Resource):
-    @api.marshal_with(ticket_response_body, envelope='ticket', skip_none=True)
+    @api.marshal_with(ticket_response_body, envelope="ticket", skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def post(self):
         body = api.payload or {}
-        api.schema_model('Tickets', {**schema}).validate(body)
-        body['user_id'] = request.user.id
+        api.schema_model("Tickets", {**schema}).validate(body)
+        body["user_id"] = request.user.id
         controller = TicketController()
 
-        seats_ids = body.pop('seat_id')
+        seats_ids = body.pop("seat_id")
         seat_list = seats_ids if type(seats_ids) is list else [seats_ids]
 
         seats = process_tickets_seats(body, seat_list)
@@ -36,7 +38,7 @@ class TicketBookings(Resource):
 
         return ticket, 201
 
-    @api.marshal_with(ticket_response_body, envelope='tickets', skip_none=True)
+    @api.marshal_with(ticket_response_body, envelope="tickets", skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     @use_args(ticket_args)
@@ -45,20 +47,21 @@ class TicketBookings(Resource):
         controller = TicketController()
         if not request.user.is_staff:
             params.append(
-                {'operator': '=', 'value': request.user.id, 'field': 'user_id'})
+                {"operator": "=", "value": request.user.id, "field": "user_id"}
+            )
         tickets = controller.find(
-            serialize=True, operator='AND', params=params, **kwargs)
+            serialize=True, operator="AND", params=params, **kwargs
+        )
         return tickets, 200
 
 
-@api.route('/ticket/<int:ticket_id>', endpoint='ticket')
+@api.route("/ticket/<int:ticket_id>", endpoint="ticket")
 class TicketBooking(Resource):
-    @api.marshal_with(ticket_response_body, envelope='ticket', skip_none=True)
+    @api.marshal_with(ticket_response_body, envelope="ticket", skip_none=True)
     @api.expect(ticket_schema)
     @token_header
     def get(self, ticket_id, **kwargs):
         user_id = request.user.id
         controller = TicketController()
-        ticket = controller.find_one(
-            user_id=user_id, id=ticket_id, serialize=True)
+        ticket = controller.find_one(user_id=user_id, id=ticket_id, serialize=True)
         return ticket
